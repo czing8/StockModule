@@ -9,11 +9,16 @@
 #import <Foundation/Foundation.h>
 #import "VTimeLineModel.h"
 #import "VBidPriceModel.h"
+#import "VStockStatusModel.h"
+#import "VTimeTradeModel.h"
 
 @interface VTimeLineGroup : NSObject
 
-@property (nonatomic, strong) NSMutableArray <VTimeLineModel *> *lineModels;
-@property (nonatomic, strong) VBidPriceModel  *bidPriceModel;
+@property (nonatomic, strong) NSMutableArray <VTimeLineModel *>     * lineModels;
+@property (nonatomic, strong) NSArray <VTimeTradeModel *>    * tradeModels;
+
+@property (nonatomic, strong) VBidPriceModel        * bidPriceModel;
+@property (nonatomic, strong) VStockStatusModel     * stockStatusModel;
 
 @property (nonatomic, assign) float price;      // 当前价
 @property (nonatomic, assign) float preClosePrice;  // 昨日收盘价

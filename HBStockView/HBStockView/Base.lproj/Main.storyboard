@@ -20,26 +20,9 @@
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="KcK-gF-hhx">
-                                <rect key="frame" x="0.0" y="64" width="375" height="160"/>
-                                <color key="backgroundColor" red="0.99215686270000003" green="0.75686274509999996" blue="0.3294117647" alpha="1" colorSpace="calibratedRGB"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="160" id="zxT-Wc-HFr"/>
-                                </constraints>
-                            </view>
-                        </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        <constraints>
-                            <constraint firstAttribute="trailing" secondItem="KcK-gF-hhx" secondAttribute="trailing" id="GgX-n1-QpT"/>
-                            <constraint firstItem="KcK-gF-hhx" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" id="nZp-cC-za1"/>
-                            <constraint firstItem="KcK-gF-hhx" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="zDk-6X-K9d"/>
-                        </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="la0-SY-3hk"/>
-                    <connections>
-                        <outlet property="stockStatusView" destination="KcK-gF-hhx" id="G97-Rn-BnZ"/>
-                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>

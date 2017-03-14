@@ -64,7 +64,6 @@
 }
 
 
-/******************************UITableViewDelegate*********************************/
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
     return section == 1 ? 5:0;
@@ -74,7 +73,7 @@
     if (section == 1) {
         UIView *view = [UIView new];
         UIView *lineView = [UIView new];
-        lineView.backgroundColor = [UIColor VStock_bgLineColor];
+        lineView.backgroundColor = [UIColor bgLineColor];
         [view addSubview:lineView];
         [lineView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.edges.equalTo(view).insets(UIEdgeInsetsMake(2, 0, 2, 0));
@@ -89,7 +88,9 @@
 - (void)layoutSubviews{
     [super layoutSubviews];
     
+    self.rowHeight = (self.bounds.size.height-5)/10.f;
     [self.layer setBorderWidth:0.5];
     [self.layer setBorderColor:[UIColor borderLineColor].CGColor];
 }
+
 @end

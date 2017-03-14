@@ -38,7 +38,7 @@
     
     //绘制竖线
     CGContextMoveToPoint(context, x, self.stockScrollView.frame.origin.y);
-    CGContextAddLineToPoint(context, x, self.stockScrollView.frame.origin.y + self.stockScrollView.bounds.size.height - VStockLineDayHeight/2.f);
+    CGContextAddLineToPoint(context, x, self.stockScrollView.frame.origin.y + self.stockScrollView.bounds.size.height - kStockLineDayHeight/2.f);
     CGContextStrokePath(context);
     
     //绘制交叉圆点
@@ -46,7 +46,7 @@
     CGContextSetFillColorWithColor(context, [UIColor stockMainBgColor].CGColor);
     CGContextSetLineWidth(context, 1.5);
     CGContextSetLineDash(context, 0, NULL, 0);
-    CGContextAddArc(context, x, self.stockScrollView.frame.origin.y + self.selectedPoint.y, VStockPointRadius, 0, 2 * M_PI, 0);
+    CGContextAddArc(context, x, self.stockScrollView.frame.origin.y + self.selectedPoint.y, kStockPointRadius, 0, 2 * M_PI, 0);
     CGContextDrawPath(context, kCGPathFillStroke);
     
     //绘制选中日期
@@ -56,16 +56,16 @@
     
     if (x + textRect.size.width/2.f + 2 > CGRectGetMaxX(self.stockScrollView.frame)) {
         CGContextSetFillColorWithColor(context, [UIColor selectedRectBgColor].CGColor);
-        CGContextFillRect(context, CGRectMake(CGRectGetMaxX(self.stockScrollView.frame) - 4 - textRect.size.width, self.stockScrollView.frame.origin.y + self.stockScrollView.bounds.size.height - VStockLineDayHeight, textRect.size.width + 4, textRect.size.height + 4));
-        [dayText drawInRect:CGRectMake(CGRectGetMaxX(self.stockScrollView.frame) - 4 - textRect.size.width + 2, self.stockScrollView.frame.origin.y + self.stockScrollView.bounds.size.height - VStockLineDayHeight + 2, textRect.size.width, textRect.size.height) withAttributes:attribute];
+        CGContextFillRect(context, CGRectMake(CGRectGetMaxX(self.stockScrollView.frame) - 4 - textRect.size.width, self.stockScrollView.frame.origin.y + self.stockScrollView.bounds.size.height - kStockLineDayHeight, textRect.size.width + 4, textRect.size.height + 4));
+        [dayText drawInRect:CGRectMake(CGRectGetMaxX(self.stockScrollView.frame) - 4 - textRect.size.width + 2, self.stockScrollView.frame.origin.y + self.stockScrollView.bounds.size.height - kStockLineDayHeight + 2, textRect.size.width, textRect.size.height) withAttributes:attribute];
     } else {
         CGContextSetFillColorWithColor(context, [UIColor selectedRectBgColor].CGColor);
-        CGContextFillRect(context, CGRectMake(x-textRect.size.width/2.f, self.stockScrollView.frame.origin.y + self.stockScrollView.bounds.size.height - VStockLineDayHeight, textRect.size.width + 4, textRect.size.height + 4));
-        [dayText drawInRect:CGRectMake(x-textRect.size.width/2.f + 2, self.stockScrollView.frame.origin.y + self.stockScrollView.bounds.size.height - VStockLineDayHeight + 2, textRect.size.width, textRect.size.height) withAttributes:attribute];
+        CGContextFillRect(context, CGRectMake(x-textRect.size.width/2.f, self.stockScrollView.frame.origin.y + self.stockScrollView.bounds.size.height - kStockLineDayHeight, textRect.size.width + 4, textRect.size.height + 4));
+        [dayText drawInRect:CGRectMake(x-textRect.size.width/2.f + 2, self.stockScrollView.frame.origin.y + self.stockScrollView.bounds.size.height - kStockLineDayHeight + 2, textRect.size.width, textRect.size.height) withAttributes:attribute];
     }
     
-    //绘制选中价格
-    NSString *priceText = [NSString stringWithFormat:@"%.2f",[[self.selectedModel price] floatValue]];
+    // 绘制选中价格
+    NSString *priceText = [NSString stringWithFormat:@"%.2f",[self.selectedModel.price floatValue]];
     CGRect priceRect = [self rectOfNSString:priceText attribute:attribute];
     CGContextSetFillColorWithColor(context, [UIColor selectedRectBgColor].CGColor);
     CGContextFillRect(context, CGRectMake(VStockScrollViewLeftGap - priceRect.size.width - 4, self.stockScrollView.frame.origin.y + self.selectedPoint.y - priceRect.size.height/2.f - 2, priceRect.size.width + 4, priceRect.size.height + 4));

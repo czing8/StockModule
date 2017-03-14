@@ -12,11 +12,10 @@
 
 @interface VStockScrollView : UIScrollView
 
-@property (nonatomic, strong) UIView *contentView;
+@property (nonatomic, strong) UIView    * contentView;
 
 @property (nonatomic, assign) VStockChartType stockType;
 
-@property (nonatomic, assign) BOOL isShowBgLine;
-
+@property (nonatomic, assign) BOOL  isShowBgLine;
 
 @end

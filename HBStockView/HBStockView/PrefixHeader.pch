@@ -1,0 +1,17 @@
+//
+//  PrefixHeader.pch
+//  HBStockView
+//
+//  Created by Vols on 2017/3/14.
+//  Copyright © 2017年 vols. All rights reserved.
+//
+
+#ifndef PrefixHeader_pch
+#define PrefixHeader_pch
+
+#define kRGB(r, g, b)       [UIColor colorWithRed:(r)/255.f green:(g)/255.f blue:(b)/255.f alpha:1.f]
+
+
+
+
+#endif /* PrefixHeader_pch */

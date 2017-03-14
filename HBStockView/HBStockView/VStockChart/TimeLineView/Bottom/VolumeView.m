@@ -38,8 +38,8 @@
     
     CGFloat minValue =  timeLineGroup.minVolume;
     CGFloat maxValue =  timeLineGroup.maxVolume;
-    CGFloat minY = VStockLineVolumeViewMinY;
-    CGFloat maxY = self.frame.size.height - VStockLineVolumeViewMinY;
+    CGFloat minY = kStockLineVolumeViewMinY;
+    CGFloat maxY = self.frame.size.height - kStockLineVolumeViewMinY;
     
     CGFloat unitValue = (maxValue - minValue)/(maxY - minY);
     
@@ -76,7 +76,7 @@
         return;
     }
     
-    CGFloat lineMaxY = self.frame.size.height - VStockLineVolumeViewMinY;
+    CGFloat lineMaxY = self.frame.size.height - kStockLineVolumeViewMinY;
     
     //绘制背景色
     VolumePositionModel *lastModel = self.drawPoints.lastObject;

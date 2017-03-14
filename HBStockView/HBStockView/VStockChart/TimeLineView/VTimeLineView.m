@@ -10,8 +10,10 @@
 
 #import "VStockScrollView.h"
 #import "VTimeLineChart.h"
+#import "UIColor+StockTheme.h"
 #import "VolumeView.h"
 #import "VBidPriceView.h"
+#import "VStockRightView.h"
 #import "VTimeLineMaskView.h"
 
 #import "VTimeLineGroup.h"
@@ -23,9 +25,10 @@
 
 @property (nonatomic, strong) VTimeLineChart    * timeLineChart;        // 分时线图表
 
-@property (nonatomic, strong) VolumeView        * volumeView;           // 成交量部分
+@property (nonatomic, strong) VolumeView        * volumeView;   // 成交量部分
+@property (nonatomic, strong) VStockRightView   * theRightView;    // 右侧视图容器（五档，明细，大单）
 
-@property (nonatomic, strong) VBidPriceView     * bidPriceView; // 五档图
+//@property (nonatomic, strong) VBidPriceView     * bidPriceView; // 五档图
 
 @property (nonatomic, strong) VTimeLineMaskView * maskView;
 
@@ -61,29 +64,32 @@
 
 - (void)configureViews {
     
-    [self addSubview:self.bidPriceView];
-    _bidPriceView.backgroundColor = [UIColor clearColor];
-    [_bidPriceView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.centerY.equalTo(self);
+    [self addSubview:self.theRightView];
+    [_theRightView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self);
         make.right.equalTo(self).offset(-6);
-        make.width.equalTo(@kStockBidPriceViewWidth);
-        make.height.equalTo(@kStockChartHeight);
+        make.width.equalTo(self).multipliedBy(0.3);
+        make.height.equalTo(self);
     }];
+
+    _theRightView.backgroundColor = [UIColor stockMainBgColor];
     
     [self addSubview:self.stockScrollView];
     [_stockScrollView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.centerY.equalTo(self);
+        make.top.equalTo(self);
         make.left.equalTo(self).offset(kStockScrollViewLeftGap);
-        make.right.equalTo(self.bidPriceView.mas_left).offset(-kStockScrollViewLeftGap);
-        make.height.equalTo(@kStockChartHeight);
+        make.right.equalTo(self.theRightView.mas_left).offset(-kStockScrollViewLeftGap);
+        make.height.equalTo(self);
     }];
 
+//    _stockScrollView.backgroundColor = [UIColor lightGrayColor];
     // 分时图View
     _timeLineChart = [[VTimeLineChart alloc] init];
     _timeLineChart.backgroundColor = [UIColor clearColor];
     [_stockScrollView.contentView addSubview:_timeLineChart];
     [_timeLineChart mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.left.equalTo(_stockScrollView.contentView);
+        make.top.equalTo(_stockScrollView.contentView);
+        make.left.equalTo(_stockScrollView.contentView);
         make.height.equalTo(_stockScrollView.contentView).multipliedBy([VStockChartConfig lineChartRadio]);
         make.width.equalTo(_stockScrollView);
     }];
@@ -114,6 +120,8 @@
     [self layoutIfNeeded];
     [self updateScrollViewContentWidth];
     [self setNeedsDisplay];
+    
+    _theRightView.timeLineGroup = timeLineGroup;
 }
 
 
@@ -135,8 +143,6 @@
             //更新背景线
             self.stockScrollView.isShowBgLine = YES;
             [self.stockScrollView setNeedsDisplay];
- 
-            [self.bidPriceView reloadWithModel:_timeLineGroup.bidPriceModel];
         }
     }
 }
@@ -195,11 +201,11 @@
     return _stockScrollView;
 }
 
-- (VBidPriceView *)bidPriceView {
-    if (_bidPriceView == nil) {
-        _bidPriceView = [VBidPriceView new];
+- (VStockRightView *)theRightView {
+    if (_theRightView == nil) {
+        _theRightView = [VStockRightView new];
     }
-    return _bidPriceView;
+    return _theRightView;
 }
 
 #pragma mark - Helpers

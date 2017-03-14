@@ -8,8 +8,11 @@
 
 #import <Foundation/Foundation.h>
 #import "VLineModel.h"
+#import "VStockStatusModel.h"
 
 @interface VLineGroup : NSObject
+
+@property (nonatomic, strong) VStockStatusModel  * stockStatusModel;    // 股票各种参数
 
 @property (nonatomic, strong) NSMutableArray <VLineModel *> *lineModels;
 

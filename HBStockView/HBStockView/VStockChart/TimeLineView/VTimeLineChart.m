@@ -76,7 +76,7 @@
     
     CGContextRef context = UIGraphicsGetCurrentContext();
     
-    CGContextSetLineWidth(context, VStockTimeLineWidth);
+    CGContextSetLineWidth(context, kStockTimeLineWidth);
     CGPoint firstPoint = [self.drawPoints.firstObject CGPointValue];    
     if (isnan(firstPoint.x) || isnan(firstPoint.y)) {
         return;
@@ -114,7 +114,7 @@
     
     // 纵横网格 辅助线
     CGContextSetLineDash(context, 0, NULL, 0);
-    CGContextSetStrokeColorWithColor(context, [UIColor VStock_bgLineColor].CGColor);
+    CGContextSetStrokeColorWithColor(context, [UIColor bgLineColor].CGColor);
     CGContextSetLineWidth(context, .5f);
     
     const CGPoint v_line[] = {CGPointMake(self.frame.size.width/4, 0), CGPointMake(self.frame.size.width/4, self.frame.size.height), CGPointMake(self.frame.size.width/2, 0), CGPointMake(self.frame.size.width/2, self.frame.size.height), CGPointMake(self.frame.size.width/4*3, 0), CGPointMake(self.frame.size.width/4*3, self.frame.size.height)};
@@ -182,7 +182,7 @@
  * 绘制左边的价格部分
  */
 - (void)drawLeftText {
-    NSDictionary *attribute = @{NSFontAttributeName:[UIFont systemFontOfSize:9],NSForegroundColorAttributeName:[UIColor VStock_topBarNormalTextColor]};
+    NSDictionary *attribute = @{NSFontAttributeName:[UIFont systemFontOfSize:9],NSForegroundColorAttributeName:[UIColor topBarNormalTextColor]};
     CGSize textSize = [self rectOfString:[NSString stringWithFormat:@"%.2f",(_maxValue + _minValue)/2.f] attribute:attribute].size;
     
     CGFloat unitValue = (_maxValue - _minValue)/2.f;

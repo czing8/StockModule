@@ -62,7 +62,7 @@
     [[[self.drawPositionModels reverseObjectEnumerator] allObjects] enumerateObjectsUsingBlock:^(VolumePositionModel  *_Nonnull pModel, NSUInteger idx, BOOL * _Nonnull stop) {
         //绘制日期
         if (pModel.dayDesc.length > 0) {
-            NSDictionary *attribute = @{NSFontAttributeName:[UIFont systemFontOfSize:10],NSForegroundColorAttributeName:[UIColor VStock_topBarNormalTextColor]};
+            NSDictionary *attribute = @{NSFontAttributeName:[UIFont systemFontOfSize:10],NSForegroundColorAttributeName:[UIColor topBarNormalTextColor]};
             CGRect rect1 = [pModel.dayDesc boundingRectWithSize:CGSizeMake(MAXFLOAT, 0)
                                                         options:NSStringDrawingTruncatesLastVisibleLine |NSStringDrawingUsesLineFragmentOrigin |
                             NSStringDrawingUsesFontLeading
@@ -112,8 +112,8 @@
     CGFloat minValue =  0;
     CGFloat maxValue =  [[[drawLineModels valueForKeyPath:@"volume"] valueForKeyPath:@"@max.floatValue"] floatValue];
     
-    CGFloat minY = VStockLineVolumeViewMinY;
-    CGFloat maxY = self.frame.size.height - VStockLineDayHeight;
+    CGFloat minY = kStockLineVolumeViewMinY;
+    CGFloat maxY = self.frame.size.height - kStockLineDayHeight;
     
     CGFloat unitValue = (maxValue - minValue)/(maxY - minY);
     

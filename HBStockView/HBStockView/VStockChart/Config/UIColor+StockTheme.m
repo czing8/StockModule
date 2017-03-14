@@ -42,14 +42,14 @@
 /**
  *  K线图背景辅助线颜色
  */
-+ (UIColor *)VStock_bgLineColor {
++ (UIColor *)bgLineColor {
     return [UIColor colorWithHex:0xEDEDED];
 }
 
 /**
  *  主文字颜色
  */
-+ (UIColor *)VStock_textColor {
++ (UIColor *)stockTextColor {
     return [UIColor colorWithHex:0xAFAFB3];
 }
 
@@ -107,8 +107,8 @@
  *  分时线颜色
  */
 + (UIColor *)timeLineColor {
-//    return [UIColor colorWithHex:0x60CFFF];
-    return [UIColor orangeColor];
+    return [UIColor colorWithHex:0x60CFFF];
+//    return [UIColor orangeColor];
 }
 
 /**
@@ -145,21 +145,21 @@
 /**
  *  顶部TopBar文字默认颜色
  */
-+ (UIColor *)VStock_topBarNormalTextColor {
++ (UIColor *)topBarNormalTextColor {
     return [UIColor colorWithHex:0xAFAFB3];
 }
 
 /**
  *  顶部TopBar文字选中颜色
  */
-+ (UIColor *)VStock_topBarSelectedTextColor {
++ (UIColor *)topBarSelectedTextColor {
     return [UIColor colorWithHex:0x4A90E2];
 }
 
 /**
  *  顶部TopBar选中块辅助线颜色
  */
-+ (UIColor *)VStock_topBarSelectedLineColor {
++ (UIColor *)topBarSelectedLineColor {
     return [UIColor colorWithHex:0x4A90E2];
 }
 

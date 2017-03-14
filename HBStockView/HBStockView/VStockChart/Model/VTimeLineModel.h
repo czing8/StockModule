@@ -18,11 +18,10 @@
 @property (nonatomic, assign) CGFloat     preClosePrice;    // 前一天的收盘价
 @property (nonatomic, assign) CGFloat     volume;           // 成交量
 
+@property (nonatomic, strong) NSString    * timeDesc;       // 日期
 
-@property (nonatomic, readonly) NSString    * timeDesc;     // 日期
+@property (nonatomic, assign) BOOL    isShowTimeDesc;       // 是否绘制在View上
 
-@property (nonatomic, readonly) BOOL isShowTimeDesc;        // 是否绘制在View上
-
-@property (nonatomic, readonly) NSString *dayDatail;        // 长按时显示的详细日期
+@property (nonatomic, strong) NSString * dayDatail;         // 长按时显示的详细日期
 
 @end

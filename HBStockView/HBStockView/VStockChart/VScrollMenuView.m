@@ -12,77 +12,108 @@
 #import "VStockConstant.h"
 #import "VStockChartConfig.h"
 
-
-#define kScrollMenuViewHeight   44
-#define kScrollMenuItemWidth    94      // 按钮宽度
-
-
-#define kIndicatorViewHeight   2
-
+#define kScrollMenuItemWidth    94      // 按钮默认宽度
+#define kIndicatorViewHeight    2
 
 @interface VScrollMenuView() <UIScrollViewDelegate>
 
-/**
- 持有最后选中的按钮
- */
-@property (nonatomic, strong) UIButton *lastSelectedBtn;
+@property (nonatomic, strong) UIScrollView  * scrollView;
+@property (nonatomic, strong) UIView        * indicatorView;    // 标题下方的指示器
 
-/**
- 标题下方的指示器
- */
-@property (nonatomic, strong) UIView *indicatorView;
+@property (nonatomic, assign) VScrollMenuLayoutStyle itemLayoutStyle;   //  按钮排列样式
 
-/**
- 持有数据源
- */
-@property (nonatomic, copy) NSArray <NSString *>*titleItems;
+@property (nonatomic, copy  ) NSArray <NSString *>  * titleItems;   //  持有数据源
+@property (nonatomic, strong) NSMutableArray        * btnArray;     // 持有按钮数组
 
-/**
- scrollView
- */
-@property (nonatomic, strong) UIScrollView *scrollView;
+@property (nonatomic, strong) UIButton          * lastSelectedBtn;  // 最后选中的按钮
+@property (nonatomic, assign) NSUInteger        selectedIndex;      // 当前选中的index
 
-/**
- 按钮排列样式
- */
-@property (nonatomic, assign) VScrollMenuLayoutStyle itemLayoutStyle;
-
-/**
- 当前选中的index
- */
-@property (nonatomic, assign) NSUInteger selectedIndex;
-
-/**
- 持有按钮数组
- */
-@property (nonatomic, strong) NSMutableArray *btnArray;
 @end
-
 
 @implementation VScrollMenuView
 
+#pragma mark - View Lifecycle
 
-/**
- 初始化方法
- 
- @param titleItems 传入标题数组
- 
- @return YYTopBarView
- */
 - (instancetype)initWithTitles:(NSArray <NSString *>*)titleItems layoutStyle:(VScrollMenuLayoutStyle)style {
     self = [super init];
     if (self) {
-        _titleItems = titleItems;
-        _itemLayoutStyle = style;
+        //默认设置
+        _bgColor            = [UIColor stockMainBgColor];
+        _lineSelectedColor  = [UIColor topBarSelectedLineColor];
+        _textNormalColor    = [UIColor topBarNormalTextColor];
+        _textSelectedColor  = [UIColor topBarSelectedTextColor];
+        _titleFont          = [UIFont systemFontOfSize:15];
+        _titleItems         = titleItems;
+        _itemLayoutStyle    = style;
+        
         [self setupHeadView];
     }
     return self;
 }
 
+
 - (void)layoutSubviews {
     [super layoutSubviews];
+    
     if (self.itemLayoutStyle == VScrollMenuLayoutStyleInScreen) {
         self.scrollView.contentSize = self.scrollView.bounds.size;
+    }
+    else if (self.itemLayoutStyle == VScrollMenuLayoutStyleOutScreen) {
+        self.scrollView.contentSize = CGSizeMake(self.titleItems.count * kScrollMenuItemWidth, self.scrollView.bounds.size.height);
+    }
+}
+
+
+#pragma mark - Public
+
+- (void)setBgColor:(UIColor *)bgColor{
+    _bgColor = bgColor;
+    
+    self.scrollView.backgroundColor = _bgColor;
+}
+
+- (void)setLineSelectedColor:(UIColor *)lineSelectedColor{
+    _lineSelectedColor = lineSelectedColor;
+    
+    self.indicatorView.backgroundColor = _lineSelectedColor;
+}
+
+- (void)setTextNormalColor:(UIColor *)textNormalColor {
+    _textNormalColor = textNormalColor;
+    
+    for (UIButton * obj in self.btnArray) {
+        [obj setTitleColor:_textNormalColor forState:UIControlStateNormal];
+    }
+}
+
+- (void)setTextSelectedColor:(UIColor *)textSelectedColor {
+    _textSelectedColor = textSelectedColor;
+    
+    for (UIButton * obj in self.btnArray) {
+        [obj setTitleColor:_textSelectedColor forState:UIControlStateSelected];
+    }
+}
+
+- (void)setTitleFont:(UIFont *)titleFont {
+    _titleFont = titleFont;
+    
+    for (UIButton * obj in self.btnArray) {
+        obj.titleLabel.font = _titleFont;
+    }
+}
+
+#pragma mark - UIs
+
+- (void)setupHeadView {
+    switch (self.itemLayoutStyle) {
+        case VScrollMenuLayoutStyleInScreen:
+            [self initTopBarInScreen];
+            break;
+        case VScrollMenuLayoutStyleOutScreen:
+            [self initTopBarOutScreen];
+            break;
+        default:
+            break;
     }
 }
 
@@ -92,7 +123,7 @@
 - (void)initTopBarInScreen {
     self.scrollView = ({
         UIScrollView *scrollView = [UIScrollView new];
-        scrollView.backgroundColor = [self bgColor];
+        scrollView.backgroundColor = _bgColor;
         [self addSubview:scrollView];
         [scrollView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.edges.equalTo(self);
@@ -109,19 +140,18 @@
                 make.top.equalTo(scrollView);
                 make.width.equalTo(scrollView).multipliedBy(1.f/self.titleItems.count);
                 make.left.equalTo(lastBtn == nil ? scrollView.mas_left : lastBtn.mas_right);
-                make.height.equalTo(@(kScrollMenuViewHeight - kIndicatorViewHeight));
+                make.height.equalTo(scrollView).offset(-2);
             }];
             if (!lastBtn) firstBtn = btn;
             lastBtn = btn;
+            [self.btnArray addObject:btn];
         }];
         
         //指示器
         UIView *indicatorView = [UIView new];
-        indicatorView.backgroundColor = [self lineSelectedColor];
+        indicatorView.backgroundColor = _lineSelectedColor;
         [scrollView addSubview:indicatorView];
         self.indicatorView = indicatorView;
-        
-        
         
         [indicatorView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.height.equalTo(@kIndicatorViewHeight);
@@ -155,14 +185,15 @@
         //按钮组
         __block UIButton *lastBtn;
         __block UIButton *firstBtn;
+        self.btnArray = @[].mutableCopy;
         [self.titleItems enumerateObjectsUsingBlock:^(NSString  *_Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
             UIButton *btn = [self createBtnWithTitle:obj tag:idx+100];
             [scrollView addSubview:btn];
             [btn mas_makeConstraints:^(MASConstraintMaker *make) {
                 make.top.equalTo(scrollView.mas_top);
-                make.height.equalTo(@(kScrollMenuViewHeight - kIndicatorViewHeight));
                 make.width.equalTo(@kScrollMenuItemWidth);
                 make.left.equalTo(scrollView).offset(kScrollMenuItemWidth * idx);
+                make.height.equalTo(scrollView).offset(-kIndicatorViewHeight);
             }];
             if (!lastBtn) firstBtn = btn;
             lastBtn = btn;
@@ -171,7 +202,7 @@
         
         //指示器
         UIView *indicatorView = [UIView new];
-        indicatorView.backgroundColor = [self lineSelectedColor];
+        indicatorView.backgroundColor = _lineSelectedColor;
         [scrollView addSubview:indicatorView];
         self.indicatorView = indicatorView;
         
@@ -185,8 +216,7 @@
             make.centerX.equalTo(firstBtn.mas_centerX);
         }];
         
-        
-        scrollView.contentSize = CGSizeMake(self.titleItems.count * kScrollMenuItemWidth, kScrollMenuViewHeight);
+        scrollView.contentSize = CGSizeMake(self.titleItems.count * kScrollMenuItemWidth, self.frame.size.height);
         scrollView;
     });
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
@@ -194,21 +224,6 @@
     });
 }
 
-/**
- 初始化顶部按钮
- */
-- (void)setupHeadView {
-    switch (self.itemLayoutStyle) {
-        case VScrollMenuLayoutStyleInScreen:
-            [self initTopBarInScreen];
-            break;
-        case VScrollMenuLayoutStyleOutScreen:
-            [self initTopBarOutScreen];
-            break;
-        default:
-            break;
-    }
-}
 
 /**
  按钮点击事件
@@ -283,41 +298,23 @@
     }
 }
 
+
+#pragma mark - Helpers
 /**
  创建按钮
  
  @param title 标题
  @param tag tag
- 
- @return 按钮
  */
-- (UIButton *)createBtnWithTitle:(NSString *)title tag:(NSInteger)tag
-{
+- (UIButton *)createBtnWithTitle:(NSString *)title tag:(NSInteger)tag {
     UIButton *btn = [UIButton new];
     [btn setTitle:title forState:UIControlStateNormal];
-    btn.titleLabel.font = [UIFont systemFontOfSize:15];
-    [btn setTitleColor:[self textNormalColor] forState:UIControlStateNormal];
-    [btn setTitleColor:[self textSelectedColor] forState:UIControlStateSelected];
+    btn.titleLabel.font = self.titleFont;
+    [btn setTitleColor:self.textNormalColor forState:UIControlStateNormal];
+    [btn setTitleColor:self.textSelectedColor forState:UIControlStateSelected];
     btn.tag = tag;
     [btn addTarget:self action:@selector(didClickBtnAction:) forControlEvents:UIControlEventTouchUpInside];
     return btn;
-}
-
-
-- (UIColor *)textNormalColor {
-    return [UIColor VStock_topBarNormalTextColor];
-}
-
-- (UIColor *)textSelectedColor {
-    return [UIColor VStock_topBarSelectedTextColor];
-}
-
-- (UIColor *)lineSelectedColor {
-    return [UIColor VStock_topBarSelectedLineColor];
-}
-
-- (UIColor *)bgColor {
-    return [UIColor stockMainBgColor];
 }
 
 - (CGRect)rectOfNSString:(NSString *)string attribute:(NSDictionary *)attribute {

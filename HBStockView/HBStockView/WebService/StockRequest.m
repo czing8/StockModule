@@ -28,8 +28,14 @@
     NSString * urlString = @"http://proxy.finance.qq.com/ifzqgtimg/appstock/app/minute/query?p=1&code=sz002185&_rndtime=1474955377&_appName=ios&_dev=iPod7,1&_devId=cca43cc6683821c1e2556251a62e0dd2038a76e5&_appver=5.1.0&_ifChId=&_isChId=1&_osVer=9.2.1&_uin=10000&_wxuin=20000";
     [[HttpHelper shared] get:nil path:urlString success:^(NSDictionary * flag) {
         
-        NSDictionary * resultDic = flag[@"data"][@"sz002185"];
-        NSArray * stockStatusArray = resultDic[@"qt"][@"sz002185"];
+        VTimeLineGroup * timeGroup = [[VTimeLineGroup alloc] init];
+
+        NSDictionary * resultDic    = flag[@"data"][@"sz002185"];
+        NSArray * stockStatusArray  = resultDic[@"qt"][@"sz002185"];
+        NSString * tradeString  = resultDic[@"mx_price"][@"mx"][@"data"][1];
+
+        NSArray * tradeModels = [self tradeModelsFrom:tradeString];
+        timeGroup.tradeModels = tradeModels;
         
         float curPrice = [stockStatusArray[3] floatValue];
         float closePrice = [stockStatusArray[4] floatValue];
@@ -37,7 +43,8 @@
         float volume = [stockStatusArray[6] floatValue];        //今天的总成交量
         float waiPan = [stockStatusArray[7] floatValue];
         float neiPan = [stockStatusArray[8] floatValue];
-        //        float openPrice = [stockStatusArray[5] floatValue];
+        
+        VStockStatusModel * statusModel = [self stockStatusModelFromArray:stockStatusArray];
         
         NSArray *buyPrices = @[stockStatusArray[9], stockStatusArray[11], stockStatusArray[13], stockStatusArray[15], stockStatusArray[17]];
         NSArray *sellPrices = @[stockStatusArray[27], stockStatusArray[25], stockStatusArray[23], stockStatusArray[21], stockStatusArray[19]];
@@ -45,8 +52,7 @@
         NSArray *buyVolumes = @[stockStatusArray[10], stockStatusArray[12], stockStatusArray[14], stockStatusArray[16], stockStatusArray[18]];
         NSArray *sellVolumes = @[stockStatusArray[28], stockStatusArray[26], stockStatusArray[24], stockStatusArray[22], stockStatusArray[20]];
         
-        
-        VTimeLineGroup * timeGroup = [[VTimeLineGroup alloc] init];
+        timeGroup.stockStatusModel = statusModel;
         NSMutableArray * timeLineModels = [[NSMutableArray alloc] init];
         
         NSArray * data = resultDic[@"data"][@"data"];
@@ -140,6 +146,9 @@
     [[HttpHelper shared] get:nil path:urlString success:^(NSDictionary * flag) {
         NSDictionary * resultDic = flag[@"data"][@"sz002185"];
         
+        NSArray * stockStatusArray = resultDic[@"qt"][@"sz002185"];
+        VStockStatusModel * statusModel = [self stockStatusModelFromArray:stockStatusArray];
+
         NSArray * stockData = resultDic[@"qfqday"];
         NSMutableArray* lineModels = [[NSMutableArray alloc] init];
         int MA5 = 5, MA10 = 10, MA20 = 20;  // 均线统计
@@ -169,6 +178,7 @@
         
         VLineGroup * lineGroup = [[VLineGroup alloc] init];
         lineGroup.lineModels = lineModels;
+        lineGroup.stockStatusModel = statusModel;
         success(lineGroup);
     } failue:^(NSError *error) {
         
@@ -185,7 +195,9 @@
         NSDictionary * resultDic = flag[@"data"][@"sz002185"];
 
         NSArray * stockData = resultDic[@"qfqweek"];
-        
+        NSArray * stockStatusArray = resultDic[@"qt"][@"sz002185"];
+        VStockStatusModel * statusModel = [self stockStatusModelFromArray:stockStatusArray];
+
         NSLog(@"WeekStockData:%@", stockData);
 
         NSMutableArray* lineModels = [[NSMutableArray alloc] init];
@@ -216,6 +228,7 @@
         
         VLineGroup * lineGroup = [[VLineGroup alloc] init];
         lineGroup.lineModels = lineModels;
+        lineGroup.stockStatusModel = statusModel;
         success(lineGroup);
     } failue:^(NSError *error) {
         
@@ -229,6 +242,10 @@
     [[HttpHelper shared] get:nil path:urlString success:^(NSDictionary * flag) {
         NSDictionary * resultDic = flag[@"data"][@"sz002185"];
         NSArray * stockData = resultDic[@"qfqmonth"];
+        
+        NSArray * stockStatusArray = resultDic[@"qt"][@"sz002185"];
+        VStockStatusModel * statusModel = [self stockStatusModelFromArray:stockStatusArray];
+
         NSLog(@"MonthStockData:%@", stockData);
 
         
@@ -260,11 +277,11 @@
         
         VLineGroup * lineGroup = [[VLineGroup alloc] init];
         lineGroup.lineModels = lineModels;
+        lineGroup.stockStatusModel = statusModel;
         success(lineGroup);
     } failue:^(NSError *error) {
         
     }];
-
 }
 
 
@@ -283,6 +300,62 @@
     }
 
     return value;
+}
+
+
++ (VStockStatusModel *)stockStatusModelFromArray:(NSArray *)stockStatusArray {
+
+    VStockStatusModel * statusModel = [[VStockStatusModel alloc] init];
+    statusModel.price = [stockStatusArray[3] floatValue];
+    statusModel.wavePrice = [stockStatusArray[31] floatValue];
+    statusModel.wavePercent = [stockStatusArray[32] floatValue];
+    statusModel.openPrice = [stockStatusArray[5] floatValue];
+    statusModel.preClosePrice = [stockStatusArray[4] floatValue];
+    statusModel.volume = [stockStatusArray[6] floatValue];                                    // 今日成交量
+    statusModel.turnoverRate = [stockStatusArray[38] floatValue];   // 换手率
+    statusModel.maxPrice = [stockStatusArray[33] floatValue];
+    statusModel.minPrice = [stockStatusArray[34] floatValue];
+    statusModel.volumePrice = [stockStatusArray[37] floatValue];    // 成交额
+    statusModel.waiPan = [stockStatusArray[7] floatValue];
+    statusModel.neiPan = [stockStatusArray[8] floatValue];
+    statusModel.ZSZ = [stockStatusArray[45] floatValue];
+    statusModel.LTSZ = [stockStatusArray[44] floatValue];
+    statusModel.PEG = stockStatusArray[39];                // 市盈率
+    statusModel.ZF = stockStatusArray[43];          // 振幅
+    return statusModel;
+}
+
+
++ (NSArray *)tradeModelsFrom:(NSString *)tradeString {
+    NSMutableArray * array = [NSMutableArray new];
+    
+    NSArray *items = [tradeString componentsSeparatedByString:@"|"];
+    if (items.count <= 0) {
+        return nil;
+    }
+    
+    for (int i = 0; i < items.count; i ++) {
+        NSLog(@"items:%@", items[i]);
+        NSArray *tmpArray = [items[i] componentsSeparatedByString:@"/"];
+        
+        VTimeTradeModel * model = [[VTimeTradeModel alloc] init];
+        model.tradeTime = [tmpArray[1] substringToIndex:5];
+        model.tradePrice = tmpArray[2];
+        model.tradeVolmue = tmpArray[4];
+        if ([tmpArray[6] isEqualToString:@"S"]) {
+            model.tradeType = -1;
+        }
+        else if ([tmpArray[6] isEqualToString:@"B"]) {
+            model.tradeType = 1;
+        }
+        else {
+            model.tradeType = 0;
+        }
+
+        [array addObject:model];
+    }
+    
+    return array;
 }
 
 

@@ -67,34 +67,34 @@
         CGFloat closePointY = ABS(maxY - (model.closePrice - minValue)/unitValue);
         
         //格式化openPoint和closePointY
-        if(ABS(closePointY - openPoint.y) < VStockLineMinThick) {
+        if(ABS(closePointY - openPoint.y) < kStockLineMinThick) {
             NSLog(@"%f",closePointY);
             NSLog(@"%f",openPoint.y);
             //            if (openPoint.y == closePointY) {
             //
             //            }
             if(openPoint.y > closePointY) {
-                openPoint.y = closePointY + VStockLineMinThick;
+                openPoint.y = closePointY + kStockLineMinThick;
             } else if(openPoint.y < closePointY) {
-                closePointY = openPoint.y + VStockLineMinThick;
+                closePointY = openPoint.y + kStockLineMinThick;
             } else {
                 if(idx > 0) {
                     VLineModel * preKLineModel = drawLineModels[idx-1];
                     if(model.openPrice > preKLineModel.closePrice) {
-                        openPoint.y = closePointY + VStockLineMinThick;
+                        openPoint.y = closePointY + kStockLineMinThick;
                     } else {
-                        closePointY = openPoint.y + VStockLineMinThick;
+                        closePointY = openPoint.y + kStockLineMinThick;
                     }
                 } else if(idx+1 < drawLineModels.count) {
                     //idx==0即第一个时
                     VLineModel * subKLineModel = drawLineModels[idx+1];
                     if(model.closePrice < subKLineModel.openPrice) {
-                        openPoint.y = closePointY + VStockLineMinThick;
+                        openPoint.y = closePointY + kStockLineMinThick;
                     } else {
-                        closePointY = openPoint.y + VStockLineMinThick;
+                        closePointY = openPoint.y + kStockLineMinThick;
                     }
                 } else {
-                    openPoint.y = closePointY - VStockLineMinThick;
+                    openPoint.y = closePointY - kStockLineMinThick;
                 }
             }
         }
@@ -200,7 +200,7 @@
         const CGPoint solidPoints[] = {linePositionModel.openPoint, linePositionModel.closePoint};
         CGContextStrokeLineSegments(context, solidPoints, 2);
         
-        CGContextSetLineWidth(context, VStockShadowLineWidth);
+        CGContextSetLineWidth(context, kStockShadowLineWidth);
         const CGPoint shadowPoints[] = {linePositionModel.highPoint, linePositionModel.lowPoint};
         CGContextStrokeLineSegments(context, shadowPoints, 2);
     }];

@@ -31,7 +31,7 @@
     // k线图，包括 日K、周K、月k
     else  {
         //单纯的画了一下背景线
-        CGContextSetStrokeColorWithColor(context, [UIColor VStock_bgLineColor].CGColor);
+        CGContextSetStrokeColorWithColor(context, [UIColor bgLineColor].CGColor);
         CGContextSetLineWidth(context, 0.5);
         CGFloat unitHeight = (self.frame.size.height*[VStockChartConfig lineChartRadio])/4;
         

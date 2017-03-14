@@ -12,17 +12,17 @@
 /**
  K线图中蜡烛的宽度
  */
-static CGFloat VStockLineWidth = 6;
+static CGFloat kStockLineWidth = 6;
 
 /**
  分时图成交量线宽度
  */
-static CGFloat VStockTimeLineVolumeWidth = 6;
+static CGFloat kStockTimeLineVolumeWidth = 6;
 
 /**
  K线图的间隔，初始值为1
  */
-static CGFloat VStockLineGap = 1;
+static CGFloat kStockLineGap = 1;
 
 /**
  KLineView的高度占比
@@ -37,12 +37,12 @@ static CGFloat kVolumeViewRadio = 0.28;
 /**
  设置K线宽度数组
  */
-static NSMutableArray *VStockLineWidthArray;
+static NSMutableArray *kStockLineWidthArray;
 
 /**
  设置当前从哪个K线宽度数组进行存取
  */
-static NSInteger VStockLineWidthIndex;
+static NSInteger kStockLineWidthIndex;
 
 
 @implementation VStockChartConfig
@@ -51,10 +51,10 @@ static NSInteger VStockLineWidthIndex;
  K线图中蜡烛的宽度
  */
 + (CGFloat)lineWidth {
-    if (VStockLineWidthIndex >= 0 && VStockLineWidthArray && [VStockLineWidthArray count] > VStockLineWidthIndex) {
-        return [VStockLineWidthArray[VStockLineWidthIndex] floatValue];
+    if (kStockLineWidthIndex >= 0 && kStockLineWidthArray && [kStockLineWidthArray count] > kStockLineWidthIndex) {
+        return [kStockLineWidthArray[kStockLineWidthIndex] floatValue];
     } else {
-        return VStockLineWidth;
+        return kStockLineWidth;
     }
 }
 
@@ -64,15 +64,15 @@ static NSInteger VStockLineWidthIndex;
  @param lineWidth 宽度
  */
 + (void)setLineWith:(CGFloat)lineWidth {
-    if (lineWidth > VStockLineMaxWidth) {
-        lineWidth = VStockLineMaxWidth;
-    }else if (lineWidth < VStockLineMinWidth){
-        lineWidth = VStockLineMinWidth;
+    if (lineWidth > kStockLineMaxWidth) {
+        lineWidth = kStockLineMaxWidth;
+    }else if (lineWidth < kStockLineMinWidth){
+        lineWidth = kStockLineMinWidth;
     }
-    if (VStockLineWidthIndex >= 0 && VStockLineWidthArray && [VStockLineWidthArray count] > VStockLineWidthIndex) {
-        VStockLineWidthArray[VStockLineWidthIndex] = [NSNumber numberWithFloat:lineWidth];
+    if (kStockLineWidthIndex >= 0 && kStockLineWidthArray && [kStockLineWidthArray count] > kStockLineWidthIndex) {
+        kStockLineWidthArray[kStockLineWidthIndex] = [NSNumber numberWithFloat:lineWidth];
     } else {
-        VStockLineWidth = lineWidth;
+        kStockLineWidth = lineWidth;
     }
 }
 
@@ -80,7 +80,7 @@ static NSInteger VStockLineWidthIndex;
  分时线的成交量线的宽度
  */
 + (CGFloat)timeLineVolumeWidth {
-    return VStockTimeLineVolumeWidth;
+    return kStockTimeLineVolumeWidth;
 }
 
 /**
@@ -88,21 +88,21 @@ static NSInteger VStockLineWidthIndex;
  
  @param timeLineVolumeWidth 宽度
  */
-+(void)setTimeLineVolumeWidth:(CGFloat)timeLineVolumeWidth {
-    VStockTimeLineVolumeWidth = timeLineVolumeWidth;
++ (void)setTimeLineVolumeWidth:(CGFloat)timeLineVolumeWidth {
+    kStockTimeLineVolumeWidth = timeLineVolumeWidth;
 }
 
 /**
  K线图的间隔，初始值为1
  */
 + (CGFloat)lineGap {
-    return VStockLineGap;
+    return kStockLineGap;
 }
 
 
 
 + (void)setLineGap:(CGFloat)lineGap {
-    VStockLineGap = lineGap;
+    kStockLineGap = lineGap;
 }
 
 + (CGFloat)lineChartRadio {
@@ -125,11 +125,11 @@ static NSInteger VStockLineWidthIndex;
 
 
 + (void)setStockLineWidthArray:(NSArray <NSNumber *>*)lineWidthArray {
-    VStockLineWidthArray = lineWidthArray.mutableCopy;
+    kStockLineWidthArray = lineWidthArray.mutableCopy;
 }
 
 + (void)setStockLineWidthIndex:(NSInteger)lineWidthindex {
-    VStockLineWidthIndex = lineWidthindex;
+    kStockLineWidthIndex = lineWidthindex;
 }
 
 @end

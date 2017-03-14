@@ -37,12 +37,12 @@
 /**
  *  K线图背景辅助线颜色
  */
-+ (UIColor *)VStock_bgLineColor;
++ (UIColor *)bgLineColor;
 
 /**
  *  主文字颜色
  */
-+ (UIColor *)VStock_textColor;
++ (UIColor *)stockTextColor;
 
 
 /**
@@ -103,17 +103,17 @@
 /**
  *  顶部TopBar文字默认颜色
  */
-+(UIColor *)VStock_topBarNormalTextColor;
++ (UIColor *)topBarNormalTextColor;
 
 /**
  *  顶部TopBar文字选中颜色
  */
-+(UIColor *)VStock_topBarSelectedTextColor;
++ (UIColor *)topBarSelectedTextColor;
 
 /**
  *  顶部TopBar选中块辅助线颜色
  */
-+(UIColor *)VStock_topBarSelectedLineColor;
++ (UIColor *)topBarSelectedLineColor;
 
 
 @end

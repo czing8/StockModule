@@ -18,108 +18,104 @@ typedef NS_ENUM(NSInteger, VStockChartType) {
 };
 
 
-
-
 /**
  *  图标总高度
  */
-#define     kStockChartHeight   180
-
-
+#define     kStockChartHeight   210
 
 
 /**
  *  K线最小的厚度
  */
-#define VStockLineMinThick 0.5
+#define     kStockLineMinThick 0.5
 
 
 /**
  *  K线最大的宽度
  */
-#define VStockLineMaxWidth 20
+#define     kStockLineMaxWidth 20
 
 /**
  *  K线图最小的宽度
  */
-#define VStockLineMinWidth 3
+#define     kStockLineMinWidth 3
 
 /**
  *  时分线的宽度
  */
-#define VStockTimeLineWidth 1
+#define     kStockTimeLineWidth 1
 
 /**
  *  上下影线宽度
  */
-#define VStockShadowLineWidth 1.2
+#define     kStockShadowLineWidth 1.2
 
 /**
  *  MA线宽度
  */
-#define VStockMALineLineWidth 1.2
+#define     kStockMALineLineWidth   1.2
 
 /**
  * 圆点的半径
  */
-#define VStockPointRadius 3
+#define     kStockPointRadius   3
 
 /**
  *  K线图上可画区域最小的Y
  */
-#define kStockLineMainViewMinY 5
+#define     kStockLineMainViewMinY  5
 
 /**
  *  K线图的成交量上最小的Y
  */
-#define VStockLineVolumeViewMinY 2
+#define     kStockLineVolumeViewMinY 2
 
 /**
  *  K线图的成交量下面日期高度
  */
-#define VStockLineDayHeight 12
+#define     kStockLineDayHeight     12
 
 
 /**
  *  TopBar的高度
  */
-#define VStockTopBarViewHeight 40
+#define     kStockTopBarViewHeight  40
 
 /**
  *  TopBar的按钮宽度
  */
-#define VStockTopBarViewWidth 94
+#define     kStockTopBarViewWidth   94
 
 /**
  *  TopBar和StockView的间距
  */
-#define VStockViewGap 1
+#define     kStockViewGap   1
 
 
 /**
  *  K线ScrollView距离顶部的距离
  */
-#define kStockScrollViewTopGap 5
+#define     kStockScrollViewTopGap 5
 
 /**
  *  K线ScrollView距离左边的距离
  */
-#define VStockScrollViewLeftGap 45
+#define     VStockScrollViewLeftGap 45
 
 /**
  *  K线ScrollView距离左部的距离
  */
-#define kStockScrollViewLeftGap 5
+#define     kStockScrollViewLeftGap 5
 
 /**
  *  分时图成交量线的间距
  */
-#define kStockTimeVolumeLineGap 0.1
+#define     kStockTimeVolumeLineGap 0.1
 
 /**
  *  五档图宽度
  */
-#define kStockBidPriceViewWidth 100
+#define     kStockBidPriceViewWidth 100
 
 
 
@@ -135,21 +131,20 @@ typedef NS_ENUM(NSInteger, VStockChartType) {
 
 //Kline种类
 typedef NS_ENUM(NSInteger, VStockType) {
-    VStockTypeLine = 1,    //K线
-    VStockTypeTimeLine,  //分时图
+    VStockTypeLine = 1,     //K线
+    VStockTypeTimeLine,     //分时图
     VStockTypeOther
 };
 
 
 //Accessory指标种类
 typedef NS_ENUM(NSInteger, VStockTargetLineStatus) {
-    VStockTargetLineStatusMACD = 100,    //MACD线
-    VStockTargetLineStatusKDJ,    //KDJ线
-    VStockTargetLineStatusAccessoryClose,    //关闭Accessory线
-    VStockTargetLineStatusMA , //MA线
-    VStockTargetLineStatusEMA,  //EMA线
-    VStockTargetLineStatusCloseMA  //MA关闭线
-    
+    VStockTargetLineStatusMACD = 100,       //MACD线
+    VStockTargetLineStatusKDJ,              //KDJ线
+    VStockTargetLineStatusAccessoryClose,   //关闭Accessory线
+    VStockTargetLineStatusMA ,              //MA线
+    VStockTargetLineStatusEMA,              //EMA线
+    VStockTargetLineStatusCloseMA           //MA关闭线
 };
 
 

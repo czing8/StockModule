@@ -269,7 +269,7 @@
  */
 - (void)drawLeftDesc {
     
-    NSDictionary *attribute = @{NSFontAttributeName:[UIFont systemFontOfSize:9],NSForegroundColorAttributeName:[UIColor VStock_topBarNormalTextColor]};
+    NSDictionary *attribute = @{NSFontAttributeName:[UIFont systemFontOfSize:9],NSForegroundColorAttributeName:[UIColor topBarNormalTextColor]};
     CGSize textSize = [self rectOfNSString:[NSString stringWithFormat:@"%.2f", (_maxValue + _minValue)/2.f] attribute:attribute].size;
     CGFloat unit = self.stockScrollView.frame.size.height * [VStockChartConfig lineChartRadio] / 4.f;
     CGFloat unitValue = (_maxValue - _minValue)/4.f;

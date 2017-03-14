@@ -12,6 +12,8 @@
 #import "VKLineView.h"
 #import "StockRequest.h"
 
+#import "VGCDTimer.h"
+
 #import "Masonry.h"
 
 @interface VStockView () <VScrollMenuViewDelegate>
@@ -28,11 +30,17 @@
 @property (nonatomic, strong) VLineGroup        * weekLineGroup;    //周k线图数据源
 @property (nonatomic, strong) VLineGroup        * monthLineGroup;   //月k线图数据源
 
+@property (nonatomic, strong) VGCDTimer * gcdTimer;
+
 @end
 
 @implementation VStockView
 
 #pragma mark - View Lifecycle
+
+- (void)dealloc {
+    [_gcdTimer invalidate];
+}
 
 - (instancetype)init {
     if (self = [super init]) {
@@ -49,7 +57,7 @@
     [self addSubview:_scrollMenu];
     [_scrollMenu mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.left.right.equalTo(self);
-        make.height.equalTo(@44);
+        make.height.equalTo(@43);
     }];
     _scrollMenu.delegate = self;
 
@@ -66,50 +74,59 @@
     [_timeLineView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(44);
         make.left.right.mas_equalTo(0);
-        make.height.mas_equalTo(kStockChartHeight + 2*kStockScrollViewTopGap);
+        make.height.equalTo(self).offset(-46);
     }];
     
     [_dayKLineView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(44);
         make.left.right.mas_equalTo(0);
-        make.height.mas_equalTo(kStockChartHeight + 2*kStockScrollViewTopGap);
+        make.height.equalTo(self).offset(-46);
     }];
     
     [_weekKLineView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(44);
         make.left.right.mas_equalTo(0);
-        make.height.mas_equalTo(kStockChartHeight + 2*kStockScrollViewTopGap);
+        make.height.equalTo(self).offset(-46);
     }];
     
     [_monthKLineView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(44);
         make.left.right.mas_equalTo(0);
-        make.height.mas_equalTo(kStockChartHeight + 2*kStockScrollViewTopGap);
-    }];
-    
-    [_dayKLineView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(44);
-        make.left.right.mas_equalTo(0);
-        make.height.mas_equalTo(kStockChartHeight + 2*kStockScrollViewTopGap);
+        make.height.equalTo(self).offset(-46);
     }];
     
 //    _timeLineView.hidden = YES;
     _dayKLineView.hidden = YES;
     _weekKLineView.hidden = YES;
     _monthKLineView.hidden = YES;
+    
+    
+    __weak typeof(self) weakSelf = self;
+    
+    _gcdTimer = [VGCDTimer scheduledTimerWithTimeInterval:2 repeats:YES block:^{
+        [weakSelf reloadDataCompletion:nil];
+    }];
+
 }
 
 
 #pragma mark - Public
 
-- (void)reloadData {
+- (void)reloadDataCompletion:(void(^)(BOOL success))completion {
     
     if (_stockChartType == VStockChartTypeTimeLine) {
         _timeLineView.hidden = NO;
         
         [StockRequest getTimeStockDataSuccess:^(VTimeLineGroup *response) {
             _timeLineGroup = response;
+            if (self.stockStatusBlock) {
+                self.stockStatusBlock(_timeLineGroup.stockStatusModel);
+            }
             [_timeLineView reloadWithGroup:_timeLineGroup];
+//            completion(YES);
+            if (completion) {
+                completion(YES);
+            }
         }];
     }
     else if (_stockChartType == VStockChartTypeDayLine) {
@@ -118,7 +135,14 @@
         [StockRequest getDayStockDataSuccess:^(VLineGroup *response) {
             NSLog(@"count:%lu", (unsigned long)response.lineModels.count);
             _dayLineGroup = response;
-            [_dayKLineView reloadWithGroup:_dayLineGroup];
+            if (self.stockStatusBlock) {
+                self.stockStatusBlock(_dayLineGroup.stockStatusModel);
+            }
+            if (completion) {
+                completion(YES);
+            }
+
+//            [_dayKLineView reloadWithGroup:_dayLineGroup];
         }];
     }
     else if (_stockChartType == VStockChartTypeWeekLine) {
@@ -127,7 +151,14 @@
         [StockRequest getWeekStockDataSuccess:^(VLineGroup *response) {
             NSLog(@"count:%lu", (unsigned long)response.lineModels.count);
             _weekLineGroup = response;
-            [_weekKLineView reloadWithGroup:_weekLineGroup];
+            if (self.stockStatusBlock) {
+                self.stockStatusBlock(_weekLineGroup.stockStatusModel);
+            }
+            if (completion) {
+                completion(YES);
+            }
+
+//            [_weekKLineView reloadWithGroup:_weekLineGroup];
         }];
     }
     else if (_stockChartType == VStockChartTypeMonthLine) {
@@ -136,7 +167,14 @@
         [StockRequest getMonthStockDataSuccess:^(VLineGroup *response) {
             NSLog(@"count:%lu", (unsigned long)response.lineModels.count);
             _monthLineGroup = response;
-            [_monthKLineView reloadWithGroup:_monthLineGroup];
+            if (self.stockStatusBlock) {
+                self.stockStatusBlock(_monthLineGroup.stockStatusModel);
+            }
+            if (completion) {
+                completion(YES);
+            }
+
+//            [_monthKLineView reloadWithGroup:_monthLineGroup];
         }];
     }
 }
@@ -192,7 +230,19 @@
     _weekKLineView.hidden = YES;
     _monthKLineView.hidden = YES;
     
-    [self reloadData];
+    [self reloadDataCompletion:^(BOOL success) {
+        if (success == YES) {
+            if (_stockChartType == VStockChartTypeDayLine) {
+                [_dayKLineView reloadWithGroup:_dayLineGroup];
+            }
+            else if (_stockChartType == VStockChartTypeWeekLine) {
+                [_weekKLineView reloadWithGroup:_weekLineGroup];
+            }
+            else if (_stockChartType == VStockChartTypeMonthLine) {
+                [_monthKLineView reloadWithGroup:_monthLineGroup];
+            }
+        }
+    }];
 }
 
 
