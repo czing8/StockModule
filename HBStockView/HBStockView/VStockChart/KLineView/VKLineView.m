@@ -33,6 +33,12 @@
 @property (nonatomic, strong) NSMutableArray    * screenLineModels;           // 当前一屏幕数据源
 @property (nonatomic, strong) VLineModel        * selectLineModel;      //长按选中的model
 
+
+@property (nonatomic, strong) UIButton  * zoomInBtn;        // 放大按钮
+@property (nonatomic, strong) UIButton  * zoomOutBtn;       // 缩小按钮
+
+@property (nonatomic, assign) float  scaleRadio;            // 缩放系数
+
 @end
 
 
@@ -56,14 +62,10 @@
     return self;
 }
 
-- (void)configureViews {
-    
+- (void)configureViews {    
     [self addSubview:self.stockScrollView];
     [_stockScrollView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.centerY.equalTo(self);
-        make.left.equalTo(self).offset(kStockScrollViewLeftGap);
-        make.right.equalTo(self).offset(-kStockScrollViewLeftGap);
-        make.height.equalTo(@kStockChartHeight);
+        make.edges.equalTo(self).insets(UIEdgeInsetsMake(0, kStockScrollViewLeftGap, 0, kStockScrollViewLeftGap));
     }];
     
     // k线图View
@@ -85,6 +87,24 @@
         make.left.right.bottom.equalTo(_stockScrollView.contentView);
         make.height.equalTo(_stockScrollView.contentView).multipliedBy([VStockChartConfig volumeViewRadio]);
     }];
+    
+    [self addSubview:self.zoomInBtn];
+    [self addSubview:self.zoomOutBtn];
+    
+    _zoomInBtn.backgroundColor = [UIColor purpleColor];
+    _zoomOutBtn.backgroundColor = [UIColor purpleColor];
+
+    [_zoomInBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerY.equalTo(self).offset(10);
+        make.left.mas_equalTo(30);
+        make.size.mas_equalTo(CGSizeMake(24, 24));
+    }];
+    
+    [_zoomOutBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerY.equalTo(_zoomInBtn.mas_centerY);
+        make.left.equalTo(_zoomInBtn.mas_right).offset(2);
+        make.size.mas_equalTo(CGSizeMake(24, 24));
+    }];
 
     //缩放
     UIPinchGestureRecognizer *pinch = [[UIPinchGestureRecognizer alloc]initWithTarget:self action:@selector(event_pinchAction:)];
@@ -92,7 +112,6 @@
     //长按手势
     UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc]initWithTarget:self action:@selector(event_longPressAction:)];
     [_stockScrollView addGestureRecognizer:longPress];
-
 }
 
 #pragma mark - Public
@@ -110,6 +129,74 @@
 
 
 #pragma mark - Actions
+
+// 缩放功能
+- (void)event_scaleAction:(UIButton *)sender {
+    if (sender == _zoomInBtn) {
+        CGFloat leftX = self.stockScrollView.contentOffset.x;
+        CGFloat centerX = leftX + _stockScrollView.bounds.size.width/2;
+
+//        // 获取捏合中心点 -> 捏合中心点距离scrollviewcontent左侧的距离
+//        CGPoint p1 = [pinch locationOfTouch:0 inView:self.stockScrollView];
+//        CGPoint p2 = [pinch locationOfTouch:1 inView:self.stockScrollView];
+//        CGFloat centerX = (p1.x+p2.x)/2;
+        
+//        // 拿到中心点数据源的index
+        CGFloat oldLeftArrCount = ABS(centerX + [VStockChartConfig lineGap]) / ([VStockChartConfig lineGap] + [VStockChartConfig lineWidth]);
+        
+        // 缩放重绘
+        CGFloat newLineWidth = [VStockChartConfig lineWidth] *  (1 + kStockLineScaleFactor);
+        [VStockChartConfig setLineWith:newLineWidth];
+        [self updateScrollViewContentWidth];
+        
+        // 计算更新宽度后捏合中心点距离klineView左侧的距离
+        CGFloat newLeftDistance = oldLeftArrCount * [VStockChartConfig lineWidth] + (oldLeftArrCount - 1) * [VStockChartConfig lineGap];
+        
+        // 设置scrollview的contentoffset = (5) - (2);
+        if (self.screenLineModels.count * newLineWidth + (self.screenLineModels.count + 1) * [VStockChartConfig lineGap] > self.stockScrollView.bounds.size.width) {
+            CGFloat newOffsetX = newLeftDistance - (centerX - self.stockScrollView.contentOffset.x);
+            self.stockScrollView.contentOffset = CGPointMake(newOffsetX > 0 ? newOffsetX : 0 , self.stockScrollView.contentOffset.y);
+        } else {
+            self.stockScrollView.contentOffset = CGPointMake(0 , self.stockScrollView.contentOffset.y);
+        }
+//        更新contentsize
+        [self updateScrollViewContentWidth];
+        [self setNeedsDisplay];
+    }
+    else if (sender == _zoomOutBtn) {
+        CGFloat leftX = self.stockScrollView.contentOffset.x;
+        CGFloat centerX = leftX + _stockScrollView.bounds.size.width/2;
+
+//        CGFloat oldLeftArrCount = ABS(centerX + [VStockChartConfig lineGap]) / ([VStockChartConfig lineGap] + [VStockChartConfig lineWidth]);
+//        
+//        CGFloat oldScreenArrCount = ABS(centerX + [VStockChartConfig lineGap]) / ([VStockChartConfig lineGap] + [VStockChartConfig lineWidth]);
+
+        // 拿到中心点数据源的index
+        CGFloat oldCenterArrCount = ABS(centerX + [VStockChartConfig lineGap]) / ([VStockChartConfig lineGap] + [VStockChartConfig lineWidth]);
+//        CGFloat oldCenterArrCount =
+        
+        // 缩放重绘
+        CGFloat newLineWidth = [VStockChartConfig lineWidth] *  (1 - kStockLineScaleFactor);
+        [VStockChartConfig setLineWith:newLineWidth];
+        [self updateScrollViewContentWidth];
+        
+        // 计算更新宽度后捏合中心点距离klineView左侧的距离
+        CGFloat newCenterDistance = oldCenterArrCount * [VStockChartConfig lineWidth] + (oldCenterArrCount - 1) * [VStockChartConfig lineGap];
+        
+        // 设置scrollview的contentoffset = (5) - (2);
+        if (self.lineGroup.lineModels.count * newLineWidth + (self.lineGroup.lineModels.count + 1) * [VStockChartConfig lineGap] > self.stockScrollView.bounds.size.width) {
+            CGFloat newOffsetX = newCenterDistance - (centerX - self.stockScrollView.contentOffset.x);
+            NSLog(@"newOffsetX:%f,%f", newOffsetX, self.stockScrollView.contentOffset.x);
+
+//            self.stockScrollView.contentOffset = CGPointMake(newOffsetX > 0 ? newOffsetX : 0 , self.stockScrollView.contentOffset.y);
+        } else {
+            self.stockScrollView.contentOffset = CGPointMake(0 , self.stockScrollView.contentOffset.y);
+        }
+        //        更新contentsize
+        [self updateScrollViewContentWidth];
+        [self setNeedsDisplay];
+    }
+}
 
 - (void)event_longPressAction:(UILongPressGestureRecognizer *)longPress {
     NSLog(@"%f", [longPress locationInView:self.stockScrollView].x - self.stockScrollView.contentOffset.x);
@@ -150,8 +237,7 @@
         [self setNeedsDisplay];
     }
     
-    if(longPress.state == UIGestureRecognizerStateEnded || longPress.state == UIGestureRecognizerStateCancelled || longPress.state == UIGestureRecognizerStateFailed)
-    {
+    if(longPress.state == UIGestureRecognizerStateEnded || longPress.state == UIGestureRecognizerStateCancelled || longPress.state == UIGestureRecognizerStateFailed) {
         //恢复scrollView的滑动
         _selectLineModel = self.screenLineModels.lastObject;
         oldPositionX = 0.f;
@@ -163,9 +249,10 @@
 - (void)event_pinchAction:(UIPinchGestureRecognizer *)pinch {
     //1.获取缩放倍数
     static CGFloat oldScale = 1.0f;
-    CGFloat difValue = pinch.scale - oldScale;
+//    CGFloat difValue = pinch.scale - oldScale;
+    _scaleRadio = pinch.scale - oldScale;
     
-    if(ABS(difValue) > VStockLineScaleBound) {
+    if(ABS(_scaleRadio) > kStockLineScaleBound) {
         if( pinch.numberOfTouches == 2 ) {
             
             //2.获取捏合中心点 -> 捏合中心点距离scrollviewcontent左侧的距离
@@ -177,7 +264,7 @@
             CGFloat oldLeftArrCount = ABS(centerX + [VStockChartConfig lineGap]) / ([VStockChartConfig lineGap] + [VStockChartConfig lineWidth]);
             
             //4.缩放重绘
-            CGFloat newLineWidth = [VStockChartConfig lineWidth] * (difValue > 0 ? (1 + VStockLineScaleFactor) : (1 - VStockLineScaleFactor));
+            CGFloat newLineWidth = [VStockChartConfig lineWidth] * (_scaleRadio > 0 ? (1 + kStockLineScaleFactor) : (1 - kStockLineScaleFactor));
             [VStockChartConfig setLineWith:newLineWidth];
             [self updateScrollViewContentWidth];
             
@@ -185,7 +272,7 @@
             CGFloat newLeftDistance = oldLeftArrCount * [VStockChartConfig lineWidth] + (oldLeftArrCount - 1) * [VStockChartConfig lineGap];
             
             //6.设置scrollview的contentoffset = (5) - (2);
-            if ( self.screenLineModels.count * newLineWidth + (self.screenLineModels.count + 1) * [VStockChartConfig lineGap] > self.stockScrollView.bounds.size.width ) {
+            if (self.screenLineModels.count * newLineWidth + (self.screenLineModels.count + 1) * [VStockChartConfig lineGap] > self.stockScrollView.bounds.size.width) {
                 CGFloat newOffsetX = newLeftDistance - (centerX - self.stockScrollView.contentOffset.x);
                 self.stockScrollView.contentOffset = CGPointMake(newOffsetX > 0 ? newOffsetX : 0 , self.stockScrollView.contentOffset.y);
             } else {
@@ -220,9 +307,27 @@
     return _stockScrollView;
 }
 
+- (UIButton *)zoomInBtn {
+    if (_zoomInBtn == nil) {
+        _zoomInBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        [_zoomInBtn setTitle:@"+" forState:UIControlStateNormal];
+        [_zoomInBtn addTarget:self action:@selector(event_scaleAction:) forControlEvents:UIControlEventTouchUpInside];
+    }
+    return _zoomInBtn;
+}
+
+- (UIButton *)zoomOutBtn {
+    if (_zoomOutBtn == nil) {
+        _zoomOutBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        [_zoomOutBtn setTitle:@"-" forState:UIControlStateNormal];
+        [_zoomOutBtn addTarget:self action:@selector(event_scaleAction:) forControlEvents:UIControlEventTouchUpInside];
+    }
+    return _zoomOutBtn;
+}
+
 
 - (CGFloat)updateScrollViewContentWidth {
-    //根据stockModels的个数和间隔和K线的宽度计算出self的宽度，并设置contentsize
+    // 根据stockModels的个数和间隔和K线的宽度计算出self的宽度，并设置contentsize
     CGFloat kLineViewWidth = self.lineGroup.lineModels.count * [VStockChartConfig lineWidth] + (self.lineGroup.lineModels.count + 1) * [VStockChartConfig lineGap];
     
     if(kLineViewWidth < self.stockScrollView.bounds.size.width) {

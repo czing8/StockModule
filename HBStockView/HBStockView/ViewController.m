@@ -79,6 +79,11 @@
     
     [self.stockView reloadDataCompletion:nil];
     
+    [StockRequest getDaDanRequestSuccess:^(NSArray *resultArray) {
+       
+        NSLog(@"daDan:%@", resultArray);
+    }];
+    
 //    [StockRequest getDayStockDataSuccess:^(VLineGroup *response) {
 //        NSLog(@"count:%lu", (unsigned long)response.lineModels.count);
 //        [self.stockDataSource setObject:response forKey:@"daySource"];
@@ -116,14 +121,14 @@
     [_fullScreenStockView addSubview:self.stockView];
     [self.stockView mas_remakeConstraints:^(MASConstraintMaker *make) {
         make.left.right.bottom.equalTo(_fullScreenStockView);
-        make.top.equalTo(_fullScreenStockView).offset(66);
+        make.top.equalTo(_fullScreenStockView).offset(48);
     }];
     _fullScreenStockView.transform = CGAffineTransformMakeRotation(M_PI_2);
     [self.stockView reloadDataCompletion:nil];
     
     _fullScreenStockView.closeHandler = ^(){
         [weakSelf.view addSubview:weakSelf.stockView];
-        weakSelf.stockView.backgroundColor = [UIColor orangeColor];
+        weakSelf.stockView.backgroundColor = [UIColor stockMainBgColor];
         [weakSelf.stockView mas_remakeConstraints:^(MASConstraintMaker *make) {
             make.top.equalTo(weakSelf.stockStatusView.mas_bottom);
             make.left.right.mas_equalTo(0);

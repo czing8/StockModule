@@ -107,8 +107,8 @@
  *  分时线颜色
  */
 + (UIColor *)timeLineColor {
-    return [UIColor colorWithHex:0x60CFFF];
-//    return [UIColor orangeColor];
+//    return [UIColor colorWithHex:0x60CFFF];
+    return [UIColor colorWithRed:16/255.f green:90/255.f blue:127/255.f alpha:1];
 }
 
 /**

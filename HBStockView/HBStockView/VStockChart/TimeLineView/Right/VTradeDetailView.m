@@ -92,15 +92,17 @@
     UIView * headView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 0, 14)];
     headView.backgroundColor = [UIColor stockMainBgColor];
     
-    float width = (self.bounds.size.width-2)/3.0 ;
+    float width = (self.bounds.size.width-3)/3.0 ;
     NSArray * titles = @[@"时间", @"价格", @"成交量"];
     for (int i = 0; i < 3; i ++) {
-        UILabel * label = [[UILabel alloc] initWithFrame:CGRectMake(2+i*width, 0, width, 14)];
+        UILabel * label = [[UILabel alloc] init];
+        label.frame = CGRectMake(2+i*width, 0, width, 14);
         label.font = [UIFont systemFontOfSize:12];
         label.text = titles[i];
         [headView addSubview:label];
         if (i == 2) {
             label.textAlignment = NSTextAlignmentRight;
+            label.frame = CGRectMake(2+i*width, 0, width + 3, 14);
         }
     }
     

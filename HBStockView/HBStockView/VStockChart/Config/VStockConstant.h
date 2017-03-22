@@ -122,12 +122,12 @@ typedef NS_ENUM(NSInteger, VStockChartType) {
 /**
  *  K线图缩放界限
  */
-#define  VStockLineScaleBound 0.03
+#define  kStockLineScaleBound 0.03
 
 /**
  *  K线的缩放因子
  */
-#define VStockLineScaleFactor 0.06
+#define kStockLineScaleFactor 0.06
 
 //Kline种类
 typedef NS_ENUM(NSInteger, VStockType) {

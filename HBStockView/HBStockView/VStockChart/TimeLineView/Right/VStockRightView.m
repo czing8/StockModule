@@ -22,7 +22,7 @@
 
 @property (nonatomic, strong) VBidPriceView     * bidPriceView;     // 五档图
 @property (nonatomic, strong) VTradeDetailView  * tradeDetailView;  // 交易明细
-@property (nonatomic, strong) VBigTradeView     * bigTradeView;     // 大单视图
+@property (nonatomic, strong) VTradeDetailView  * bigTradeView;     // 大单视图
 
 
 @end
@@ -95,9 +95,9 @@
     return _tradeDetailView;
 }
 
-- (VBigTradeView *)bigTradeView {
+- (VTradeDetailView *)bigTradeView {
     if (_bigTradeView == nil) {
-        _bigTradeView = [VBigTradeView new];
+        _bigTradeView = [VTradeDetailView new];
         _bigTradeView.hidden = YES;
     }
     return _bigTradeView;
@@ -112,7 +112,9 @@
     [self.tradeDetailView reloadWithData:_timeLineGroup.tradeModels];
 //    [self.bidPriceView reloadWithModel:_timeLineGroup.bidPriceModel];
     
-    
+    [StockRequest getDaDanRequestSuccess:^(NSArray *resultArray) {
+        [_bigTradeView reloadWithData:resultArray];
+    }];
 }
 
 #pragma mark - ScrollMenuDelegate
@@ -131,7 +133,12 @@
     }
     else if (index == 2) {
         _bigTradeView.hidden = NO;
+        [StockRequest getDaDanRequestSuccess:^(NSArray *resultArray) {
+            [_bigTradeView reloadWithData:resultArray];
+        }];
     }
 }
+
+
 
 @end

@@ -438,8 +438,8 @@
 				F14B2B351E61776A0001663F /* VStockScrollView.m */,
 				F17B72031E69638300F0978B /* VScrollMenuView.h */,
 				F17B72041E69638300F0978B /* VScrollMenuView.m */,
-				F155B4CE1E70013B00CC0349 /* VStockStatusView.h */,
 				F155B4CF1E70013B00CC0349 /* VStockStatusView.m */,
+				F155B4CE1E70013B00CC0349 /* VStockStatusView.h */,
 				F155B4D11E70051F00CC0349 /* VStockStatusView.xib */,
 				F1469A461E715914005B50F5 /* VFullScreenStockView.h */,
 				F1469A471E715914005B50F5 /* VFullScreenStockView.m */,
@@ -578,6 +578,7 @@
 				TargetAttributes = {
 					F14B2AE21E6126620001663F = {
 						CreatedOnToolsVersion = 8.2.1;
+						DevelopmentTeam = NRQ862A7E8;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -807,7 +808,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = NRQ862A7E8;
 				GCC_PREFIX_HEADER = HBStockView/PrefixHeader.pch;
 				INFOPLIST_FILE = HBStockView/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -821,7 +822,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = NRQ862A7E8;
 				GCC_PREFIX_HEADER = HBStockView/PrefixHeader.pch;
 				INFOPLIST_FILE = HBStockView/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";

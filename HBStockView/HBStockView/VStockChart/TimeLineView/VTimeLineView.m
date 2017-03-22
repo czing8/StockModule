@@ -66,23 +66,20 @@
     
     [self addSubview:self.theRightView];
     [_theRightView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self);
-        make.right.equalTo(self).offset(-6);
-        make.width.equalTo(self).multipliedBy(0.3);
-        make.height.equalTo(self);
+        make.top.height.equalTo(self);
+        make.right.equalTo(self).offset(-kStockScrollViewLeftGap);
+        make.width.equalTo(self.mas_height).multipliedBy(0.5);
     }];
 
     _theRightView.backgroundColor = [UIColor stockMainBgColor];
     
     [self addSubview:self.stockScrollView];
     [_stockScrollView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self);
+        make.top.height.equalTo(self);
         make.left.equalTo(self).offset(kStockScrollViewLeftGap);
         make.right.equalTo(self.theRightView.mas_left).offset(-kStockScrollViewLeftGap);
-        make.height.equalTo(self);
     }];
 
-//    _stockScrollView.backgroundColor = [UIColor lightGrayColor];
     // 分时图View
     _timeLineChart = [[VTimeLineChart alloc] init];
     _timeLineChart.backgroundColor = [UIColor clearColor];

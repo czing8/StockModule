@@ -22,6 +22,9 @@
 
 + (void)getMonthStockDataSuccess:(void (^)(VLineGroup *response))success;
 
++ (void)getDaDanRequestSuccess:(void (^)(NSArray *resultArray))success;
+
+//http://proxy.finance.qq.com/ifzqgtimg/appstock/app/HsDealinfo/getDadan?code=sz002185
 
 + (void)get:(NSString*) url params:(id)params success:(void (^)(NSDictionary *response))success fail:(void(^)(NSDictionary *info))fail;
 

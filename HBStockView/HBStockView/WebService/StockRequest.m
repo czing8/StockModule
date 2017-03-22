@@ -285,6 +285,46 @@
 }
 
 
++ (void)getDaDanRequestSuccess:(void (^)(NSArray *resultArray))success {
+    NSString * urlString = @"http://proxy.finance.qq.com/ifzqgtimg/appstock/app/HsDealinfo/getDadan?code=sz002185";
+    
+    [[HttpHelper shared] get:nil path:urlString success:^(NSDictionary * flag) {
+        NSArray * daDanData = flag[@"data"][@"detail"];
+        NSLog(@"daDanData:%@", daDanData);
+        
+        NSMutableArray * array = [NSMutableArray new];
+        
+        for (int i = 0; i < daDanData.count; i ++) {
+            NSArray *tmpArray = daDanData[i];
+
+            VTimeTradeModel * model = [[VTimeTradeModel alloc] init];
+            model.tradeTime = [tmpArray[0] substringToIndex:5];
+            model.tradePrice = tmpArray[1];
+            model.tradeVolmue = tmpArray[2];
+            if ([tmpArray[3] isEqualToString:@"S"]) {
+                model.tradeType = -1;
+            }
+            else if ([tmpArray[3] isEqualToString:@"B"]) {
+                model.tradeType = 1;
+            }
+            else {
+                model.tradeType = 0;
+            }
+            
+            [array addObject:model];
+        }
+        success(array);
+        
+    } failue:^(NSError *error) {
+        
+    }];
+
+}
+
+
+
+
+
 #pragma mark --均值计算
 + (CGFloat)averageWithData:(NSArray *)data range:(NSRange)range{
     
