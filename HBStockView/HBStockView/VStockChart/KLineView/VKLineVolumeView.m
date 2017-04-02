@@ -25,6 +25,44 @@
 
 @implementation VKLineVolumeView
 
+- (void)drawViewWithXPosition:(CGFloat)xPosition drawModels:(NSArray <VLineModel *>*)drawLineModels linePositions:(NSArray <VKLinePosition *>*)linePositions{
+    NSAssert(drawLineModels, @"数据源不能为空");
+    _linePositionModels = linePositions;
+    //转换为实际坐标
+    [self convertToPositionModelsWithXPosition:xPosition drawLineModels:drawLineModels];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self setNeedsDisplay];
+    });
+}
+
+- (NSArray *)convertToPositionModelsWithXPosition:(CGFloat)startX drawLineModels:(NSArray <VLineModel *>*)drawLineModels {
+    if (!drawLineModels) return nil;
+    self.drawLineModels = drawLineModels;
+    [self.drawPositionModels removeAllObjects];
+    
+    CGFloat minValue =  0;
+    CGFloat maxValue =  [[[drawLineModels valueForKeyPath:@"volume"] valueForKeyPath:@"@max.floatValue"] floatValue];
+    
+    CGFloat minY = kStockLineVolumeViewMinY;
+    CGFloat maxY = self.frame.size.height - kStockLineDayHeight;
+    
+    CGFloat unitValue = (maxValue - minValue)/(maxY - minY);
+    
+    [drawLineModels enumerateObjectsUsingBlock:^(VLineModel * _Nonnull model, NSUInteger idx, BOOL * _Nonnull stop) {
+        
+        CGFloat xPosition = startX + idx * ([VStockChartConfig lineWidth] + [VStockChartConfig lineGap]);
+        CGFloat yPosition = ABS(maxY - (model.volume - minValue)/unitValue);
+        CGPoint startPoint = CGPointMake(xPosition, (ABS(yPosition - maxY) > 0 && ABS(yPosition - maxY) < 0.5) ? maxY - 0.5 : yPosition);
+        CGPoint endPoint = CGPointMake(xPosition, maxY);
+        
+        VolumePositionModel *positionModel = [VolumePositionModel modelWithStartPoint:startPoint endPoint:endPoint dayDesc:model.day];
+        [self.drawPositionModels addObject:positionModel];
+    }];
+    
+    return self.drawPositionModels;
+}
+
+
 - (void)drawRect:(CGRect)rect {
     [super drawRect:rect];
     
@@ -45,11 +83,11 @@
         } else if (self.drawLineModels[idx].openPrice > self.drawLineModels[idx].closePrice) {
             strokeColor = [UIColor stock_decreaseColor];
         } else {
-//            if (self.drawLineModels[idx].openPrice >= [[[self.drawLineModels[idx] preDataModel] Close] floatValue]) {
-                strokeColor = [UIColor stock_increaseColor];
-//            } else {
-//                strokeColor = [UIColor YYStock_decreaseColor];
-//            }
+            //            if (self.drawLineModels[idx].openPrice >= [[[self.drawLineModels[idx] preDataModel] Close] floatValue]) {
+            strokeColor = [UIColor stock_increaseColor];
+            //            } else {
+            //                strokeColor = [UIColor YYStock_decreaseColor];
+            //            }
         }
         
         CGContextSetStrokeColorWithColor(context, strokeColor.CGColor);
@@ -94,42 +132,7 @@
     }];
     
 }
-- (void)drawViewWithXPosition:(CGFloat)xPosition drawModels:(NSArray <VLineModel *>*)drawLineModels linePositions:(NSArray <VKLinePosition *>*)linePositions{
-    NSAssert(drawLineModels, @"数据源不能为空");
-    _linePositionModels = linePositions;
-    //转换为实际坐标
-    [self convertToPositionModelsWithXPosition:xPosition drawLineModels:drawLineModels];
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self setNeedsDisplay];
-    });
-}
 
-- (NSArray *)convertToPositionModelsWithXPosition:(CGFloat)startX drawLineModels:(NSArray <VLineModel *>*)drawLineModels {
-    if (!drawLineModels) return nil;
-    self.drawLineModels = drawLineModels;
-    [self.drawPositionModels removeAllObjects];
-    
-    CGFloat minValue =  0;
-    CGFloat maxValue =  [[[drawLineModels valueForKeyPath:@"volume"] valueForKeyPath:@"@max.floatValue"] floatValue];
-    
-    CGFloat minY = kStockLineVolumeViewMinY;
-    CGFloat maxY = self.frame.size.height - kStockLineDayHeight;
-    
-    CGFloat unitValue = (maxValue - minValue)/(maxY - minY);
-    
-    [drawLineModels enumerateObjectsUsingBlock:^(VLineModel * _Nonnull model, NSUInteger idx, BOOL * _Nonnull stop) {
-        
-        CGFloat xPosition = startX + idx * ([VStockChartConfig lineWidth] + [VStockChartConfig lineGap]);
-        CGFloat yPosition = ABS(maxY - (model.volume - minValue)/unitValue);
-        CGPoint startPoint = CGPointMake(xPosition, (ABS(yPosition - maxY) > 0 && ABS(yPosition - maxY) < 0.5) ? maxY - 0.5 : yPosition);
-        CGPoint endPoint = CGPointMake(xPosition, maxY);
-        
-        VolumePositionModel *positionModel = [VolumePositionModel modelWithStartPoint:startPoint endPoint:endPoint dayDesc:model.day];
-        [self.drawPositionModels addObject:positionModel];
-    }];
-    
-    return self.drawPositionModels;
-}
 
 - (NSMutableArray *)drawPositionModels {
     if (!_drawPositionModels) {

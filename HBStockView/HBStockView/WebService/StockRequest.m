@@ -24,18 +24,17 @@
 }
 
 
-+ (void)getTimeStockDataSuccess:(void (^)(VTimeLineGroup *response))success {
-    NSString * urlString = @"http://proxy.finance.qq.com/ifzqgtimg/appstock/app/minute/query?p=1&code=sz002185&_rndtime=1474955377&_appName=ios&_dev=iPod7,1&_devId=cca43cc6683821c1e2556251a62e0dd2038a76e5&_appver=5.1.0&_ifChId=&_isChId=1&_osVer=9.2.1&_uin=10000&_wxuin=20000";
++ (void)getTimeStockData:(NSString *)stockCode success:(void (^)(VStockGroup *response))success {
+    // sz002185
+    NSString * urlString = [NSString stringWithFormat:@"http://proxy.finance.qq.com/ifzqgtimg/appstock/app/minute/query?p=1&code=%@", stockCode];
+    
     [[HttpHelper shared] get:nil path:urlString success:^(NSDictionary * flag) {
         
-        VTimeLineGroup * timeGroup = [[VTimeLineGroup alloc] init];
-
-        NSDictionary * resultDic    = flag[@"data"][@"sz002185"];
-        NSArray * stockStatusArray  = resultDic[@"qt"][@"sz002185"];
+        NSDictionary * resultDic    = flag[@"data"][stockCode];
+        NSArray * stockStatusArray  = resultDic[@"qt"][stockCode];
         NSString * tradeString  = resultDic[@"mx_price"][@"mx"][@"data"][1];
 
         NSArray * tradeModels = [self tradeModelsFrom:tradeString];
-        timeGroup.tradeModels = tradeModels;
         
         float curPrice = [stockStatusArray[3] floatValue];
         float closePrice = [stockStatusArray[4] floatValue];
@@ -44,15 +43,25 @@
         float waiPan = [stockStatusArray[7] floatValue];
         float neiPan = [stockStatusArray[8] floatValue];
         
-        VStockStatusModel * statusModel = [self stockStatusModelFromArray:stockStatusArray];
+        // ---- 股票各种参数模型
+        VStockStatusModel * statusModel = [self stockStatusModelFromArray:stockStatusArray  isHK:NO];
         
+        
+        // ---- 股票五档竞价模型
         NSArray *buyPrices = @[stockStatusArray[9], stockStatusArray[11], stockStatusArray[13], stockStatusArray[15], stockStatusArray[17]];
         NSArray *sellPrices = @[stockStatusArray[27], stockStatusArray[25], stockStatusArray[23], stockStatusArray[21], stockStatusArray[19]];
         
         NSArray *buyVolumes = @[stockStatusArray[10], stockStatusArray[12], stockStatusArray[14], stockStatusArray[16], stockStatusArray[18]];
         NSArray *sellVolumes = @[stockStatusArray[28], stockStatusArray[26], stockStatusArray[24], stockStatusArray[22], stockStatusArray[20]];
         
-        timeGroup.stockStatusModel = statusModel;
+        VBidPriceModel * bidPriceModel = [[VBidPriceModel alloc]init];
+        bidPriceModel.buyPrices = buyPrices;
+        bidPriceModel.buyVolumes = buyVolumes;
+        bidPriceModel.sellPrices = sellPrices;
+        bidPriceModel.sellVolumes = sellVolumes;
+
+
+        // ---- 股票K线数组
         NSMutableArray * timeLineModels = [[NSMutableArray alloc] init];
         
         NSArray * data = resultDic[@"data"][@"data"];
@@ -67,8 +76,8 @@
             float price = [item[1] floatValue];
             float volume = [item[2] floatValue];
             
-            VTimeLineModel *model = [[VTimeLineModel alloc]init];
-            model.price = @(price);
+            VStockPoint *model = [[VStockPoint alloc]init];
+            model.price = price;
             model.volume = volume - tmpVolume;
             model.preClosePrice = closePrice;
             [timeLineModels addObject:model];
@@ -100,25 +109,19 @@
             tmpVolume = volume;
         }
         
-        VBidPriceModel * bidPriceModel = [[VBidPriceModel alloc]init];
-        bidPriceModel.buyPrices = buyPrices;
-        bidPriceModel.buyVolumes = buyVolumes;
-        bidPriceModel.sellPrices = sellPrices;
-        bidPriceModel.sellVolumes = sellVolumes;
+        VStockGroup * timeGroup = [[VStockGroup alloc] init];
         
-        timeGroup.lineModels = timeLineModels;
+        timeGroup.tradeModels       = tradeModels;
+        timeGroup.stockStatusModel  = statusModel;
+        timeGroup.bidPriceModel     = bidPriceModel;
+        timeGroup.lineModels        = timeLineModels;
+        
         timeGroup.maxPrice = maxPrice;
         timeGroup.minPrice = minPrice;
         timeGroup.maxVolume= maxVolume;
         timeGroup.minVolume= minVolume;
         timeGroup.preClosePrice = closePrice;
         timeGroup.price = curPrice;
-        timeGroup.openPrice = openPrice;
-        timeGroup.volume = volume;
-        timeGroup.waiPan = waiPan;
-        timeGroup.neiPan = neiPan;
-        
-        timeGroup.bidPriceModel = bidPriceModel;
 
         success(timeGroup);
         
@@ -129,7 +132,7 @@
 
 
 + (void)get5DayStockDataSuccess:(void (^)(NSArray *resultArray))success {
-    NSString * urlString = @"http://proxy.finance.qq.com/ifzqgtimg/appstock/app/day/query?p=1&code=sz002185&_rndtime=1473489077&_appName=ios&_dev=iPod5,1&_devId=d66caf3263cd7633ae0cd7ab69be2887b960c9aa&_appver=5.1.0&_ifChId=&_isChId=1&_osVer=7.1.1&_uin=10000&_wxuin=20000";
+    NSString * urlString = @"http://proxy.finance.qq.com/ifzqgtimg/appstock/app/day/query?p=1&code=sz002185";
 
     [[HttpHelper shared] get:nil path:urlString success:^(NSDictionary * flag) {
         NSDictionary * resultDic = flag[@"data"][@"sz002185"];
@@ -141,13 +144,14 @@
     }];
 }
 
-+ (void)getDayStockDataSuccess:(void (^)(VLineGroup *response))success {
-    NSString * urlString = @"http://proxy.finance.qq.com/ifzqgtimg/appstock/app/fqkline/get?p=1&param=sz002185,day,,,320,qfq&_rndtime=1473240957&_appName=ios&_dev=iPod7,1&_devId=cca43cc6683821c1e2556251a62e0dd2038a76e5&_appver=5.1.0&_ifChId=&_isChId=1&_osVer=9.2.1&_uin=10000&_wxuin=20000";
++ (void)getDayStockData:(NSString *)stockCode success:(void (^)(VStockGroup *response))success {
+    NSString * urlString = [NSString stringWithFormat:@"http://proxy.finance.qq.com/ifzqgtimg/appstock/app/fqkline/get?p=1&param=%@,day,,,320,qfq", stockCode];
+
     [[HttpHelper shared] get:nil path:urlString success:^(NSDictionary * flag) {
-        NSDictionary * resultDic = flag[@"data"][@"sz002185"];
+        NSDictionary * resultDic = flag[@"data"][stockCode];
         
-        NSArray * stockStatusArray = resultDic[@"qt"][@"sz002185"];
-        VStockStatusModel * statusModel = [self stockStatusModelFromArray:stockStatusArray];
+        NSArray * stockStatusArray = resultDic[@"qt"][stockCode];
+        VStockStatusModel * statusModel = [self stockStatusModelFromArray:stockStatusArray  isHK:NO];
 
         NSArray * stockData = resultDic[@"qfqday"];
         NSMutableArray* lineModels = [[NSMutableArray alloc] init];
@@ -176,10 +180,11 @@
             [lineModels addObject:model];
         }
         
-        VLineGroup * lineGroup = [[VLineGroup alloc] init];
-        lineGroup.lineModels = lineModels;
-        lineGroup.stockStatusModel = statusModel;
-        success(lineGroup);
+        VStockGroup * stockGroup = [[VStockGroup alloc] init];
+        stockGroup.kLineModels = lineModels;
+        stockGroup.stockStatusModel = statusModel;
+        success(stockGroup);
+        
     } failue:^(NSError *error) {
         
     }];
@@ -187,16 +192,16 @@
 }
 
 
-+ (void)getWeekStockDataSuccess:(void (^)(VLineGroup *response))success {
++ (void)getWeekStockData:(NSString *)stockCode success:(void (^)(VStockGroup *response))success {
     
-    NSString * urlString = @"http://proxy.finance.qq.com/ifzqgtimg/appstock/app/fqkline/get?p=1&param=sz002185,week,,,320,qfq&_rndtime=1473486948&_appName=ios&_dev=iPod5,1&_devId=d66caf3263cd7633ae0cd7ab69be2887b960c9aa&_appver=5.1.0&_ifChId=&_isChId=1&_osVer=7.1.1&_uin=10000&_wxuin=20000";
+    NSString * urlString = [NSString stringWithFormat:@"http://proxy.finance.qq.com/ifzqgtimg/appstock/app/fqkline/get?p=1&param=%@,week,,,320,qfq", stockCode];
     
     [[HttpHelper shared] get:nil path:urlString success:^(NSDictionary * flag) {
-        NSDictionary * resultDic = flag[@"data"][@"sz002185"];
+        NSDictionary * resultDic = flag[@"data"][stockCode];
 
         NSArray * stockData = resultDic[@"qfqweek"];
-        NSArray * stockStatusArray = resultDic[@"qt"][@"sz002185"];
-        VStockStatusModel * statusModel = [self stockStatusModelFromArray:stockStatusArray];
+        NSArray * stockStatusArray = resultDic[@"qt"][stockCode];
+        VStockStatusModel * statusModel = [self stockStatusModelFromArray:stockStatusArray  isHK:NO];
 
         NSLog(@"WeekStockData:%@", stockData);
 
@@ -226,28 +231,27 @@
             [lineModels addObject:model];
         }
         
-        VLineGroup * lineGroup = [[VLineGroup alloc] init];
-        lineGroup.lineModels = lineModels;
-        lineGroup.stockStatusModel = statusModel;
-        success(lineGroup);
+        VStockGroup * stockGroup = [[VStockGroup alloc] init];
+        stockGroup.kLineModels = lineModels;
+        stockGroup.stockStatusModel = statusModel;
+        success(stockGroup);
     } failue:^(NSError *error) {
         
     }];
 
 }
 
-+ (void)getMonthStockDataSuccess:(void (^)(VLineGroup *response))success {
-    NSString * urlString = @"http://proxy.finance.qq.com/ifzqgtimg/appstock/app/fqkline/get?p=1&param=sz002185,month,,,320,qfq&_rndtime=1473488888&_appName=ios&_dev=iPod5,1&_devId=d66caf3263cd7633ae0cd7ab69be2887b960c9aa&_appver=5.1.0&_ifChId=&_isChId=1&_osVer=7.1.1&_uin=10000&_wxuin=20000";
++ (void)getMonthStockData:(NSString *)stockCode success:(void (^)(VStockGroup *response))success {
+    NSString * urlString = [NSString stringWithFormat:@"http://proxy.finance.qq.com/ifzqgtimg/appstock/app/fqkline/get?p=1&param=%@,month,,,320,qfq", stockCode];
     
     [[HttpHelper shared] get:nil path:urlString success:^(NSDictionary * flag) {
-        NSDictionary * resultDic = flag[@"data"][@"sz002185"];
+        NSDictionary * resultDic = flag[@"data"][stockCode];
         NSArray * stockData = resultDic[@"qfqmonth"];
         
-        NSArray * stockStatusArray = resultDic[@"qt"][@"sz002185"];
-        VStockStatusModel * statusModel = [self stockStatusModelFromArray:stockStatusArray];
+        NSArray * stockStatusArray = resultDic[@"qt"][stockCode];
+        VStockStatusModel * statusModel = [self stockStatusModelFromArray:stockStatusArray  isHK:NO];
 
         NSLog(@"MonthStockData:%@", stockData);
-
         
         NSMutableArray* lineModels = [[NSMutableArray alloc] init];
         int MA5 = 5, MA10 = 10, MA20 = 20;  // 均线统计
@@ -275,18 +279,20 @@
             [lineModels addObject:model];
         }
         
-        VLineGroup * lineGroup = [[VLineGroup alloc] init];
-        lineGroup.lineModels = lineModels;
-        lineGroup.stockStatusModel = statusModel;
-        success(lineGroup);
+        VStockGroup * stockGroup = [[VStockGroup alloc] init];
+        stockGroup.kLineModels = lineModels;
+        stockGroup.stockStatusModel = statusModel;
+        success(stockGroup);
     } failue:^(NSError *error) {
         
     }];
 }
 
 
-+ (void)getDaDanRequestSuccess:(void (^)(NSArray *resultArray))success {
-    NSString * urlString = @"http://proxy.finance.qq.com/ifzqgtimg/appstock/app/HsDealinfo/getDadan?code=sz002185";
++ (void)getDaDanRequest:(NSString *)stockCode success:(void (^)(NSArray *resultArray))success {
+    NSString * urlString = [NSString stringWithFormat:@"http://proxy.finance.qq.com/ifzqgtimg/appstock/app/HsDealinfo/getDadan?code=%@", stockCode];
+
+//    NSString * urlString = @"http://proxy.finance.qq.com/ifzqgtimg/appstock/app/HsDealinfo/getDadan?code=sz002185";
     
     [[HttpHelper shared] get:nil path:urlString success:^(NSDictionary * flag) {
         NSArray * daDanData = flag[@"data"][@"detail"];
@@ -318,10 +324,259 @@
     } failue:^(NSError *error) {
         
     }];
-
 }
 
 
+
++ (void)getHKTimeStockData:(NSString *)stockCode success:(void (^)(VStockGroup *response))success {
+//    hk01211
+    NSString * urlString = [NSString stringWithFormat:@"http://proxy.finance.qq.com/ifzqgtimg/appstock/app/HkMinute/query?p=1&code=%@", stockCode];
+    
+    [[HttpHelper shared] get:nil path:urlString success:^(NSDictionary * flag) {
+   
+        NSDictionary * resultDic = flag[@"data"][stockCode];
+
+        
+        // ---- 股票各种参数
+        NSArray * stockStatusArray  = resultDic[@"qt"][stockCode];
+        VStockStatusModel * statusModel = [self stockStatusModelFromArray:stockStatusArray isHK:YES];
+        
+        // ---- 股票K线点数组
+        NSArray * data = resultDic[@"data"][@"data"];
+
+        NSMutableArray * timeLineModels = [[NSMutableArray alloc] init];
+        float maxPrice = 0.0, minPrice = 0.0, maxVolume = 0.0, minVolume = 0.0;
+        float tmpVolume = 0.0;
+        
+        for (int i = 0; i < data.count; i ++) {
+            NSString *timeStockData = data[i];
+            NSArray * item = [timeStockData componentsSeparatedByString:@" "];
+            
+            float price = [item[1] floatValue];
+            float volume = [item[2] floatValue];
+            
+            VStockPoint *model = [[VStockPoint alloc]init];
+            model.price = price;
+            model.volume = volume - tmpVolume;
+            model.preClosePrice = [stockStatusArray[4] floatValue];
+            [timeLineModels addObject:model];
+            
+            if (i == 0) {
+                maxPrice = [item[1] floatValue];
+                minPrice = maxPrice;
+                
+                maxVolume = [item[2] floatValue];
+                minVolume = maxVolume;
+            }
+            
+            if (price > maxPrice) {
+                maxPrice = price;
+            }
+            
+            if (price < minPrice) {
+                minPrice = price;
+            }
+            
+            if (model.volume > maxVolume) {
+                maxVolume = model.volume;
+            }
+            
+            if (model.volume < minVolume) {
+                minVolume = model.volume;
+            }
+            
+            tmpVolume = volume;
+        }
+        
+        VStockGroup * timeGroup = [[VStockGroup alloc] init];
+        timeGroup.stockStatusModel  = statusModel;
+        timeGroup.lineModels        = timeLineModels;
+        
+        timeGroup.maxPrice = maxPrice;
+        timeGroup.minPrice = minPrice;
+        timeGroup.maxVolume= maxVolume;
+        timeGroup.minVolume= minVolume;
+        timeGroup.preClosePrice = [stockStatusArray[4] floatValue];
+        
+        success(timeGroup);
+        
+    } failue:^(NSError *error) {
+        
+    }];
+}
+
+
++ (void)getHKDayStockData:(NSString *)stockCode success:(void (^)(VStockGroup *response))success {
+    NSString * urlString = [NSString stringWithFormat:@"http://123.126.122.40/ifzqgtimg/appstock/app/newkline/newkline?p=1&param=%@,day,,,320", stockCode];
+
+    [[HttpHelper shared] get:nil path:urlString success:^(NSDictionary * flag) {
+        NSDictionary * resultDic = flag[@"data"][stockCode];
+        
+        NSArray * stockStatusArray = resultDic[@"qt"][stockCode];
+        VStockStatusModel * statusModel = [self stockStatusModelFromArray:stockStatusArray  isHK:YES];
+        
+        NSArray * stockData = resultDic[@"day"];
+        NSMutableArray* lineModels = [[NSMutableArray alloc] init];
+        int MA5 = 5, MA10 = 10, MA20 = 20;  // 均线统计
+        
+        for (int i = 0; i < stockData.count; i ++) {
+            NSArray *item = stockData[i];
+            VLineModel * model = [[VLineModel alloc] init];
+            model.day = item[0];
+            model.openPrice = [item[1] floatValue];
+            model.closePrice = [item[2] floatValue];
+            model.highestPrice = [item[3] floatValue];
+            model.lowestPrice = [item[4] floatValue];
+            model.volume = [item[5] floatValue];
+            
+            if (i >= 5) {
+                model.ma5 = [self averageWithData:stockData range:NSMakeRange(i-MA5+1, MA5)];
+            }
+            if (i >= 10) {
+                model.ma10 = [self averageWithData:stockData range:NSMakeRange(i-MA10+1, MA10)];
+            }
+            if (i >= 20) {
+                model.ma20 = [self averageWithData:stockData range:NSMakeRange(i-MA20+1, MA20)];
+            }
+            
+            [lineModels addObject:model];
+        }
+        
+        VStockGroup * stockGroup = [[VStockGroup alloc] init];
+        stockGroup.kLineModels = lineModels;
+        stockGroup.stockStatusModel = statusModel;
+        success(stockGroup);
+
+    } failue:^(NSError *error) {
+        
+    }];
+}
+
+
++ (void)getHKWeekStockCode:(NSString *)stockCode success:(void (^)(VStockGroup *response))success {
+    NSString * urlString = [NSString stringWithFormat:@"http://123.126.122.40/ifzqgtimg/appstock/app/newkline/newkline?p=1&param=%@,week,,,320", stockCode];
+    
+    [[HttpHelper shared] get:nil path:urlString success:^(NSDictionary * flag) {
+        NSDictionary * resultDic = flag[@"data"][stockCode];
+        
+        NSArray * stockData = resultDic[@"week"];
+        NSArray * stockStatusArray = resultDic[@"qt"][stockCode];
+        VStockStatusModel * statusModel = [self stockStatusModelFromArray:stockStatusArray  isHK:YES];
+        
+        NSMutableArray* lineModels = [[NSMutableArray alloc] init];
+        int MA5 = 5, MA10 = 10, MA20 = 20;  // 均线统计
+        
+        for (int i = 0; i < stockData.count; i ++) {
+            NSArray *item = stockData[i];
+            VLineModel * model = [[VLineModel alloc] init];
+            model.day = item[0];
+            model.openPrice = [item[1] floatValue];
+            model.closePrice = [item[2] floatValue];
+            model.highestPrice = [item[3] floatValue];
+            model.lowestPrice = [item[4] floatValue];
+            model.volume = [item[5] floatValue];
+            
+            if (i >= 5) {
+                model.ma5 = [self averageWithData:stockData range:NSMakeRange(i-MA5+1, MA5)];
+            }
+            if (i >= 10) {
+                model.ma10 = [self averageWithData:stockData range:NSMakeRange(i-MA10+1, MA10)];
+            }
+            if (i >= 20) {
+                model.ma20 = [self averageWithData:stockData range:NSMakeRange(i-MA20+1, MA20)];
+            }
+            
+            [lineModels addObject:model];
+        }
+        
+        VStockGroup * stockGroup = [[VStockGroup alloc] init];
+        stockGroup.kLineModels = lineModels;
+        stockGroup.stockStatusModel = statusModel;
+        success(stockGroup);
+        
+    } failue:^(NSError *error) {
+        
+    }];
+}
+
++ (void)getHKYearStockCode:(NSString *)stockCode success:(void (^)(VStockGroup *response))success {
+    NSString * urlString = [NSString stringWithFormat:@"http://123.126.122.40/ifzqgtimg/appstock/app/newkline/newkline?p=1&param=%@,day,,,260", stockCode];
+    
+    [[HttpHelper shared] get:nil path:urlString success:^(NSDictionary * flag) {
+        NSDictionary * resultDic = flag[@"data"][stockCode];
+        
+        NSArray * stockStatusArray = resultDic[@"qt"][stockCode];
+        VStockStatusModel * statusModel = [self stockStatusModelFromArray:stockStatusArray  isHK:YES];
+        
+        NSArray * stockData = resultDic[@"day"];
+        NSMutableArray* lineModels = [[NSMutableArray alloc] init];
+        int MA5 = 5, MA10 = 10, MA20 = 20;  // 均线统计
+        
+        float maxPrice = 0.0, minPrice = 0.0, maxVolume = 0.0, minVolume = 0.0;
+        
+        for (int i = 0; i < stockData.count; i ++) {
+            NSArray *item = stockData[i];
+            VLineModel * model = [[VLineModel alloc] init];
+            model.day = item[0];
+            model.openPrice = [item[1] floatValue];
+            model.closePrice = [item[2] floatValue];
+            model.highestPrice = [item[3] floatValue];
+            model.lowestPrice = [item[4] floatValue];
+            model.volume = [item[5] floatValue];
+            
+            if (i >= 5) {
+                model.ma5 = [self averageWithData:stockData range:NSMakeRange(i-MA5+1, MA5)];
+            }
+            if (i >= 10) {
+                model.ma10 = [self averageWithData:stockData range:NSMakeRange(i-MA10+1, MA10)];
+            }
+            if (i >= 20) {
+                model.ma20 = [self averageWithData:stockData range:NSMakeRange(i-MA20+1, MA20)];
+            }
+            
+            [lineModels addObject:model];
+            
+            if (i == 0) {
+                maxPrice = model.highestPrice;
+                minPrice = model.lowestPrice;
+                
+                maxVolume = model.volume;
+                minVolume = maxVolume;
+            }
+            
+            if (model.highestPrice > maxPrice) {
+                maxPrice = model.highestPrice;
+            }
+            
+            if (model.lowestPrice < minPrice) {
+                minPrice = model.lowestPrice;
+            }
+            
+            if (model.volume > maxVolume) {
+                maxVolume = model.volume;
+            }
+            
+            if (model.volume < minVolume) {
+                minVolume = model.volume;
+            }
+            
+        }
+        
+        VStockGroup * stockGroup  = [[VStockGroup alloc] init];
+        stockGroup.stockStatusModel  = statusModel;
+        stockGroup.kLineModels        = lineModels;
+        
+        stockGroup.maxPrice = maxPrice;
+        stockGroup.minPrice = minPrice;
+        stockGroup.maxVolume = maxVolume;
+        stockGroup.minVolume = minVolume;
+        
+        success(stockGroup);
+        
+    } failue:^(NSError *error) {
+        
+    }];
+}
 
 
 
@@ -343,7 +598,7 @@
 }
 
 
-+ (VStockStatusModel *)stockStatusModelFromArray:(NSArray *)stockStatusArray {
++ (VStockStatusModel *)stockStatusModelFromArray:(NSArray *)stockStatusArray isHK:(BOOL)isHK{
 
     VStockStatusModel * statusModel = [[VStockStatusModel alloc] init];
     statusModel.price = [stockStatusArray[3] floatValue];
@@ -361,7 +616,14 @@
     statusModel.ZSZ = [stockStatusArray[45] floatValue];
     statusModel.LTSZ = [stockStatusArray[44] floatValue];
     statusModel.PEG = stockStatusArray[39];                // 市盈率
-    statusModel.ZF = stockStatusArray[43];          // 振幅
+    statusModel.ZF = stockStatusArray[43];                 // 振幅
+    
+    if (isHK == YES) {
+        statusModel.ZXL = stockStatusArray[47];
+        statusModel.maxPrice_52Week = stockStatusArray[48];
+        statusModel.minPrice_52Week = stockStatusArray[49];
+    }
+    
     return statusModel;
 }
 
@@ -397,6 +659,7 @@
     
     return array;
 }
+
 
 
 @end

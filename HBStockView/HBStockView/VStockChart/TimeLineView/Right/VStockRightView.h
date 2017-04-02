@@ -7,10 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "VTimeLineGroup.h"
+#import "VStockGroup.h"
 
 @interface VStockRightView : UIView
 
-@property (nonatomic, strong) VTimeLineGroup    * timeLineGroup;        // 数据源
+@property (nonatomic, strong) VStockGroup    * stockGroup;        // 数据源
 
 @end

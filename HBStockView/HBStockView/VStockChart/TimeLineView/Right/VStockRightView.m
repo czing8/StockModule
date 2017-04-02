@@ -105,14 +105,14 @@
 
 
 
-- (void)setTimeLineGroup:(VTimeLineGroup *)timeLineGroup{
-    _timeLineGroup = timeLineGroup;
+- (void)setStockGroup:(VStockGroup *)stockGroup{
+    _stockGroup = stockGroup;
     
-    [self.bidPriceView reloadWithModel:_timeLineGroup.bidPriceModel];
-    [self.tradeDetailView reloadWithData:_timeLineGroup.tradeModels];
-//    [self.bidPriceView reloadWithModel:_timeLineGroup.bidPriceModel];
+    [self.bidPriceView reloadWithModel:_stockGroup.bidPriceModel];
+    [self.tradeDetailView reloadWithData:_stockGroup.tradeModels];
+//    [self.bidPriceView reloadWithModel:_stockGroup.bidPriceModel];
     
-    [StockRequest getDaDanRequestSuccess:^(NSArray *resultArray) {
+    [StockRequest getDaDanRequest:@"sz002185" success:^(NSArray *resultArray) {
         [_bigTradeView reloadWithData:resultArray];
     }];
 }
@@ -129,11 +129,11 @@
     }
     else if (index == 1) {
         _tradeDetailView.hidden = NO;
-        [_tradeDetailView reloadWithData:_timeLineGroup.tradeModels];
+        [_tradeDetailView reloadWithData:_stockGroup.tradeModels];
     }
     else if (index == 2) {
         _bigTradeView.hidden = NO;
-        [StockRequest getDaDanRequestSuccess:^(NSArray *resultArray) {
+        [StockRequest getDaDanRequest:@"sz002185" success:^(NSArray *resultArray) {
             [_bigTradeView reloadWithData:resultArray];
         }];
     }

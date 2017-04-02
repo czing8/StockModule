@@ -11,7 +11,7 @@
 #import "VFiveDayVolumeView.h"
 #import "VStockScrollView.h"
 
-#import "VTimeLineGroup.h"
+#import "VStockGroup.h"
 
 
 @interface VFiveDayLineView ()

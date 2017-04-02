@@ -1,18 +1,17 @@
 //
-//  VTimeLineView.h
+//  VHKStockYearView.h
 //  HBStockView
 //
-//  Created by Vols on 2017/2/25.
+//  Created by Vols on 2017/3/28.
 //  Copyright © 2017年 vols. All rights reserved.
-//  分时图主类
+//
 
 #import <UIKit/UIKit.h>
 #import "VStockGroup.h"
 #import "VStockConstant.h"
+//#import "VStockGroup.h"
 
-@interface VTimeLineView : UIView
-
-- (instancetype)initWithType:(VStockType)stockType;
+@interface VHKStockYearView : UIView
 
 - (void)reloadWithGroup:(VStockGroup *)stockGroup;
 

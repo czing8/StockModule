@@ -7,10 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "VLineGroup.h"
+#import "VStockGroup.h"
 
 @interface VKLineView : UIView
 
-- (void)reloadWithGroup:(VLineGroup *)lineGroup;
+- (void)reloadWithGroup:(VStockGroup *)stockGroup;
 
 @end

@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "VLineGroup.h"
+#import "VStockGroup.h"
 
 @interface VKLineChart : UIView
 

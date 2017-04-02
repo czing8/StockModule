@@ -1,37 +1,38 @@
 //
-//  VTimeLineSubView.m
+//  VLineChart.m
 //  HBStockView
 //
-//  Created by Vols on 2017/2/25.
+//  Created by Vols on 2017/3/29.
 //  Copyright © 2017年 vols. All rights reserved.
 //
 
-#import "VTimeLineChart.h"
+#import "VLineChart.h"
+
 #import "VStockConstant.h"
 #import "UIColor+StockTheme.h"
 #import "VStockChartConfig.h"
 
 #import "UIColor+VAdd.h"
 
-@interface VTimeLineChart() <CAAnimationDelegate>
+@interface VLineChart() <CAAnimationDelegate>
 
 @property (nonatomic, strong) NSMutableArray *drawPoints;
 
 @end
 
-@implementation VTimeLineChart {
+@implementation VLineChart {
     CGFloat _maxValue;  // 不是股价的最大值，是表格区域表示的最大值
     CGFloat _minValue;  // 不是股价的最小值，是表格区域表示的最小值
 }
 
-- (NSArray *)drawViewWithXPosition:(CGFloat)xPosition stockGroup:(VStockGroup *)stockGroup maxValue:(CGFloat)maxValue minValue:(CGFloat)minValue {
+- (NSArray *)drawViewWithXPosition:(CGFloat)xPosition lineModels:(NSArray<VLineModel *> *)lineModels maxValue:(CGFloat)maxValue minValue:(CGFloat)minValue {
     
-    NSAssert(stockGroup, @"数据源不能为空");
+    NSAssert(lineModels, @"数据源不能为空");
     _maxValue = maxValue;
     _minValue = minValue;
     
     // 转换为实际坐标
-    [self convertToPositionsWithXPosition:xPosition drawLineModels:stockGroup.lineModels maxValue:maxValue minValue:minValue];
+    [self convertToPositionsWithXPosition:xPosition drawLineModels:lineModels maxValue:maxValue minValue:minValue];
     dispatch_async(dispatch_get_main_queue(), ^{
         [self setNeedsDisplay];
     });
@@ -40,7 +41,7 @@
 
 #pragma mark - Helpers
 
-- (NSArray *)convertToPositionsWithXPosition:(CGFloat)startX drawLineModels:(NSArray <VStockPoint *>*)drawLineModels  maxValue:(CGFloat)maxValue minValue:(CGFloat)minValue {
+- (NSArray *)convertToPositionsWithXPosition:(CGFloat)startX drawLineModels:(NSArray <VLineModel *>*)drawLineModels  maxValue:(CGFloat)maxValue minValue:(CGFloat)minValue {
     if (drawLineModels == nil) return nil;
     
     [self.drawPoints removeAllObjects];
@@ -49,10 +50,10 @@
     CGFloat maxY = self.frame.size.height - kStockLineMainViewMinY;
     CGFloat unitValue = (maxValue - minValue)/(maxY - minY);
     NSLog(@"minY:%f,%f,%f,%f,%f", minY, maxY, unitValue, maxValue, minValue);
-
-    [drawLineModels enumerateObjectsUsingBlock:^(VStockPoint * model, NSUInteger idx, BOOL * _Nonnull stop) {
+    
+    [drawLineModels enumerateObjectsUsingBlock:^(VLineModel * model, NSUInteger idx, BOOL * _Nonnull stop) {
         CGFloat xPosition = startX + idx * ([VStockChartConfig timeLineVolumeWidth] + kStockTimeVolumeLineGap);
-        CGPoint pricePoint = CGPointMake(xPosition, ABS(maxY - (model.price - minValue)/unitValue));
+        CGPoint pricePoint = CGPointMake(xPosition, ABS(maxY - (model.closePrice - minValue)/unitValue));
         [self.drawPoints addObject:[NSValue valueWithCGPoint:pricePoint]];
     }];
     
@@ -77,7 +78,7 @@
     CGContextRef context = UIGraphicsGetCurrentContext();
     
     CGContextSetLineWidth(context, kStockTimeLineWidth);
-    CGPoint firstPoint = [self.drawPoints.firstObject CGPointValue];    
+    CGPoint firstPoint = [self.drawPoints.firstObject CGPointValue];
     if (isnan(firstPoint.x) || isnan(firstPoint.y)) {
         return;
     }
@@ -85,7 +86,7 @@
     //画分时线
     CGContextSetStrokeColorWithColor(context, [UIColor timeLineColor].CGColor);
     CGContextMoveToPoint(context, firstPoint.x, firstPoint.y);
-
+    
     for (NSInteger idx = 1; idx < self.drawPoints.count ; idx++) {
         CGPoint point = [self.drawPoints[idx] CGPointValue];
         CGContextAddLineToPoint(context, point.x, point.y);
@@ -133,12 +134,12 @@
     CGContextStrokeLineSegments(context, line1, 2);
     
     [self drawLeftText];
-//    [self sparkView:lastPoint];
+    //    [self sparkView:lastPoint];
 }
 
 
 - (void)sparkView:(CGPoint)spartPoint {
-
+    
     CALayer *layer = [[CALayer alloc] init];
     layer.cornerRadius = 10;
     layer.frame = CGRectMake(0, 0, layer.cornerRadius * 2, layer.cornerRadius * 2);
@@ -198,24 +199,15 @@
     for (int i = 0; i < 3; i++) {
         NSString *priceText = [NSString stringWithFormat:@"%.2f",_maxValue - unitValue * i];
         CGPoint leftDrawPoint = CGPointMake(leftGap , unit * i + kStockScrollViewTopGap - textSize.height/2.f + topOffset);
-        
-        NSString *percentText = [NSString stringWithFormat:@"%.2f%%",creasePercent - creasePercent * i];
-        CGSize textSize2 = [self rectOfString:percentText attribute:attribute].size;
-        CGPoint rightDrawPoint = CGPointMake(CGRectGetMaxX(self.frame) - textSize2.width - 3, unit * i + kStockScrollViewTopGap - textSize.height/2.f + topOffset);
-        
+                
         if (i == 1) {
             leftDrawPoint = CGPointMake(leftGap , unit * i - textSize.height/2.f);
-            rightDrawPoint = CGPointMake(CGRectGetMaxX(self.frame) - textSize2.width - 3, unit * i - textSize2.height/2.f);
         }
         else if (i == 2) {
             leftDrawPoint = CGPointMake(leftGap , unit * i - textSize.height);
-            rightDrawPoint = CGPointMake(CGRectGetMaxX(self.frame) - textSize2.width - 3, unit * i - textSize2.height);
         }
         
         [priceText drawAtPoint:leftDrawPoint withAttributes:attribute];
-      
-        if (i == 1) continue;       // 忽略 0.0%
-        [percentText drawAtPoint:rightDrawPoint withAttributes:attribute];
     }
     NSLog(@"_maxValue:%f, %f, %f, %f", _maxValue, _minValue, (_maxValue + _minValue)/2.f, unitValue);
 }
@@ -228,9 +220,5 @@
                                        context:nil];
     return rect;
 }
-
-
-
-
 
 @end

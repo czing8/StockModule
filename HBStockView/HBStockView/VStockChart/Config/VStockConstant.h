@@ -15,6 +15,15 @@ typedef NS_ENUM(NSInteger, VStockChartType) {
     VStockChartTypeDayLine,
     VStockChartTypeWeekLine,
     VStockChartTypeMonthLine,
+    VStockChartTypeYearLine,        // 港股的年线图
+};
+
+/**
+ *  股票类型（A股，港股）
+ */
+typedef NS_ENUM(NSInteger, VStockType) {
+    VStockTypeCN = 1,       //A股
+    VStockTypeHK,           //港股
 };
 
 
@@ -128,13 +137,6 @@ typedef NS_ENUM(NSInteger, VStockChartType) {
  *  K线的缩放因子
  */
 #define kStockLineScaleFactor 0.06
-
-//Kline种类
-typedef NS_ENUM(NSInteger, VStockType) {
-    VStockTypeLine = 1,     //K线
-    VStockTypeTimeLine,     //分时图
-    VStockTypeOther
-};
 
 
 //Accessory指标种类

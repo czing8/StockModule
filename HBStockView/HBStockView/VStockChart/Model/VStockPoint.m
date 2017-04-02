@@ -1,14 +1,14 @@
 //
-//  VTimeLineModel.m
+//  VStockPoint.m
 //  HBStockView
 //
 //  Created by Vols on 2017/2/25.
 //  Copyright © 2017年 vols. All rights reserved.
 //
 
-#import "VTimeLineModel.h"
+#import "VStockPoint.h"
 
-@implementation VTimeLineModel
+@implementation VStockPoint
 
 - (NSString *)description {
     return [NSString stringWithFormat:@"<%@:%p> price = %@, volume = %f", [self class], self, self.price, self.volume];

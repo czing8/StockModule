@@ -16,28 +16,28 @@
 #import "VStockRightView.h"
 #import "VTimeLineMaskView.h"
 
-#import "VTimeLineGroup.h"
+#import "VStockGroup.h"
 #import "Masonry.h"
 
+/*
+ *  港股类型时，没有rightView
+ */
 @interface VTimeLineView ()
 
-@property (nonatomic, strong) VStockScrollView  * stockScrollView;      // 背景
+@property (nonatomic, assign) VStockType        stockType;
 
-@property (nonatomic, strong) VTimeLineChart    * timeLineChart;        // 分时线图表
-
-@property (nonatomic, strong) VolumeView        * volumeView;   // 成交量部分
-@property (nonatomic, strong) VStockRightView   * theRightView;    // 右侧视图容器（五档，明细，大单）
-
-//@property (nonatomic, strong) VBidPriceView     * bidPriceView; // 五档图
+@property (nonatomic, strong) VStockScrollView  * stockScrollView;  // 背景
+@property (nonatomic, strong) VTimeLineChart    * timeLineChart;    // 分时线图表
+@property (nonatomic, strong) VolumeView        * volumeView;       // 成交量部分
+@property (nonatomic, strong) VStockRightView   * theRightView;     // 右侧视图容器（五档，明细，大单）
 
 @property (nonatomic, strong) VTimeLineMaskView * maskView;
 
+@property (nonatomic, strong) VStockGroup    * stockGroup;    // 数据源
 
-@property (nonatomic, strong) VTimeLineGroup    * timeLineGroup;        // 数据源
+@property (nonatomic, copy  ) NSArray <NSValue *> * drawLinePoints; // 位置数组
 
-@property (nonatomic, copy) NSArray <NSValue *> * drawLinePoints;       // 位置数组
-
-@property (nonatomic, strong) VTimeLineModel    * selectLineModel;      //长按选中的model
+@property (nonatomic, strong) VStockPoint    * selectLineModel;      //长按选中的model
 
 @end
 
@@ -52,9 +52,10 @@
 
 #pragma mark - Lifecycle
 
-- (instancetype)init {
+- (instancetype)initWithType:(VStockType)stockType{
     self = [super init];
     if (self) {
+        _stockType = stockType;
         
         [self configureViews];
         _stockScrollView.userInteractionEnabled = YES;
@@ -64,20 +65,27 @@
 
 - (void)configureViews {
     
-    [self addSubview:self.theRightView];
-    [_theRightView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.height.equalTo(self);
-        make.right.equalTo(self).offset(-kStockScrollViewLeftGap);
-        make.width.equalTo(self.mas_height).multipliedBy(0.5);
-    }];
+    if (_stockType == VStockTypeCN) {
+        [self addSubview:self.theRightView];
+        [_theRightView mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.top.height.equalTo(self);
+            make.right.equalTo(self).offset(-kStockScrollViewLeftGap);
+            make.width.equalTo(self.mas_height).multipliedBy(0.5);
+        }];
+        _theRightView.backgroundColor = [UIColor stockMainBgColor];
 
-    _theRightView.backgroundColor = [UIColor stockMainBgColor];
+    }
     
     [self addSubview:self.stockScrollView];
     [_stockScrollView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.height.equalTo(self);
         make.left.equalTo(self).offset(kStockScrollViewLeftGap);
-        make.right.equalTo(self.theRightView.mas_left).offset(-kStockScrollViewLeftGap);
+        if (_stockType == VStockTypeCN) {
+            make.right.equalTo(self.theRightView.mas_left).offset(-kStockScrollViewLeftGap);
+        }
+        else if (_stockType == VStockTypeHK) {
+            make.right.equalTo(self).offset(-kStockScrollViewLeftGap);
+        }
     }];
 
     // 分时图View
@@ -111,32 +119,34 @@
 }
 
 
-- (void)reloadWithGroup:(VTimeLineGroup *)timeLineGroup {
-    _timeLineGroup = timeLineGroup;
+- (void)reloadWithGroup:(VStockGroup *)stockGroup {
+    _stockGroup = stockGroup;
     
     [self layoutIfNeeded];
     [self updateScrollViewContentWidth];
     [self setNeedsDisplay];
     
-    _theRightView.timeLineGroup = timeLineGroup;
+    if (_stockType == VStockTypeCN) {
+        _theRightView.stockGroup = stockGroup;
+    }
 }
-
 
 #pragma mark - Draw Func
 
 - (void)drawRect:(CGRect)rect {
     [super drawRect:rect];
-    if (self.timeLineGroup.lineModels.count > 0) {
+    if (self.stockGroup.lineModels.count > 0) {
         if (!self.maskView || self.maskView.isHidden) {
             
-            //更新绘制的数据源
+            // 更新绘制的数据源
             [self updateDrawModels];
             
             //绘制K线上部分
-            self.drawLinePoints = [self.timeLineChart drawViewWithXPosition:0 timeLineGroup:_timeLineGroup maxValue:_maxValue minValue:_minValue];
+            self.drawLinePoints = [self.timeLineChart drawViewWithXPosition:0 stockGroup:_stockGroup maxValue:_maxValue minValue:_minValue];
             
+            NSLog(@"drawLinePoints:%ld--%@", self.drawLinePoints.count, self.drawLinePoints);
             //绘制成交量
-            [self.volumeView drawViewWithXPosition:0 timeLineGroup:_timeLineGroup];
+            [self.volumeView drawViewWithXPosition:0 stockGroup:_stockGroup];
             //更新背景线
             self.stockScrollView.isShowBgLine = YES;
             [self.stockScrollView setNeedsDisplay];
@@ -151,9 +161,9 @@
 - (void)updateDrawModels {
     
     //更新最大值最小值-价格
-    CGFloat closeYPrice = [self.timeLineGroup preClosePrice];
-    _maxValue = _timeLineGroup.maxPrice;
-    _minValue = _timeLineGroup.minPrice;
+    CGFloat closeYPrice = [self.stockGroup preClosePrice];
+    _maxValue = _stockGroup.maxPrice;
+    _minValue = _stockGroup.minPrice;
 
     if (_maxValue == _minValue && _maxValue == closeYPrice) {
         //处理特殊情况
@@ -179,12 +189,6 @@
     //        maxValue = 2 * average - minValue;
     //    }
 }
-
-
-#pragma mark - Public
-
-#pragma mark - Actions
-
 
 #pragma mark - Properties
 
@@ -213,6 +217,9 @@
     
     // 9:30-11:30 / 12:00-15:00 一共240分钟
     NSInteger minCount = 240;
+    if (_stockType == VStockTypeHK) {
+        minCount = 330;
+    }
     [VStockChartConfig setTimeLineVolumeWidth:((self.stockScrollView.bounds.size.width - (minCount - 1) * kStockTimeVolumeLineGap) / minCount)];
 }
 
@@ -245,7 +252,7 @@
     NSInteger startIndex = (NSInteger)(oldPositionX / (kStockTimeVolumeLineGap + [VStockChartConfig timeLineVolumeWidth]));
     
     if (startIndex < 0) startIndex = 0;
-    if (startIndex >= self.timeLineGroup.lineModels.count) startIndex = self.timeLineGroup.lineModels.count - 1;
+    if (startIndex >= self.stockGroup.lineModels.count) startIndex = self.stockGroup.lineModels.count - 1;
     
     if (!self.maskView) {
         _maskView = [VTimeLineMaskView new];
@@ -258,8 +265,8 @@
         self.maskView.hidden = NO;
     }
     
-    _selectLineModel = self.timeLineGroup.lineModels[startIndex];
-    self.maskView.selectedModel = self.timeLineGroup.lineModels[startIndex];
+    _selectLineModel = self.stockGroup.lineModels[startIndex];
+    self.maskView.selectedModel = self.stockGroup.lineModels[startIndex];
     self.maskView.selectedPoint = [self.drawLinePoints[startIndex] CGPointValue];
     self.maskView.stockScrollView = self.stockScrollView;
     [self setNeedsDisplay];
@@ -267,7 +274,7 @@
 }
 
 - (void)hideStockTipView {
-    _selectLineModel = self.timeLineGroup.lineModels.lastObject;
+    _selectLineModel = self.stockGroup.lineModels.lastObject;
     [self setNeedsDisplay];
     self.maskView.hidden = YES;
 }
@@ -289,7 +296,7 @@
         NSInteger startIndex = (NSInteger)(oldPositionX / (kStockTimeVolumeLineGap + [VStockChartConfig timeLineVolumeWidth]));
         
         if (startIndex < 0) startIndex = 0;
-        if (startIndex >= self.timeLineGroup.lineModels.count) startIndex = self.timeLineGroup.lineModels.count - 1;
+        if (startIndex >= self.stockGroup.lineModels.count) startIndex = self.stockGroup.lineModels.count - 1;
         
         if (!self.maskView) {
             _maskView = [VTimeLineMaskView new];
@@ -302,8 +309,8 @@
             self.maskView.hidden = NO;
         }
         
-        _selectLineModel = self.timeLineGroup.lineModels[startIndex];
-        self.maskView.selectedModel = self.timeLineGroup.lineModels[startIndex];
+        _selectLineModel = self.stockGroup.lineModels[startIndex];
+        self.maskView.selectedModel = self.stockGroup.lineModels[startIndex];
         self.maskView.selectedPoint = [self.drawLinePoints[startIndex] CGPointValue];
         self.maskView.stockScrollView = self.stockScrollView;
         [self setNeedsDisplay];
@@ -311,7 +318,7 @@
     }
     
     if(longPress.state == UIGestureRecognizerStateEnded || longPress.state == UIGestureRecognizerStateCancelled || longPress.state == UIGestureRecognizerStateFailed) {
-        _selectLineModel = self.timeLineGroup.lineModels.lastObject;
+        _selectLineModel = self.stockGroup.lineModels.lastObject;
         [self setNeedsDisplay];
         self.maskView.hidden = YES;
         oldPositionX = 0.f;

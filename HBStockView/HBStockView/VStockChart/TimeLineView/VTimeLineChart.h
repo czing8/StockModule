@@ -7,10 +7,10 @@
 //  分时图模块里的分时图表格
 
 #import <UIKit/UIKit.h>
-#import "VTimeLineGroup.h"
+#import "VStockGroup.h"
 
 @interface VTimeLineChart : UIView
 
-- (NSArray *)drawViewWithXPosition:(CGFloat)xPosition timeLineGroup:(VTimeLineGroup*)timeLineGroup maxValue:(CGFloat)maxValue minValue:(CGFloat)minValue;
+- (NSArray *)drawViewWithXPosition:(CGFloat)xPosition stockGroup:(VStockGroup *)stockGroup maxValue:(CGFloat)maxValue minValue:(CGFloat)minValue;
 
 @end

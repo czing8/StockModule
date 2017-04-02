@@ -13,11 +13,9 @@
 @interface VKLinePosition : NSObject
 
 @property (nonatomic, assign) CGPoint openPoint;    // 开盘点
-
 @property (nonatomic, assign) CGPoint closePoint;   // 收盘点
 
 @property (nonatomic, assign) CGPoint highPoint;    // 最高点
-
 @property (nonatomic, assign) CGPoint lowPoint;     // 最低点
 
 + (instancetype)modelWith:(CGPoint)openPoint :(CGPoint)closePoint :(CGPoint)highPoint :(CGPoint)lowPoint;

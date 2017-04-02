@@ -2,7 +2,7 @@
 //  ViewController.h
 //  HBStockView
 //
-//  Created by Vols on 2017/2/25.
+//  Created by Vols on 2017/3/27.
 //  Copyright © 2017年 vols. All rights reserved.
 //
 
@@ -10,6 +10,4 @@
 
 @interface ViewController : UIViewController
 
-
 @end
-

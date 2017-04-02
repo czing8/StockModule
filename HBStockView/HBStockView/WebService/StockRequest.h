@@ -7,24 +7,32 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "VTimeLineGroup.h"
-#import "VLineGroup.h"
+#import "VStockGroup.h"
+//#import "VStockGroup.h"
 
 @interface StockRequest : NSObject
 
-+ (void)getTimeStockDataSuccess:(void (^)(VTimeLineGroup *response))success;
++ (void)getTimeStockData:(NSString *)code success:(void (^)(VStockGroup *response))success;
 
 + (void)get5DayStockDataSuccess:(void (^)(NSArray *resultArray))success;
 
-+ (void)getDayStockDataSuccess:(void (^)(VLineGroup *response))success;
++ (void)getDayStockData:(NSString *)stockCode success:(void (^)(VStockGroup *response))success;
 
-+ (void)getWeekStockDataSuccess:(void (^)(VLineGroup *response))success;
++ (void)getWeekStockData:(NSString *)stockCode success:(void (^)(VStockGroup *response))success;
 
-+ (void)getMonthStockDataSuccess:(void (^)(VLineGroup *response))success;
++ (void)getMonthStockData:(NSString *)stockCode success:(void (^)(VStockGroup *response))success;
 
-+ (void)getDaDanRequestSuccess:(void (^)(NSArray *resultArray))success;
++ (void)getDaDanRequest:(NSString *)stockCode success:(void (^)(NSArray *resultArray))success;
 
-//http://proxy.finance.qq.com/ifzqgtimg/appstock/app/HsDealinfo/getDadan?code=sz002185
+
++ (void)getHKTimeStockData:(NSString *)code success:(void (^)(VStockGroup *response))success;
+
++ (void)getHKDayStockData:(NSString *)code success:(void (^)(VStockGroup *response))success;
+
++ (void)getHKWeekStockCode:(NSString *)code success:(void (^)(VStockGroup *response))success;
+
++ (void)getHKYearStockCode:(NSString *)code success:(void (^)(VStockGroup *response))success;
+
 
 + (void)get:(NSString*) url params:(id)params success:(void (^)(NSDictionary *response))success fail:(void(^)(NSDictionary *info))fail;
 

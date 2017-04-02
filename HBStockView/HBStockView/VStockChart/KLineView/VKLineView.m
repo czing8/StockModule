@@ -29,7 +29,7 @@
 
 @property (nonatomic, copy) NSArray <VKLinePosition *>*drawLinePositions;   // 位置数组
 
-@property (nonatomic, strong) VLineGroup        * lineGroup;            // 数据源
+@property (nonatomic, strong) VStockGroup        * stockGroup;            // 数据源
 @property (nonatomic, strong) NSMutableArray    * screenLineModels;           // 当前一屏幕数据源
 @property (nonatomic, strong) VLineModel        * selectLineModel;      //长按选中的model
 
@@ -116,13 +116,13 @@
 
 #pragma mark - Public
 
-- (void)reloadWithGroup:(VLineGroup *)lineGroup {
-    _lineGroup = lineGroup;
+- (void)reloadWithGroup:(VStockGroup *)stockGroup {
+    _stockGroup = stockGroup;
     
     [self layoutIfNeeded];
     [self updateScrollViewContentWidth];
     [self setNeedsDisplay];
-    if (self.lineGroup.lineModels.count > 0) {
+    if (self.stockGroup.kLineModels.count > 0) {
         self.stockScrollView.contentOffset = CGPointMake(self.stockScrollView.contentSize.width - self.stockScrollView.bounds.size.width, self.stockScrollView.contentOffset.y);
     }
 }
@@ -184,7 +184,7 @@
         CGFloat newCenterDistance = oldCenterArrCount * [VStockChartConfig lineWidth] + (oldCenterArrCount - 1) * [VStockChartConfig lineGap];
         
         // 设置scrollview的contentoffset = (5) - (2);
-        if (self.lineGroup.lineModels.count * newLineWidth + (self.lineGroup.lineModels.count + 1) * [VStockChartConfig lineGap] > self.stockScrollView.bounds.size.width) {
+        if (self.stockGroup.kLineModels.count * newLineWidth + (self.stockGroup.kLineModels.count + 1) * [VStockChartConfig lineGap] > self.stockScrollView.bounds.size.width) {
             CGFloat newOffsetX = newCenterDistance - (centerX - self.stockScrollView.contentOffset.x);
             NSLog(@"newOffsetX:%f,%f", newOffsetX, self.stockScrollView.contentOffset.x);
 
@@ -328,7 +328,7 @@
 
 - (CGFloat)updateScrollViewContentWidth {
     // 根据stockModels的个数和间隔和K线的宽度计算出self的宽度，并设置contentsize
-    CGFloat kLineViewWidth = self.lineGroup.lineModels.count * [VStockChartConfig lineWidth] + (self.lineGroup.lineModels.count + 1) * [VStockChartConfig lineGap];
+    CGFloat kLineViewWidth = self.stockGroup.kLineModels.count * [VStockChartConfig lineWidth] + (self.stockGroup.kLineModels.count + 1) * [VStockChartConfig lineGap];
     
     if(kLineViewWidth < self.stockScrollView.bounds.size.width) {
         kLineViewWidth = self.stockScrollView.bounds.size.width;
@@ -348,7 +348,7 @@
 
 - (void)drawRect:(CGRect)rect {
     [super drawRect:rect];
-    if (self.lineGroup.lineModels.count > 0) {
+    if (self.stockGroup.kLineModels.count > 0) {
         if (self.maskView == nil || self.maskView.isHidden) {
             // 更新绘制的数据源
             [self updateDrawModels];
@@ -426,8 +426,8 @@
     NSInteger drawLineCount = (self.stockScrollView.frame.size.width) / ([VStockChartConfig lineGap] +  [VStockChartConfig lineWidth]);
     
     [self.screenLineModels removeAllObjects];
-    NSInteger length = startIndex+drawLineCount < self.lineGroup.lineModels.count ? drawLineCount+1 : self.lineGroup.lineModels.count - startIndex;
-    [self.screenLineModels addObjectsFromArray:[self.lineGroup.lineModels subarrayWithRange:NSMakeRange(startIndex, length)]];
+    NSInteger length = startIndex+drawLineCount < self.stockGroup.kLineModels.count ? drawLineCount+1 : self.stockGroup.kLineModels.count - startIndex;
+    [self.screenLineModels addObjectsFromArray:[self.stockGroup.kLineModels subarrayWithRange:NSMakeRange(startIndex, length)]];
     
     //更新顶部ma数据
     _selectLineModel = self.screenLineModels.lastObject;
@@ -461,8 +461,8 @@
     CGFloat offsetX = self.stockScrollView.contentOffset.x < 0 ? 0 : self.stockScrollView.contentOffset.x;
     NSUInteger leftCount = ABS(offsetX) / ([VStockChartConfig lineGap] + [VStockChartConfig lineWidth]);
     
-    if (leftCount > self.lineGroup.lineModels.count) {
-        leftCount = self.lineGroup.lineModels.count - 1;
+    if (leftCount > self.stockGroup.kLineModels.count) {
+        leftCount = self.stockGroup.kLineModels.count - 1;
     }
     return leftCount;
 }

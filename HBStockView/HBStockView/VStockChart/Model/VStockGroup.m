@@ -1,15 +1,14 @@
 //
-//  VTimeLineGroup.m
+//  VStockGroup.m
 //  HBStockView
 //
 //  Created by Vols on 2017/2/25.
 //  Copyright © 2017年 vols. All rights reserved.
 //
 
-#import "VTimeLineGroup.h"
+#import "VStockGroup.h"
 
-@implementation VTimeLineGroup
-
+@implementation VStockGroup
 
 - (NSString *)description {
     return [NSString stringWithFormat:@"<%@:%p> price:%f, maxPrice:%f, minPrice:%f, maxVolume:%f, minVolume:%f", [self class], self, self.price, self.maxPrice, self.minPrice, self.maxVolume, self.minVolume];

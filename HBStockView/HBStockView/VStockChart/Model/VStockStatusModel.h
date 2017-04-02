@@ -34,4 +34,10 @@
 @property (nonatomic, assign) float maxVolume;      // 最大成交量
 @property (nonatomic, assign) float minVolume;      // 最小成交量
 
+
+// 港股独有参数
+@property (nonatomic, strong) NSString  * maxPrice_52Week;      // 52周最大价格
+@property (nonatomic, strong) NSString  * minPrice_52Week;      // 52周最小价格
+@property (nonatomic, strong) NSString  * ZXL;      // 周息率
+
 @end

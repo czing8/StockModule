@@ -66,8 +66,8 @@
     NSString *priceText = [NSString stringWithFormat:@"%.2f",self.selectedModel.closePrice];
     CGRect priceRect = [self rectOfNSString:priceText attribute:attribute];
     CGContextSetFillColorWithColor(ctx, [UIColor selectedRectBgColor].CGColor);
-    CGContextFillRect(ctx, CGRectMake(kStockScrollViewLeftGap - priceRect.size.width - 4, self.stockScrollView.frame.origin.y + self.selectedPosition.closePoint.y - priceRect.size.height/2.f - 2, priceRect.size.width + 4, priceRect.size.height + 4));
-    [priceText drawInRect:CGRectMake(kStockScrollViewLeftGap - priceRect.size.width - 4 + 2, self.stockScrollView.frame.origin.y + self.selectedPosition.closePoint.y - priceRect.size.height/2.f, priceRect.size.width, priceRect.size.height) withAttributes:attribute];
+    CGContextFillRect(ctx, CGRectMake(kStockScrollViewLeftGap, self.stockScrollView.frame.origin.y + self.selectedPosition.closePoint.y - priceRect.size.height/2.f - 2, priceRect.size.width + 4, priceRect.size.height + 4));
+    [priceText drawInRect:CGRectMake(kStockScrollViewLeftGap, self.stockScrollView.frame.origin.y + self.selectedPosition.closePoint.y - priceRect.size.height/2.f, priceRect.size.width, priceRect.size.height) withAttributes:attribute];
 }
 
 - (CGRect)rectOfNSString:(NSString *)string attribute:(NSDictionary *)attribute {
