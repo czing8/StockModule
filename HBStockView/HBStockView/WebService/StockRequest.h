@@ -8,7 +8,6 @@
 
 #import <Foundation/Foundation.h>
 #import "VStockGroup.h"
-//#import "VStockGroup.h"
 
 @interface StockRequest : NSObject
 
@@ -25,6 +24,7 @@
 + (void)getDaDanRequest:(NSString *)stockCode success:(void (^)(NSArray *resultArray))success;
 
 
+
 + (void)getHKTimeStockData:(NSString *)code success:(void (^)(VStockGroup *response))success;
 
 + (void)getHKDayStockData:(NSString *)code success:(void (^)(VStockGroup *response))success;
@@ -33,7 +33,5 @@
 
 + (void)getHKYearStockCode:(NSString *)code success:(void (^)(VStockGroup *response))success;
 
-
-+ (void)get:(NSString*) url params:(id)params success:(void (^)(NSDictionary *response))success fail:(void(^)(NSDictionary *info))fail;
 
 @end

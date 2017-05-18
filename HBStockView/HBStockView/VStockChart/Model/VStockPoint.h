@@ -21,3 +21,6 @@
 @property (nonatomic, strong) NSString  * dayDatail;        // 长按时显示的详细日期
 
 @end
+
+
+

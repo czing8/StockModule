@@ -29,17 +29,17 @@
 @property (nonatomic, strong) VStockStatusView      * stockStatusView;
 @property (nonatomic, strong) VStockStatusView_HK   * stockStatusView_HK;
 
-@property (nonatomic, strong) VFullScreenStockView  * fullScreenStockView;
-
 @property (nonatomic, strong) VStockView            * stockView;
 
-@property (nonatomic, strong) NSMutableDictionary   * stockDataSource;
-
-@property (nonatomic, strong) VStockGroup        * timeGroup;
+@property (nonatomic, strong) VFullScreenStockView  * fullScreenStockView;
 
 @end
 
 @implementation StockViewController
+
+- (void)dealloc{
+    NSLog(@"StockViewController release");
+}
 
 - (instancetype)initStockVC:(NSString *)stockCode type:(VStockType)stockType {
     if (self = [super init]) {
@@ -93,6 +93,8 @@
 //    _stockStatusView.backgroundColor = [UIColor blackColor];
 
     _stockView = [[VStockView alloc] initWithStockCode:_stockCode stockType:_stockType];
+    [_stockView setRefreshTime:_refreshTime];
+
     _stockView.stockStatusBlock = ^(VStockStatusModel * stockStatusModel){
         if (weakSelf.stockType == VStockTypeCN) {
             weakSelf.stockStatusView.stockStatusModel = stockStatusModel;
@@ -117,9 +119,10 @@
     UIBarButtonItem * rightButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh target:self action:@selector(fetchData)];
     self.navigationItem.rightBarButtonItem = rightButton;
     
-    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(event_enterFullScreen:)];
-    tap.numberOfTapsRequired = 1;
-    [self.stockView addGestureRecognizer:tap];
+    // 点击横屏
+//    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(event_enterFullScreen:)];
+//    tap.numberOfTapsRequired = 1;
+//    [self.stockView addGestureRecognizer:tap];
 //    [self.stock.containerView.subviews setValue:@0 forKey:@"userInteractionEnabled"];
 }
 
@@ -129,6 +132,7 @@
 }
 
 
+/*
 - (void)event_enterFullScreen:(UITapGestureRecognizer *)tap {
     __weak typeof(self) weakSelf = self;
     tap.enabled = NO;
@@ -180,15 +184,8 @@
         [weakSelf.stockView.gestureRecognizers.firstObject setEnabled:YES];
     };
 }
-
-
+*/
 #pragma mark - Properties
-- (NSMutableDictionary *)stockDataSource{
-    if (_stockDataSource == nil) {
-        _stockDataSource = [[NSMutableDictionary alloc] init];
-    }
-    return _stockDataSource;
-}
 
 - (UIScrollView *)mainScrollView {
     if (_mainScrollView == nil) {
@@ -229,6 +226,7 @@
     }
     return _fullScreenStockView;
 }
+
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

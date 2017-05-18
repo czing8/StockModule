@@ -36,6 +36,7 @@
 @property (nonatomic, strong) VStockGroup   * monthLineGroup;   //A股月k,HK年K 的数据源
 
 @property (nonatomic, strong) VGCDTimer     * gcdTimer;
+@property (nonatomic, assign) float         refreshTime;  //修改股票刷新时间
 
 @end
 
@@ -51,6 +52,7 @@
     if (self = [super init]) {
         
         _stockChartType = VStockChartTypeTimeLine;      //默认 分时图
+        _refreshTime    = 5.f;
         
         _stockCode  = stockCode;
         _stockType  = stockType;
@@ -58,6 +60,7 @@
     }
     return self;
 }
+
 
 - (void)configureViews {
     
@@ -128,7 +131,7 @@
     
     __weak typeof(self) weakSelf = self;
     
-    _gcdTimer = [VGCDTimer scheduledTimerWithTimeInterval:2 repeats:YES block:^{
+    _gcdTimer = [VGCDTimer scheduledTimerWithTimeInterval:_refreshTime repeats:YES block:^{
         [weakSelf reloadDataCompletion:nil];
     }];
 }
@@ -266,13 +269,6 @@
 
 #pragma mark - Properties
 
-//- (VScrollMenuView *)scrollMenu {
-//    if (_scrollMenu == nil) {
-//        _scrollMenu = [[VScrollMenuView alloc] init];
-//    }
-//    return _scrollMenu;
-//}
-
 - (VTimeLineView *)timeLineView {
     if (_timeLineView == nil) {
         _timeLineView = [[VTimeLineView alloc] initWithType:_stockType];
@@ -308,6 +304,16 @@
     }
     return _hkStockYearView;
 }
+
+
+- (void)setRefreshTime:(float)refreshTime {
+    if (refreshTime > 0) {
+        _refreshTime = refreshTime;
+        
+        [_gcdTimer setTimeInterval:refreshTime];
+    }
+}
+
 
 - (void)setStockChartType:(VStockChartType)stockChartType {
     _stockChartType = stockChartType;

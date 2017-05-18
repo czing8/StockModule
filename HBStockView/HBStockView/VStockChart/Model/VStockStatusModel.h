@@ -38,6 +38,6 @@
 // 港股独有参数
 @property (nonatomic, strong) NSString  * maxPrice_52Week;      // 52周最大价格
 @property (nonatomic, strong) NSString  * minPrice_52Week;      // 52周最小价格
-@property (nonatomic, strong) NSString  * ZXL;      // 周息率
+@property (nonatomic, strong) NSString  * ZXL;                  // 周息率
 
 @end

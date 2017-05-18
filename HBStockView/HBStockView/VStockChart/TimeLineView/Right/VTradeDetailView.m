@@ -11,6 +11,8 @@
 #import "UIColor+StockTheme.h"
 
 #import "Masonry.h"
+#import "MJRefresh.h"
+
 
 @interface VTradeDetailView ()<UITableViewDelegate, UITableViewDataSource>
 
@@ -46,6 +48,22 @@
         make.edges.equalTo(self);
     }];
     
+    // MJRefresh 刷新设置
+    MJRefreshNormalHeader *mjHeader = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
+        [self.tableView.mj_header endRefreshing];
+    }];
+    mjHeader.automaticallyChangeAlpha = YES;
+    mjHeader.lastUpdatedTimeLabel.hidden = YES;
+    mjHeader.stateLabel.hidden = YES;
+
+    MJRefreshBackNormalFooter *mjFooter = [MJRefreshBackNormalFooter footerWithRefreshingBlock:^{
+        [self.tableView.mj_footer endRefreshing];
+    }];
+    mjFooter.stateLabel.hidden = YES;
+    
+    self.tableView.mj_header = mjHeader;
+    self.tableView.mj_footer = mjFooter;
+
 }
 
 

@@ -12,12 +12,12 @@
 
 @interface VKLineMaskView : UIView
 
-//当前长按选中的model
+// 当前长按选中的model
 @property (nonatomic, strong) VLineModel        * selectedModel;
 @property (nonatomic, assign) VKLinePosition    * selectedPosition;
 
 
 // 当前的滑动scrollview
-@property (nonatomic, strong) UIScrollView *stockScrollView;
+@property (nonatomic, strong) UIScrollView      * stockScrollView;
 
 @end

@@ -112,7 +112,7 @@
     [self.tradeDetailView reloadWithData:_stockGroup.tradeModels];
 //    [self.bidPriceView reloadWithModel:_stockGroup.bidPriceModel];
     
-    [StockRequest getDaDanRequest:@"sz002185" success:^(NSArray *resultArray) {
+    [StockRequest getDaDanRequest:_stockGroup.stockCode success:^(NSArray *resultArray) {
         [_bigTradeView reloadWithData:resultArray];
     }];
 }
@@ -133,12 +133,11 @@
     }
     else if (index == 2) {
         _bigTradeView.hidden = NO;
-        [StockRequest getDaDanRequest:@"sz002185" success:^(NSArray *resultArray) {
+        [StockRequest getDaDanRequest:_stockGroup.stockCode success:^(NSArray *resultArray) {
             [_bigTradeView reloadWithData:resultArray];
         }];
     }
 }
-
 
 
 @end

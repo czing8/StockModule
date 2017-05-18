@@ -12,6 +12,7 @@
 @interface ViewController ()
 
 @property (weak, nonatomic) IBOutlet UITextField *stockCodeTF;
+@property (weak, nonatomic) IBOutlet UITextField *refreshTimeTF;
 
 @end
 
@@ -31,6 +32,7 @@
     if ([stockCode hasPrefix:@"hk"])    stockType = VStockTypeHK;
     
     StockViewController * stockVC = [[StockViewController alloc] initStockVC:stockCode type:stockType];
+    stockVC.refreshTime = [_refreshTimeTF.text floatValue];
     [self.navigationController pushViewController:stockVC animated:YES];
 }
 

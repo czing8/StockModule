@@ -32,6 +32,8 @@
 - (instancetype) initWithTimeInterval:(NSTimeInterval)seconds repeats:(BOOL)repeats block:(dispatch_block_t)block;
 + (instancetype) scheduledTimerWithTimeInterval:(NSTimeInterval)seconds repeats:(BOOL)repeats block:(dispatch_block_t)block;
 
+- (void)setTimeInterval:(NSTimeInterval)interval;
+
 - (void)invalidate;
 
 @end

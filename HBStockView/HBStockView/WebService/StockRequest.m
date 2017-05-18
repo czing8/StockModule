@@ -11,19 +11,6 @@
 
 @implementation StockRequest
 
-+ (void)get:(NSString*) url params:(id)params success:(void (^)(NSDictionary *response))success fail:(void(^)(NSDictionary *info))fail {
-    if ([url isEqualToString:@"minute"]) {
-        success([NSDictionary dictionaryWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"minuteData" ofType:@"plist"]]);
-    }
-    if ([url isEqualToString:@"day"]) {
-        success([NSDictionary dictionaryWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"dayData" ofType:@"plist"]]);
-    }
-    if ([url isEqualToString:@"five"]) {
-        success([NSDictionary dictionaryWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"fiveData" ofType:@"plist"]]);
-    }
-}
-
-
 + (void)getTimeStockData:(NSString *)stockCode success:(void (^)(VStockGroup *response))success {
     // sz002185
     NSString * urlString = [NSString stringWithFormat:@"http://proxy.finance.qq.com/ifzqgtimg/appstock/app/minute/query?p=1&code=%@", stockCode];
@@ -38,14 +25,10 @@
         
         float curPrice = [stockStatusArray[3] floatValue];
         float closePrice = [stockStatusArray[4] floatValue];
-        float openPrice = [stockStatusArray[5] floatValue];
-        float volume = [stockStatusArray[6] floatValue];        //今天的总成交量
-        float waiPan = [stockStatusArray[7] floatValue];
-        float neiPan = [stockStatusArray[8] floatValue];
         
         // ---- 股票各种参数模型
         VStockStatusModel * statusModel = [self stockStatusModelFromArray:stockStatusArray  isHK:NO];
-        
+    
         
         // ---- 股票五档竞价模型
         NSArray *buyPrices = @[stockStatusArray[9], stockStatusArray[11], stockStatusArray[13], stockStatusArray[15], stockStatusArray[17]];
@@ -110,8 +93,9 @@
         }
         
         VStockGroup * timeGroup = [[VStockGroup alloc] init];
+        timeGroup.stockCode         = stockCode;
         
-        timeGroup.tradeModels       = tradeModels;
+        timeGroup.tradeModels       = [NSMutableArray arrayWithArray:[[tradeModels reverseObjectEnumerator] allObjects]];
         timeGroup.stockStatusModel  = statusModel;
         timeGroup.bidPriceModel     = bidPriceModel;
         timeGroup.lineModels        = timeLineModels;
@@ -181,6 +165,8 @@
         }
         
         VStockGroup * stockGroup = [[VStockGroup alloc] init];
+        stockGroup.stockCode         = stockCode;
+
         stockGroup.kLineModels = lineModels;
         stockGroup.stockStatusModel = statusModel;
         success(stockGroup);
@@ -232,6 +218,8 @@
         }
         
         VStockGroup * stockGroup = [[VStockGroup alloc] init];
+        stockGroup.stockCode         = stockCode;
+
         stockGroup.kLineModels = lineModels;
         stockGroup.stockStatusModel = statusModel;
         success(stockGroup);
@@ -280,6 +268,8 @@
         }
         
         VStockGroup * stockGroup = [[VStockGroup alloc] init];
+        stockGroup.stockCode         = stockCode;
+
         stockGroup.kLineModels = lineModels;
         stockGroup.stockStatusModel = statusModel;
         success(stockGroup);
@@ -389,6 +379,8 @@
         }
         
         VStockGroup * timeGroup = [[VStockGroup alloc] init];
+        timeGroup.stockCode         = stockCode;
+
         timeGroup.stockStatusModel  = statusModel;
         timeGroup.lineModels        = timeLineModels;
         
@@ -443,7 +435,9 @@
         }
         
         VStockGroup * stockGroup = [[VStockGroup alloc] init];
-        stockGroup.kLineModels = lineModels;
+        stockGroup.stockCode    = stockCode;
+
+        stockGroup.kLineModels  = lineModels;
         stockGroup.stockStatusModel = statusModel;
         success(stockGroup);
 
@@ -490,7 +484,8 @@
         }
         
         VStockGroup * stockGroup = [[VStockGroup alloc] init];
-        stockGroup.kLineModels = lineModels;
+        stockGroup.stockCode    = stockCode;
+        stockGroup.kLineModels  = lineModels;
         stockGroup.stockStatusModel = statusModel;
         success(stockGroup);
         
@@ -563,8 +558,10 @@
         }
         
         VStockGroup * stockGroup  = [[VStockGroup alloc] init];
-        stockGroup.stockStatusModel  = statusModel;
-        stockGroup.kLineModels        = lineModels;
+        stockGroup.stockCode        = stockCode;
+
+        stockGroup.stockStatusModel = statusModel;
+        stockGroup.kLineModels      = lineModels;
         
         stockGroup.maxPrice = maxPrice;
         stockGroup.minPrice = minPrice;

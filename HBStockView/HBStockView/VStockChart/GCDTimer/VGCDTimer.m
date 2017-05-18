@@ -58,6 +58,13 @@
     return [self scheduledTimerWithTimeInterval:interval repeats:repeats queue:dispatch_get_main_queue() block:block];
 }
 
+- (void)setTimeInterval:(NSTimeInterval)interval{
+    dispatch_source_set_timer(_dispatch_timer,
+                              dispatch_time(DISPATCH_TIME_NOW, 0),
+                              interval * NSEC_PER_SEC,
+                              0);
+}
+
 
 - (void)invalidate {
     dispatch_source_cancel(_dispatch_timer);

@@ -26,7 +26,6 @@
             make.right.mas_equalTo(20);
             make.size.mas_equalTo(CGSizeMake(100, 40));
         }];
-        
     }
     return self;
 }
@@ -52,7 +51,6 @@
         self.closeHandler();
     }
 }
-
 
 
 @end

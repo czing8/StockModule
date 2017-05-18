@@ -9,12 +9,10 @@
 #import "VHKStockYearView.h"
 #import "VStockScrollView.h"
 #import "VLineChart.h"
-#import "UIColor+StockTheme.h"
 #import "VLineVolumeView.h"
-#import "VBidPriceView.h"
-#import "VStockRightView.h"
 #import "VLineMaskView.h"
 
+#import "UIColor+StockTheme.h"
 #import "VStockGroup.h"
 #import "Masonry.h"
 

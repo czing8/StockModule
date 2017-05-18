@@ -11,6 +11,8 @@
 
 @interface StockViewController : UIViewController
 
+@property (nonatomic, assign) float   refreshTime;  //修改股票刷新时间
+
 - (instancetype)initStockVC:(NSString *)stockCode type:(VStockType)stockType;
 
 @end

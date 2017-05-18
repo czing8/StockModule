@@ -9,7 +9,6 @@
 #import <UIKit/UIKit.h>
 #import "VStockGroup.h"
 #import "VStockConstant.h"
-//#import "VStockGroup.h"
 
 @interface VHKStockYearView : UIView
 

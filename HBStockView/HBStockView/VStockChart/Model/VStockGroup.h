@@ -17,12 +17,12 @@
 
 @interface VStockGroup : NSObject
 
-@property (nonatomic, strong) NSString  * stockCode;
-
 // ------- 股票参数 --------
 @property (nonatomic, strong) VStockStatusModel     * stockStatusModel;
-@property (nonatomic, assign) float price;          // 当前价
-@property (nonatomic, assign) float preClosePrice;  // 昨日收盘价
+@property (nonatomic, strong) NSString  * stockCode;    // 股票代码
+
+@property (nonatomic, assign) float price;              // 当前价
+@property (nonatomic, assign) float preClosePrice;      // 昨日收盘价
 
 @property (nonatomic, assign) float maxPrice;   // 最大价格
 @property (nonatomic, assign) float minPrice;   // 最小价格
@@ -33,7 +33,7 @@
 // -------分时图模型数据 --------
 @property (nonatomic, strong) NSMutableArray <VStockPoint *>    * lineModels;
 @property (nonatomic, strong) NSMutableArray <VTimeTradeModel *>* tradeModels;
-@property (nonatomic, strong) VBidPriceModel        * bidPriceModel;
+@property (nonatomic, strong) VBidPriceModel                    * bidPriceModel;
 
 
 // -------K线图模型数据 --------

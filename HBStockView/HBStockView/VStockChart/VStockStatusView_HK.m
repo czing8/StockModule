@@ -9,6 +9,7 @@
 #import "VStockStatusView_HK.h"
 
 @interface VStockStatusView_HK ()
+@property (weak, nonatomic) IBOutlet UIView *colorBgView;
 
 @property (weak, nonatomic) IBOutlet UILabel *priceLabel;
 @property (weak, nonatomic) IBOutlet UILabel *priceChgLabel;
@@ -64,19 +65,24 @@
 - (void)setStockStatusModel:(VStockStatusModel *)stockStatusModel {
     _stockStatusModel = stockStatusModel;
     if (stockStatusModel.wavePrice < 0) {
-        _priceLabel.textColor = kRGB(41, 253, 47);
-        _priceChgLabel.textColor = kRGB(41, 253, 47);
-        _pricePercentLabel.textColor = kRGB(41, 253, 47);
+        _colorBgView.backgroundColor = kRGB(55, 185, 130);
+
+//        _priceLabel.textColor = kRGB(41, 253, 47);
+//        _priceChgLabel.textColor = kRGB(41, 253, 47);
+//        _pricePercentLabel.textColor = kRGB(41, 253, 47);
     }
     else if (stockStatusModel.wavePrice > 0) {
-        _priceLabel.textColor = kRGB(252, 63, 30);
-        _priceChgLabel.textColor = kRGB(252, 63, 30);
-        _pricePercentLabel.textColor = kRGB(252, 63, 30);
+        _colorBgView.backgroundColor = kRGB(252, 80, 90);
+
+        //        _priceLabel.textColor = kRGB(252, 63, 30);
+        //        _priceChgLabel.textColor = kRGB(252, 63, 30);
+        //        _pricePercentLabel.textColor = kRGB(252, 63, 30);
     }
     else{
-        _priceLabel.textColor = [UIColor grayColor];
-        _priceChgLabel.textColor = [UIColor grayColor];
-        _pricePercentLabel.textColor = [UIColor grayColor];
+        _colorBgView.backgroundColor = kRGB(128, 128, 128);
+//        _priceLabel.textColor = [UIColor grayColor];
+//        _priceChgLabel.textColor = [UIColor grayColor];
+//        _pricePercentLabel.textColor = [UIColor grayColor];
     }
     
     _priceLabel.text    = [NSString stringWithFormat:@"%.2f", stockStatusModel.price];
@@ -112,7 +118,5 @@
     
     return label;
 }
-
-
 
 @end
