@@ -14,28 +14,30 @@
 
 #import "VKLinePosition.h"
 
-#import "VStockChartConfig.h"
-#import "UIColor+StockTheme.h"
+#import "StockRequest.h"
 #import "Masonry.h"
 
-@interface VKLineView () <UIScrollViewDelegate>
+@interface VKLineView () <UIScrollViewDelegate, UIActionSheetDelegate>
 
 @property (nonatomic, strong) VStockScrollView  * stockScrollView;      // 背景
-
 @property (nonatomic, strong) VKLineChart       * kLineChart;           // k线图表
 @property (nonatomic, strong) VKLineVolumeView  * volumeChart;          // 成交量
-
 @property (nonatomic, strong) VKLineMaskView    * maskView;
+
+@property (nonatomic, assign) VStockType        stockType;          //
+@property (nonatomic, assign) VStockChartType   chartType;      //
+@property (nonatomic, assign) VStockFuQuanType  fuQuanType;         //
 
 @property (nonatomic, copy) NSArray <VKLinePosition *>*drawLinePositions;   // 位置数组
 
-@property (nonatomic, strong) VStockGroup        * stockGroup;            // 数据源
-@property (nonatomic, strong) NSMutableArray    * screenLineModels;           // 当前一屏幕数据源
+@property (nonatomic, strong) VStockGroup       * stockGroup;            // 数据源
+@property (nonatomic, strong) NSMutableArray    * screenLineModels;     // 当前一屏幕数据源
 @property (nonatomic, strong) VLineModel        * selectLineModel;      //长按选中的model
 
 
 @property (nonatomic, strong) UIButton  * zoomInBtn;        // 放大按钮
 @property (nonatomic, strong) UIButton  * zoomOutBtn;       // 缩小按钮
+@property (nonatomic, strong) UIButton  * fuQuanBtn;       // 缩小按钮
 
 @property (nonatomic, assign) float  scaleRadio;            // 缩放系数
 
@@ -44,17 +46,19 @@
 
 @implementation VKLineView {
     
-    CGFloat _maxValue;      //图表最大的价格
-    CGFloat _minValue;      //图表最小的价格
+    CGFloat     _maxValue;      //图表最大的价格
+    CGFloat     _minValue;      //图表最小的价格
     
-    CGFloat _volumeValue;       //图表最大的成交量
+    CGFloat     _volumeValue;       //图表最大的成交量
+    NSString    * _stockCode;
 }
 
 #pragma mark - Lifecycle
 
-- (instancetype)init {
+- (instancetype)initWithChartType:(VStockChartType)chartType {
     self = [super init];
     if (self) {
+        _chartType = chartType;
         
         [self configureViews];
 //        _stockScrollView.userInteractionEnabled = NO;
@@ -90,10 +94,18 @@
     
     [self addSubview:self.zoomInBtn];
     [self addSubview:self.zoomOutBtn];
-    
+    [self addSubview:self.fuQuanBtn];
+
     _zoomInBtn.backgroundColor = [UIColor purpleColor];
     _zoomOutBtn.backgroundColor = [UIColor purpleColor];
+    _fuQuanBtn.backgroundColor = [UIColor purpleColor];
 
+    [_fuQuanBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.mas_equalTo(10);
+        make.right.mas_equalTo(-10);
+        make.size.mas_equalTo(CGSizeMake(60, 24));
+    }];
+    
     [_zoomInBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerY.equalTo(self).offset(10);
         make.left.mas_equalTo(30);
@@ -105,7 +117,8 @@
         make.left.equalTo(_zoomInBtn.mas_right).offset(2);
         make.size.mas_equalTo(CGSizeMake(24, 24));
     }];
-
+    
+    
     //缩放
     UIPinchGestureRecognizer *pinch = [[UIPinchGestureRecognizer alloc]initWithTarget:self action:@selector(event_pinchAction:)];
     [_stockScrollView addGestureRecognizer:pinch];
@@ -115,9 +128,39 @@
 }
 
 #pragma mark - Public
+- (void)reloadData:(NSString *)stockCode fuQuan:(VStockFuQuanType)fuQuanType{
+    [self reloadData:stockCode fuQuan:fuQuanType success:nil];
+}
 
-- (void)reloadWithGroup:(VStockGroup *)stockGroup {
+- (void)reloadData:(NSString *)stockCode fuQuan:(VStockFuQuanType)fuQuanType success:(void(^)(VStockGroup * stockGroup))success{
+    _stockCode = stockCode;
+    
+    NSArray * titles = @[@"不复权",@"前复权",@"后复权"];
+    [_fuQuanBtn setTitle:titles[fuQuanType] forState:UIControlStateNormal];
+
+    [self getStockData:stockCode fuQuanType:fuQuanType success:^(VStockGroup *stockGroup) {
+        NSLog(@"%@", stockGroup.stockCode);
+        if (success) {
+            success(stockGroup);
+        }
+        _stockGroup = stockGroup;
+        NSArray * titles = @[@"不复权",@"前复权",@"后复权"];
+        [_fuQuanBtn setTitle:titles[fuQuanType] forState:UIControlStateNormal];
+        
+        [self layoutIfNeeded];
+        [self updateScrollViewContentWidth];
+        [self setNeedsDisplay];
+        if (self.stockGroup.kLineModels.count > 0) {
+            self.stockScrollView.contentOffset = CGPointMake(self.stockScrollView.contentSize.width - self.stockScrollView.bounds.size.width, self.stockScrollView.contentOffset.y);
+        }
+    }];
+}
+
+
+- (void)reloadWithGroup:(VStockGroup *)stockGroup fuQuan:(VStockFuQuanType)fuQuanType{
     _stockGroup = stockGroup;
+    NSArray * titles = @[@"不复权",@"前复权",@"后复权"];
+    [_fuQuanBtn setTitle:titles[fuQuanType] forState:UIControlStateNormal];
     
     [self layoutIfNeeded];
     [self updateScrollViewContentWidth];
@@ -127,8 +170,16 @@
     }
 }
 
-
 #pragma mark - Actions
+
+- (void)event_fuquanAction:(UIButton *)sender {
+    UIActionSheet *choiceSheet = [[UIActionSheet alloc]initWithTitle:nil
+                                                           delegate:self
+                                                  cancelButtonTitle:@"取消"
+                                             destructiveButtonTitle:nil
+                                                  otherButtonTitles:@"不复权",@"前复权",@"后复权",nil];
+    [choiceSheet showInView:kKeyWindow];
+}
 
 // 缩放功能
 - (void)event_scaleAction:(UIButton *)sender {
@@ -307,6 +358,17 @@
     return _stockScrollView;
 }
 
+- (UIButton *)fuQuanBtn {
+    if (_fuQuanBtn == nil) {
+        _fuQuanBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        [_fuQuanBtn setTitle:@"不复权" forState:UIControlStateNormal];
+//        [_fuQuanBtn setTitle:@"不复权" forState:UIControlStateNormal];
+        _fuQuanBtn.titleLabel.font = [UIFont systemFontOfSize:14];
+        [_fuQuanBtn addTarget:self action:@selector(event_fuquanAction:) forControlEvents:UIControlEventTouchUpInside];
+    }
+    return _fuQuanBtn;
+}
+
 - (UIButton *)zoomInBtn {
     if (_zoomInBtn == nil) {
         _zoomInBtn = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -482,5 +544,53 @@
     return rect;
 }
 
+
+
+//当点击功能对话框按钮时被调用
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
+    if (buttonIndex == 3) {     //点击取消选项
+        return;
+    }
+    NSArray * titles = @[@"不复权",@"前复权",@"后复权"];
+    [_fuQuanBtn setTitle:titles[buttonIndex] forState:UIControlStateNormal];
+    if (self.fuQuanStatusBlock) {
+        self.fuQuanStatusBlock(buttonIndex);
+    }
+    
+    [self reloadData:_stockCode fuQuan:buttonIndex success:^(VStockGroup *stockGroup) {}];
+}
+
+
+
+#pragma mark - Network Data
+
+- (void)getStockData:(NSString *)stockCode fuQuanType:(VStockFuQuanType)fuQuanType success:(void (^)(VStockGroup *response))success {
+    
+    VStockType stockType = VStockTypeCN;
+    if ([stockCode hasPrefix:@"hk"]){
+        stockType = VStockTypeHK;
+    }
+
+    
+    if (stockType == VStockTypeCN) {
+        if (_chartType == VStockChartTypeDayLine) {
+            [StockRequest getDayStockData:stockCode fuQuanType:fuQuanType success:success];
+        }
+        else if (_chartType == VStockChartTypeWeekLine) {
+            [StockRequest getWeekStockData:stockCode fuQuanType:fuQuanType success:success];
+        }
+        else if (_chartType == VStockChartTypeMonthLine) {
+            [StockRequest getMonthStockData:stockCode fuQuanType:fuQuanType success:success];
+        }
+    }
+    else if (stockType == VStockTypeHK) {
+        if (_chartType == VStockChartTypeDayLine) {
+            [StockRequest getHKDayStockData:stockCode fuQuanType:fuQuanType success:success];
+        }
+        else if (_chartType == VStockChartTypeWeekLine) {
+            [StockRequest getHKWeekStockCode:stockCode fuQuanType:fuQuanType success:success];
+        }
+    }
+}
 
 @end

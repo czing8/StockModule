@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "VStockView.h"
 
-@interface StockViewController : UIViewController
+@interface StockChartController : UIViewController
 
 @property (nonatomic, assign) float   refreshTime;  //修改股票刷新时间
 

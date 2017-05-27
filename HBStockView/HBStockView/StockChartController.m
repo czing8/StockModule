@@ -6,7 +6,7 @@
 //  Copyright © 2017年 vols. All rights reserved.
 //
 
-#import "StockViewController.h"
+#import "StockChartController.h"
 #import "StockRequest.h"
 #import "VStockGroup.h"
 #import "VStockView.h"
@@ -18,7 +18,7 @@
 
 #define kStatusViewHeight   168
 
-@interface StockViewController ()
+@interface StockChartController ()
 
 @property (nonatomic, strong) UIScrollView  * mainScrollView;
 @property (nonatomic, strong) UIView        * containerView;    // scrollView的容器View
@@ -35,7 +35,7 @@
 
 @end
 
-@implementation StockViewController
+@implementation StockChartController
 
 - (void)dealloc{
     NSLog(@"StockViewController release");
@@ -66,7 +66,7 @@
     [_mainScrollView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.edges.equalTo(self.view);
     }];
-    self.title = _stockCode;
+//    self.title = _stockCode;
 
     [self.mainScrollView addSubview:self.containerView];
     [self.containerView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -128,7 +128,7 @@
 
 - (void)fetchData {
     
-    [self.stockView reloadDataCompletion:nil];
+    [self.stockView reloadStockData];
 }
 
 

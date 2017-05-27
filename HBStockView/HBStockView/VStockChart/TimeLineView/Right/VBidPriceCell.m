@@ -27,14 +27,14 @@
         [_noteLabel mas_makeConstraints:^(MASConstraintMaker *make) {
             make.left.mas_equalTo(1);
             make.centerY.equalTo(self.contentView);
-            make.width.equalTo(self.contentView).multipliedBy(0.2);
+            make.width.equalTo(self.contentView).multipliedBy(0.24);
             make.height.equalTo(self.contentView);
         }];
         
         [_priceLabel mas_makeConstraints:^(MASConstraintMaker *make) {
             make.left.equalTo(_noteLabel.mas_right).offset(2);
             make.centerY.equalTo(self.contentView);
-            make.width.equalTo(self.contentView).multipliedBy(0.39);
+            make.width.equalTo(self.contentView).multipliedBy(0.36);
             make.height.equalTo(self.contentView);
         }];
         
@@ -79,7 +79,8 @@
     if (_noteLabel == nil) {
         _noteLabel = [[UILabel alloc] init];
         _noteLabel.textAlignment = NSTextAlignmentLeft;
-        _noteLabel.font = [UIFont systemFontOfSize:13];
+        _noteLabel.font = [UIFont boldSystemFontOfSize:12];
+        _noteLabel.textColor = kRGB(60, 60, 60);
     }
     return _noteLabel;
 }
@@ -88,7 +89,8 @@
     if (_priceLabel == nil) {
         _priceLabel = [[UILabel alloc] init];
         _priceLabel.textAlignment = NSTextAlignmentCenter;
-        _priceLabel.font = [UIFont systemFontOfSize:13];
+        _priceLabel.font = [UIFont boldSystemFontOfSize:12];
+        _priceLabel.textColor = kRGB(60, 60, 60);
     }
     return _priceLabel;
 }
@@ -98,7 +100,8 @@
     if (_volumeLabel == nil) {
         _volumeLabel = [[UILabel alloc] init];
         _volumeLabel.textAlignment = NSTextAlignmentRight;
-        _volumeLabel.font = [UIFont systemFontOfSize:13];
+        _volumeLabel.font = [UIFont boldSystemFontOfSize:12];
+        _volumeLabel.textColor = kRGB(60, 60, 60);
     }
     return _volumeLabel;
 }

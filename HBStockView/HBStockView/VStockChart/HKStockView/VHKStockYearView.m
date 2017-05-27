@@ -14,6 +14,7 @@
 
 #import "UIColor+StockTheme.h"
 #import "VStockGroup.h"
+#import "StockRequest.h"
 #import "Masonry.h"
 
 @interface VHKStockYearView ()
@@ -49,6 +50,28 @@
     }
     return self;
 }
+
+#pragma mark - Public
+
+- (void)reloadData:(NSString *)stockCode fuQuan:(VStockFuQuanType)fuQuanType {
+    
+    [StockRequest getHKYearStockCode:stockCode fuQuanType:fuQuanType success:^(VStockGroup *stockGroup) {
+        _stockGroup = stockGroup;
+        
+        [self layoutIfNeeded];
+        [self updateScrollViewContentWidth];
+        [self setNeedsDisplay];
+    }];
+}
+
+- (void)reloadWithGroup:(VStockGroup *)stockGroup {
+    _stockGroup = stockGroup;
+    
+    [self layoutIfNeeded];
+    [self updateScrollViewContentWidth];
+    [self setNeedsDisplay];
+}
+
 
 - (void)configureViews {
     
@@ -87,13 +110,6 @@
 }
 
 
-- (void)reloadWithGroup:(VStockGroup *)stockGroup {
-    _stockGroup = stockGroup;
-    
-    [self layoutIfNeeded];
-    [self updateScrollViewContentWidth];
-    [self setNeedsDisplay];
-}
 
 #pragma mark - Draw Func
 

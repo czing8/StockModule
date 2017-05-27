@@ -7,7 +7,7 @@
 //
 
 #import "ViewController.h"
-#import "StockViewController.h"
+#import "StockChartController.h"
 
 @interface ViewController ()
 
@@ -31,7 +31,7 @@
     VStockType stockType = VStockTypeCN;
     if ([stockCode hasPrefix:@"hk"])    stockType = VStockTypeHK;
     
-    StockViewController * stockVC = [[StockViewController alloc] initStockVC:stockCode type:stockType];
+    StockChartController * stockVC = [[StockChartController alloc] initStockVC:stockCode type:stockType];
     stockVC.refreshTime = [_refreshTimeTF.text floatValue];
     [self.navigationController pushViewController:stockVC animated:YES];
 }

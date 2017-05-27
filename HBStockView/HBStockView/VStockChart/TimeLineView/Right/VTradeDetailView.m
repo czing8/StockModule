@@ -12,34 +12,65 @@
 
 #import "Masonry.h"
 #import "MJRefresh.h"
-
+#import "StockRequest.h"
 
 @interface VTradeDetailView ()<UITableViewDelegate, UITableViewDataSource>
 
 @property (nonatomic, strong) UITableView       * tableView;
 @property (nonatomic, strong) NSMutableArray    * dataSource;
+@property (nonatomic, strong) NSString          * stockCode;
 
 @end
 
-@implementation VTradeDetailView
+@implementation VTradeDetailView{
+    NSString    * _curIndex;
+}
 
 - (instancetype)init {
     self = [super init];
     if (self) {
-//        self.delegate = self;
-//        self.separatorStyle = UITableViewCellSeparatorStyleNone;
-//        self.bounces = NO;
-//        self.showsVerticalScrollIndicator = NO;
+        _curIndex = @"0";
         [self configureViews];
     }
     return self;
 }
 
-- (void)reloadWithData:(NSArray <VTimeTradeModel *>*)tradeModels{
-    _dataSource = [NSMutableArray arrayWithArray:tradeModels];
-    
-    [self.tableView reloadData];
+#pragma mark - public
+
+- (void)reloadWithStockCode:(NSString*)stockCode {
+    _stockCode = stockCode;
+
+    [StockRequest getMingxiRequest:_stockCode index:@"0" success:^(NSArray<VTimeTradeModel *> *resultArray, NSString * index) {
+        _curIndex = index;
+        if (self.dataSource.count > 0) {
+            [_dataSource removeAllObjects];
+        }
+        _dataSource = [NSMutableArray arrayWithArray:[[resultArray reverseObjectEnumerator] allObjects]];
+        [self.tableView reloadData];
+    }];
 }
+
+
+- (void)reloadWithData:(NSArray <VTimeTradeModel *>*)tradeModels{
+//    _curIndex = @"0";
+//    _dataSource = [NSMutableArray arrayWithArray:tradeModels];
+//    [self.tableView reloadData];
+}
+
+
+//- (void)setStockCode:(NSString *)stockCode {
+//    _stockCode = stockCode;
+//    
+//    [StockRequest getMingxiRequest:_stockCode index:@"0" success:^(NSArray *resultArray, NSString * index) {
+//        _curIndex = index;
+//        if (self.dataSource.count > 0) {
+//            [_dataSource removeAllObjects];
+//        }
+//        _dataSource = [NSMutableArray arrayWithArray:[[resultArray reverseObjectEnumerator] allObjects]];
+//        [self.tableView reloadData];
+//    }];
+//}
+
 
 - (void)configureViews {
     [self addSubview:self.tableView];
@@ -50,20 +81,40 @@
     
     // MJRefresh 刷新设置
     MJRefreshNormalHeader *mjHeader = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
-        [self.tableView.mj_header endRefreshing];
+        [StockRequest getMingxiRequest:_stockCode index:@"0" success:^(NSArray *resultArray, NSString * index) {
+            _curIndex = index;
+            if (self.dataSource.count > 0) {
+                [_dataSource removeAllObjects];
+            }
+            _dataSource = [NSMutableArray arrayWithArray:[[resultArray reverseObjectEnumerator] allObjects]];
+            [self.tableView reloadData];
+
+            [self.tableView.header endRefreshing];
+        }];
     }];
+
     mjHeader.automaticallyChangeAlpha = YES;
     mjHeader.lastUpdatedTimeLabel.hidden = YES;
     mjHeader.stateLabel.hidden = YES;
 
     MJRefreshBackNormalFooter *mjFooter = [MJRefreshBackNormalFooter footerWithRefreshingBlock:^{
-        [self.tableView.mj_footer endRefreshing];
+        [StockRequest getMingxiRequest:_stockCode index:_curIndex success:^(NSArray *resultArray, NSString * index) {
+            _curIndex = index;
+            [_dataSource addObjectsFromArray:[[resultArray reverseObjectEnumerator] allObjects]];
+            [self.tableView reloadData];
+            
+            [self.tableView.footer endRefreshing];
+        }];
+
     }];
     mjFooter.stateLabel.hidden = YES;
     
-    self.tableView.mj_header = mjHeader;
-    self.tableView.mj_footer = mjFooter;
+    self.tableView.header = mjHeader;
+    self.tableView.footer = mjFooter;
 
+    
+
+    
 }
 
 

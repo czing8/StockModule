@@ -49,9 +49,9 @@
     CGContextAddArc(context, x, self.stockScrollView.frame.origin.y + self.selectedPoint.y, kStockPointRadius, 0, 2 * M_PI, 0);
     CGContextDrawPath(context, kCGPathFillStroke);
     
-    //绘制选中日期
+    //绘制成交量
     NSDictionary *attribute = @{NSFontAttributeName:[UIFont systemFontOfSize:9],NSForegroundColorAttributeName:[UIColor selectedRectTextColor]};
-    NSString *dayText = [NSString stringWithFormat:@"%f", self.selectedModel.volume];
+    NSString *dayText = [NSString stringWithFormat:@"%.0f", self.selectedModel.volume];
     CGRect textRect = [self rectOfNSString:dayText attribute:attribute];
     
     if (x + textRect.size.width/2.f + 2 > CGRectGetMaxX(self.stockScrollView.frame)) {
@@ -68,8 +68,8 @@
     NSString *priceText = [NSString stringWithFormat:@"%.2f", self.selectedModel.price];
     CGRect priceRect = [self rectOfNSString:priceText attribute:attribute];
     CGContextSetFillColorWithColor(context, [UIColor selectedRectBgColor].CGColor);
-    CGContextFillRect(context, CGRectMake(VStockScrollViewLeftGap - priceRect.size.width - 4, self.stockScrollView.frame.origin.y + self.selectedPoint.y - priceRect.size.height/2.f - 2, priceRect.size.width + 4, priceRect.size.height + 4));
-    [priceText drawInRect:CGRectMake(VStockScrollViewLeftGap - priceRect.size.width - 4 + 2, self.stockScrollView.frame.origin.y + self.selectedPoint.y - priceRect.size.height/2.f, priceRect.size.width, priceRect.size.height) withAttributes:attribute];
+    CGContextFillRect(context, CGRectMake(VStockScrollViewLeftGap - priceRect.size.width - 10, self.stockScrollView.frame.origin.y + self.selectedPoint.y - priceRect.size.height/2.f - 2, priceRect.size.width + 4, priceRect.size.height + 4));
+    [priceText drawInRect:CGRectMake(VStockScrollViewLeftGap - priceRect.size.width - 10 + 2, self.stockScrollView.frame.origin.y + self.selectedPoint.y - priceRect.size.height/2.f, priceRect.size.width, priceRect.size.height) withAttributes:attribute];
     
     //绘制选中增幅
     NSString *text2 = [NSString stringWithFormat:@"%.2f%%",(self.selectedModel.price - self.selectedModel.preClosePrice)*100/self.selectedModel.preClosePrice];

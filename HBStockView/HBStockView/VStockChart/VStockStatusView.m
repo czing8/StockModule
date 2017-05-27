@@ -72,12 +72,14 @@
     if (stockStatusModel.wavePrice < 0) {
         
         _colorBgView.backgroundColor = kRGB(55, 185, 130);
-//        _priceLabel.textColor = kRGB(41, 253, 47);
-//        _priceChgLabel.textColor = kRGB(41, 253, 47);
-//        _pricePercentLabel.textColor = kRGB(41, 253, 47);
+//        _priceLabel.textColor = kRGB(7, 149, 12);
+//        _priceChgLabel.textColor = kRGB(7, 149, 12);
+//        _pricePercentLabel.textColor = kRGB(7, 149, 12);
     }
     else if (stockStatusModel.wavePrice > 0) {
-        _colorBgView.backgroundColor = kRGB(252, 80, 90);
+//        _colorBgView.backgroundColor = kRGB(252, 80, 90);
+        _colorBgView.backgroundColor = kRGB(247, 59, 77);
+//        _colorBgView.backgroundColor = kRGB(228, 62, 62);
 
 //        _priceLabel.textColor = kRGB(252, 63, 30);
 //        _priceChgLabel.textColor = kRGB(252, 63, 30);
@@ -111,6 +113,9 @@
     _SYLLb.text     = [NSString stringWithFormat:@"%@", stockStatusModel.PEG];
     _ZFLb.text      = [NSString stringWithFormat:@"%@%%", stockStatusModel.ZF];
     _LTSZLb.text    = [NSString stringWithFormat:@"%.0f亿", stockStatusModel.LTSZ];
+    
+    
+    _priceLabel.adjustsFontSizeToFitWidth = YES;
 
 }
 

@@ -12,6 +12,10 @@
 
 @interface VHKStockYearView : UIView
 
+//直接传全部数据，刷新UI
 - (void)reloadWithGroup:(VStockGroup *)stockGroup;
+
+//传入Code，内部从网络拉取数据
+- (void)reloadData:(NSString *)stockCode fuQuan:(VStockFuQuanType)fuQuanType;
 
 @end

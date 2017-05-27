@@ -17,6 +17,7 @@
 #import "VTimeLineMaskView.h"
 
 #import "VStockGroup.h"
+#import "StockRequest.h"
 #import "Masonry.h"
 
 /*
@@ -63,6 +64,31 @@
     return self;
 }
 
+#pragma mark - Public
+
+- (void)reloadWithStockCode:(NSString *)stockCode success:(void(^)(VStockGroup * stockGroup))success {
+    __weak typeof(self) weakSelf = self;
+    [self getTimeStockData:stockCode success:^(VStockGroup *stockGroup) {
+        if (success) {
+            success(stockGroup);
+        }
+        [weakSelf reloadWithGroup:stockGroup];
+    }];
+}
+
+- (void)reloadWithGroup:(VStockGroup *)stockGroup {
+    _stockGroup = stockGroup;
+    
+    [self layoutIfNeeded];
+    [self updateScrollViewContentWidth];
+    [self setNeedsDisplay];
+    
+    if (_stockType == VStockTypeCN) {
+        _theRightView.stockGroup = stockGroup;
+    }
+}
+
+
 - (void)configureViews {
     
     if (_stockType == VStockTypeCN) {
@@ -106,8 +132,9 @@
     
     [_volumeView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(_timeLineChart.mas_bottom).offset(2);
-        make.left.right.equalTo(_stockScrollView.contentView);
+        make.left.equalTo(_stockScrollView.contentView);
         make.height.equalTo(_stockScrollView.contentView).multipliedBy([VStockChartConfig volumeViewRadio]);
+        make.width.equalTo(_stockScrollView);
     }];
 
     
@@ -119,17 +146,6 @@
 }
 
 
-- (void)reloadWithGroup:(VStockGroup *)stockGroup {
-    _stockGroup = stockGroup;
-    
-    [self layoutIfNeeded];
-    [self updateScrollViewContentWidth];
-    [self setNeedsDisplay];
-    
-    if (_stockType == VStockTypeCN) {
-        _theRightView.stockGroup = stockGroup;
-    }
-}
 
 #pragma mark - Draw Func
 
@@ -324,6 +340,17 @@
         oldPositionX = 0.f;
         [self setNeedsDisplay];
         self.maskView.hidden = YES;
+    }
+}
+
+
+
+- (void)getTimeStockData:(NSString *)stockCode success:(void (^)(VStockGroup *response))success {
+    if (_stockType == VStockTypeCN) {
+        [StockRequest getTimeStockData:stockCode success:success];
+    }
+    else if (_stockType == VStockTypeHK) {
+        [StockRequest getHKTimeStockData:stockCode success:success];
     }
 }
 @end

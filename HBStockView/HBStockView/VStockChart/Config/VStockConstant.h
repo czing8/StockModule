@@ -18,6 +18,13 @@ typedef NS_ENUM(NSInteger, VStockChartType) {
     VStockChartTypeYearLine,        // 港股的年线图
 };
 
+//
+typedef NS_ENUM(NSInteger, VStockFuQuanType) {
+    VStockFuQuanTypeNone = 0,   // 不复权
+    VStockFuQuanTypeQian,   // 前复权
+    VStockFuQuanTypeHou,    // 后复权
+};
+
 /**
  *  股票类型（A股，港股）
  */
@@ -109,7 +116,7 @@ typedef NS_ENUM(NSInteger, VStockType) {
 /**
  *  K线ScrollView距离左边的距离
  */
-#define     VStockScrollViewLeftGap 45
+#define     VStockScrollViewLeftGap 40
 
 /**
  *  K线ScrollView距离左部的距离

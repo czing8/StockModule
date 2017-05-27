@@ -10,8 +10,8 @@
 #define PrefixHeader_pch
 
 #define kRGB(r, g, b)       [UIColor colorWithRed:(r)/255.f green:(g)/255.f blue:(b)/255.f alpha:1.f]
-
-
+#define kScreenSize     [UIScreen mainScreen].bounds.size
+#define kKeyWindow      [UIApplication sharedApplication].keyWindow
 
 
 #endif /* PrefixHeader_pch */

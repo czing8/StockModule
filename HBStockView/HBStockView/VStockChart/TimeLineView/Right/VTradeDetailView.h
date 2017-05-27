@@ -11,6 +11,11 @@
 
 @interface VTradeDetailView : UIView
 
+- (void)reloadWithStockCode:(NSString*)stockCode;
+
 - (void)reloadWithData:(NSArray <VTimeTradeModel *>*)tradeModels;
+
+
+
 
 @end

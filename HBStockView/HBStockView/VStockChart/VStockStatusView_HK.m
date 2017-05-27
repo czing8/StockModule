@@ -65,27 +65,27 @@
 - (void)setStockStatusModel:(VStockStatusModel *)stockStatusModel {
     _stockStatusModel = stockStatusModel;
     if (stockStatusModel.wavePrice < 0) {
-        _colorBgView.backgroundColor = kRGB(55, 185, 130);
+//        _colorBgView.backgroundColor = kRGB(55, 185, 130);
 
-//        _priceLabel.textColor = kRGB(41, 253, 47);
-//        _priceChgLabel.textColor = kRGB(41, 253, 47);
-//        _pricePercentLabel.textColor = kRGB(41, 253, 47);
+        _priceLabel.textColor = kRGB(7, 149, 12);
+        _priceChgLabel.textColor = kRGB(7, 149, 12);
+        _pricePercentLabel.textColor = kRGB(7, 149, 12);
     }
     else if (stockStatusModel.wavePrice > 0) {
-        _colorBgView.backgroundColor = kRGB(252, 80, 90);
+//        _colorBgView.backgroundColor = kRGB(252, 80, 90);
 
-        //        _priceLabel.textColor = kRGB(252, 63, 30);
-        //        _priceChgLabel.textColor = kRGB(252, 63, 30);
-        //        _pricePercentLabel.textColor = kRGB(252, 63, 30);
+                _priceLabel.textColor = kRGB(252, 63, 30);
+                _priceChgLabel.textColor = kRGB(252, 63, 30);
+                _pricePercentLabel.textColor = kRGB(252, 63, 30);
     }
     else{
-        _colorBgView.backgroundColor = kRGB(128, 128, 128);
-//        _priceLabel.textColor = [UIColor grayColor];
-//        _priceChgLabel.textColor = [UIColor grayColor];
-//        _pricePercentLabel.textColor = [UIColor grayColor];
+//        _colorBgView.backgroundColor = kRGB(128, 128, 128);
+        _priceLabel.textColor = [UIColor grayColor];
+        _priceChgLabel.textColor = [UIColor grayColor];
+        _pricePercentLabel.textColor = [UIColor grayColor];
     }
     
-    _priceLabel.text    = [NSString stringWithFormat:@"%.2f", stockStatusModel.price];
+    _priceLabel.text    = [NSString stringWithFormat:@"%.3f", stockStatusModel.price];
     _priceChgLabel.text = [NSString stringWithFormat:@"%.2f", stockStatusModel.wavePrice];
     _pricePercentLabel.text = [NSString stringWithFormat:@"%.2f%%", stockStatusModel.wavePercent];
     
@@ -106,6 +106,8 @@
     _minPrice52WeekLb.text  = [NSString stringWithFormat:@"%@", stockStatusModel.minPrice_52Week];
     
     _ZXLLb.text  = [NSString stringWithFormat:@"%@%%", stockStatusModel.ZXL];
+    
+    _priceLabel.adjustsFontSizeToFitWidth = YES;
 }
 
 #pragma mark - Helpers

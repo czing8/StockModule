@@ -32,7 +32,7 @@ typedef void (^StockStatusBlock)(VStockStatusModel * stockStatusModel);
  */
 - (instancetype)initWithStockCode:(NSString *)stockCode stockType:(VStockType)stockType;
 
-- (void)reloadDataCompletion:(void(^)(BOOL success))completion;
+- (void)reloadStockData;
 
 
 /**
