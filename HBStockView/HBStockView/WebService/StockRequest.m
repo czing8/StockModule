@@ -19,16 +19,16 @@
         
         NSDictionary * resultDic    = flag[@"data"][stockCode];
         NSArray * stockStatusArray  = resultDic[@"qt"][stockCode];
-        NSString * tradeString  = resultDic[@"mx_price"][@"mx"][@"data"][1];
-
-        NSArray * tradeModels = [self tradeModelsFrom:tradeString];
+        
+//        NSString * tradeString  = resultDic[@"mx_price"][@"mx"][@"data"][1];
+//        NSArray * tradeModels = [self tradeModelsFrom:nil];
+        NSArray * tradeModels = nil;
         
         float curPrice = [stockStatusArray[3] floatValue];
         float closePrice = [stockStatusArray[4] floatValue];
         
         // ---- 股票各种参数模型
         VStockStatusModel * statusModel = [self stockStatusModelFromArray:stockStatusArray  isHK:NO];
-    
         
         // ---- 股票五档竞价模型
         NSArray *buyPrices = @[stockStatusArray[9], stockStatusArray[11], stockStatusArray[13], stockStatusArray[15], stockStatusArray[17]];
@@ -42,7 +42,6 @@
         bidPriceModel.buyVolumes = buyVolumes;
         bidPriceModel.sellPrices = sellPrices;
         bidPriceModel.sellVolumes = sellVolumes;
-
 
         // ---- 股票K线数组
         NSMutableArray * timeLineModels = [[NSMutableArray alloc] init];
