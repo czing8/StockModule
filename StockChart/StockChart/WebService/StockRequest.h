@@ -1,6 +1,6 @@
 //
 //  StockRequest.h
-//  HBStockView
+//  StockChart
 //
 //  Created by Vols on 2017/2/27.
 //  Copyright © 2017年 vols. All rights reserved.

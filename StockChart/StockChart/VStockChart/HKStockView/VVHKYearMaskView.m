@@ -1,17 +1,17 @@
 //
-//  VLineMaskView.m
+//  VVHKYearMaskView.m
 //  HBStockView
 //
 //  Created by Vols on 2017/3/29.
 //  Copyright © 2017年 vols. All rights reserved.
 //
 
-#import "VLineMaskView.h"
+#import "VVHKYearMaskView.h"
 #import "VStockConstant.h"
 #import "VStockChartConfig.h"
 #import "UIColor+StockTheme.h"
 
-@implementation VLineMaskView
+@implementation VVHKYearMaskView
 
 - (void)drawRect:(CGRect)rect {
     [super drawRect:rect];

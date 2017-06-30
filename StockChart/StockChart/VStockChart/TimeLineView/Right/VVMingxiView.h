@@ -1,5 +1,5 @@
 //
-//  VTradeDetailView.h
+//  VVMingxiView.h
 //  HBStockView
 //
 //  Created by Vols on 2017/3/13.
@@ -9,13 +9,10 @@
 #import <UIKit/UIKit.h>
 #import "VTimeTradeModel.h"
 
-@interface VTradeDetailView : UIView
+@interface VVMingxiView : UIView
 
 - (void)reloadWithStockCode:(NSString*)stockCode;
 
 - (void)reloadWithData:(NSArray <VTimeTradeModel *>*)tradeModels;
-
-
-
 
 @end

@@ -1,22 +1,22 @@
 //
-//  VBidPriceView.m
+//  VVWuDangView.m
 //  HBStockView
 //
 //  Created by Vols on 2017/2/28.
 //  Copyright © 2017年 vols. All rights reserved.
 //
 
-#import "VBidPriceView.h"
-#import "VBidPriceCell.h"
+#import "VVWuDangView.h"
+#import "VVWuDangCell.h"
 #import "VStockChartConfig.h"
 #import "UIColor+StockTheme.h"
 #import "Masonry.h"
 
-@interface VBidPriceView ()
+@interface VVWuDangView ()
 
 @end
 
-@implementation VBidPriceView
+@implementation VVWuDangView
 
 - (instancetype)init {
     self = [super init];
@@ -31,8 +31,8 @@
     return self;
 }
 
-- (void)reloadWithModel:(VBidPriceModel *)bidPriceModel {
-    _bidPriceModel = bidPriceModel;
+- (void)reloadWithModel:(VVWuDangModel *)wuDangModel {
+    _wuDangModel = wuDangModel;
     
     [self reloadData];
 }
@@ -46,19 +46,19 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (![self dequeueReusableCellWithIdentifier:kBidPriceCellIdentifier]) {
-        [self registerClass:[VBidPriceCell class] forCellReuseIdentifier:kBidPriceCellIdentifier];
+    if (![self dequeueReusableCellWithIdentifier:kWuDangCellIdentifier]) {
+        [self registerClass:[VVWuDangCell class] forCellReuseIdentifier:kWuDangCellIdentifier];
     }
-    VBidPriceCell *cell = [self dequeueReusableCellWithIdentifier:kBidPriceCellIdentifier forIndexPath:indexPath];
+    VVWuDangCell *cell = [self dequeueReusableCellWithIdentifier:kWuDangCellIdentifier forIndexPath:indexPath];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     if (indexPath.section == 0) {
-        cell.noteLabel.text = [self.bidPriceModel sellDescs][indexPath.row];
-        cell.priceLabel.text = [self.bidPriceModel sellPrices][indexPath.row];
-        cell.volumeLabel.text = [self.bidPriceModel sellVolumes][indexPath.row];
+        cell.noteLabel.text = [self.wuDangModel sellDescs][indexPath.row];
+        cell.priceLabel.text = [self.wuDangModel sellPrices][indexPath.row];
+        cell.volumeLabel.text = [self.wuDangModel sellVolumes][indexPath.row];
     } else {
-        cell.noteLabel.text = [self.bidPriceModel buyDescs][indexPath.row];
-        cell.priceLabel.text = [self.bidPriceModel buyPrices][indexPath.row];
-        cell.volumeLabel.text = [self.bidPriceModel buyVolumes][indexPath.row];
+        cell.noteLabel.text = [self.wuDangModel buyDescs][indexPath.row];
+        cell.priceLabel.text = [self.wuDangModel buyPrices][indexPath.row];
+        cell.volumeLabel.text = [self.wuDangModel buyVolumes][indexPath.row];
     }
     return cell;
 }

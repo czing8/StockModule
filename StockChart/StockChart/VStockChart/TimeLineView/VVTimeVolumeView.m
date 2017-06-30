@@ -1,28 +1,26 @@
 //
-//  VLineVolumeView.m
+//  VVTimeVolumeView.m
 //  HBStockView
 //
-//  Created by Vols on 2017/3/29.
+//  Created by Vols on 2017/2/25.
 //  Copyright © 2017年 vols. All rights reserved.
 //
 
-#import "VLineVolumeView.h"
-
+#import "VVTimeVolumeView.h"
 #import "VStockChartConfig.h"
 #import "VStockConstant.h"
 #import "UIColor+StockTheme.h"
 #import "VolumePositionModel.h"
 
-@interface VLineVolumeView ()
+@interface VVTimeVolumeView ()
 
-@property (nonatomic, strong) NSMutableArray <VolumePositionModel *>    *drawPoints;
-@property (nonatomic, strong) NSArray <VLineModel *>    *drawLineModels;
+@property (nonatomic, strong) NSMutableArray *drawPoints;
 
 @end
 
-@implementation VLineVolumeView
+@implementation VVTimeVolumeView
 
-- (void)drawViewWithXPosition:(CGFloat)xPosition stockGroup:(VStockGroup *)stockGroup {
+- (void)drawViewWithXPosition:(CGFloat)xPosition stockGroup:(VStockGroup *)stockGroup{
     NSAssert(stockGroup, @"数据源不能为空");
     //转换为实际坐标
     [self convertToPositionModelsWithXPosition:xPosition stockGroup:stockGroup];
@@ -35,7 +33,6 @@
 - (void)convertToPositionModelsWithXPosition:(CGFloat)startX stockGroup:(VStockGroup *)stockGroup  {
     if (!stockGroup) return;
     
-    self.drawLineModels = stockGroup.kLineModels;
     [self.drawPoints removeAllObjects];
     
     CGFloat minValue =  stockGroup.minVolume;
@@ -45,14 +42,14 @@
     
     CGFloat unitValue = (maxValue - minValue)/(maxY - minY);
     
-    [stockGroup.kLineModels enumerateObjectsUsingBlock:^(VLineModel * model, NSUInteger idx, BOOL * _Nonnull stop) {
+    [stockGroup.lineModels enumerateObjectsUsingBlock:^(VStockPoint * model, NSUInteger idx, BOOL * _Nonnull stop) {
         
         CGFloat xPosition = startX + idx * ([VStockChartConfig timeLineVolumeWidth] + kStockTimeVolumeLineGap);
         CGFloat yPosition = ABS(maxY - (model.volume - minValue)/unitValue);
         
         CGPoint startPoint = CGPointMake(xPosition, ABS(yPosition - maxY) > 1 ? yPosition : maxY );
         CGPoint endPoint = CGPointMake(xPosition, maxY);
-        NSString *dayDesc = model.dayDatail;
+        NSString *dayDesc = model.timeDesc;
         
         VolumePositionModel *positionModel = [VolumePositionModel modelWithStartPoint:startPoint endPoint:endPoint dayDesc:dayDesc];
         [self.drawPoints addObject:positionModel];
@@ -86,21 +83,8 @@
     CGContextFillRect(context, CGRectMake(0, 0, lastModel.endPoint.x, lineMaxY));
     
     [self.drawPoints enumerateObjectsUsingBlock:^(VolumePositionModel  *_Nonnull pModel, NSUInteger idx, BOOL * _Nonnull stop) {
-        
-        UIColor *strokeColor;
-        if (self.drawLineModels[idx].openPrice < self.drawLineModels[idx].closePrice) {
-            strokeColor = [UIColor stock_increaseColor];
-        } else if (self.drawLineModels[idx].openPrice > self.drawLineModels[idx].closePrice) {
-            strokeColor = [UIColor stock_decreaseColor];
-        } else {
-            //            if (self.drawLineModels[idx].openPrice >= [[[self.drawLineModels[idx] preDataModel] Close] floatValue]) {
-            strokeColor = [UIColor stock_increaseColor];
-            //            } else {
-            //                strokeColor = [UIColor YYStock_decreaseColor];
-            //            }
-        }
-        
-        CGContextSetStrokeColorWithColor(context, strokeColor.CGColor);
+
+        CGContextSetStrokeColorWithColor(context, [UIColor timeLineColor].CGColor);
         CGContextSetLineWidth(context, [VStockChartConfig timeLineVolumeWidth]);
         const CGPoint solidPoints[] = {pModel.startPoint, pModel.endPoint};
         CGContextStrokeLineSegments(context, solidPoints, 2);

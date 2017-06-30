@@ -1,20 +1,20 @@
 //
-//  VTradeDetailView.m
+//  VVMingxiView.m
 //  HBStockView
 //
 //  Created by Vols on 2017/3/13.
 //  Copyright © 2017年 vols. All rights reserved.
 //
 
-#import "VTradeDetailView.h"
-#import "VTradeDetailCell.h"
+#import "VVMingxiView.h"
+#import "VVMingxiCell.h"
 #import "UIColor+StockTheme.h"
 
 #import "Masonry.h"
 #import "MJRefresh.h"
 #import "StockRequest.h"
 
-@interface VTradeDetailView ()<UITableViewDelegate, UITableViewDataSource>
+@interface VVMingxiView ()<UITableViewDelegate, UITableViewDataSource>
 
 @property (nonatomic, strong) UITableView       * tableView;
 @property (nonatomic, strong) NSMutableArray    * dataSource;
@@ -22,7 +22,7 @@
 
 @end
 
-@implementation VTradeDetailView{
+@implementation VVMingxiView{
     NSString    * _curIndex;
 }
 
@@ -89,7 +89,7 @@
             _dataSource = [NSMutableArray arrayWithArray:[[resultArray reverseObjectEnumerator] allObjects]];
             [self.tableView reloadData];
 
-            [self.tableView.header endRefreshing];
+            [self.tableView.mj_header endRefreshing];
         }];
     }];
 
@@ -103,18 +103,14 @@
             [_dataSource addObjectsFromArray:[[resultArray reverseObjectEnumerator] allObjects]];
             [self.tableView reloadData];
             
-            [self.tableView.footer endRefreshing];
+            [self.tableView.mj_footer endRefreshing];
         }];
 
     }];
     mjFooter.stateLabel.hidden = YES;
     
-    self.tableView.header = mjHeader;
-    self.tableView.footer = mjFooter;
-
-    
-
-    
+    self.tableView.mj_header = mjHeader;
+    self.tableView.mj_footer = mjFooter;
 }
 
 
@@ -127,7 +123,7 @@
         _tableView.dataSource = self;
         _tableView.backgroundColor = [UIColor purpleColor];
         _tableView.tableFooterView = [UIView new];
-        [_tableView registerClass:[VTradeDetailCell class] forCellReuseIdentifier:kTradeDetailCellIdentifier];
+        [_tableView registerClass:[VVMingxiCell class] forCellReuseIdentifier:kMingXiCellIdentifier];
         _tableView.rowHeight = 24;      //预估行高 可以提高性能
         _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
         _tableView.showsVerticalScrollIndicator = NO;
@@ -145,7 +141,7 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    VTradeDetailCell * cell = [tableView dequeueReusableCellWithIdentifier:kTradeDetailCellIdentifier];
+    VVMingxiCell * cell = [tableView dequeueReusableCellWithIdentifier:kMingXiCellIdentifier];
     
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     cell.textLabel.textColor = [UIColor colorWithWhite:0.293 alpha:1.000];
@@ -177,7 +173,6 @@
     
     return headView;
 }
-
 
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {

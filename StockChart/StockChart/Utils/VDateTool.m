@@ -63,7 +63,7 @@
     [resultComps setHour:hour];
     [resultComps setMinute:minute];
 
-    NSCalendar*resultCalendar = [[NSCalendar alloc]initWithCalendarIdentifier:NSGregorianCalendar];
+    NSCalendar *resultCalendar = [[NSCalendar alloc]initWithCalendarIdentifier:NSGregorianCalendar];
     return [resultCalendar dateFromComponents:resultComps];
 }
 

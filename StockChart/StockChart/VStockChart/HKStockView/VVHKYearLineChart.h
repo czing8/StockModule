@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "VLineModel.h"
 
-@interface VLineChart : UIView
+@interface VVHKYearLineChart : UIView
 
 - (NSArray *)drawViewWithXPosition:(CGFloat)xPosition lineModels:(NSArray<VLineModel *> *)lineModels maxValue:(CGFloat)maxValue minValue:(CGFloat)minValue;
 

@@ -1,5 +1,5 @@
 //
-//  VBidPriceCell.h
+//  VVWuDangCell.h
 //  HBStockView
 //
 //  Created by Vols on 2017/2/28.
@@ -7,16 +7,16 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "VBidPriceModel.h"
+#import "VVWuDangModel.h"
 
-#define kBidPriceCellIdentifier     @"kBidPriceCellIdentifier"
+#define kWuDangCellIdentifier     @"kWuDangCellIdentifier"
 
-@interface VBidPriceCell : UITableViewCell
+@interface VVWuDangCell : UITableViewCell
 
 @property(nonatomic,strong) UILabel *noteLabel;
 @property(nonatomic,strong) UILabel *priceLabel;
 @property(nonatomic,strong) UILabel *volumeLabel;
 
-@property (nonatomic, strong) VBidPriceModel * model;
+@property (nonatomic, strong) VVWuDangModel * model;
 
 @end

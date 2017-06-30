@@ -1,6 +1,6 @@
 //
 //  VStockPoint.h
-//  HBStockView
+//  StockChart
 //
 //  Created by Vols on 2017/2/25.
 //  Copyright © 2017年 vols. All rights reserved.
@@ -19,6 +19,11 @@
 
 @property (nonatomic, strong) NSString  * timeDesc;         // 日期
 @property (nonatomic, strong) NSString  * dayDatail;        // 长按时显示的详细日期
+
+@property (nonatomic, assign) CGFloat  totalPrice;          // 当天总成交价
+@property (nonatomic, assign) CGFloat  totalVolume;         // 当天总成交量
+
+@property (nonatomic, assign) CGFloat  avPrice;         // 均价
 
 @end
 

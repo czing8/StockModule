@@ -1,5 +1,5 @@
 //
-//  DaDanView.h
+//  VVDaDanView.h
 //  HBStockView
 //
 //  Created by Vols on 2017/5/23.
@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "VTimeTradeModel.h"
 
-@interface VDaDanView : UIView
+@interface VVDaDanView : UIView
 
 @property (nonatomic, strong) NSString * stockCode;
 

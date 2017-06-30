@@ -1,6 +1,6 @@
 //
 //  VTimeLineSubView.m
-//  HBStockView
+//  StockChart
 //
 //  Created by Vols on 2017/2/25.
 //  Copyright © 2017年 vols. All rights reserved.
@@ -14,8 +14,10 @@
 #import "UIColor+VAdd.h"
 
 @interface VTimeLineChart() <CAAnimationDelegate>
+@property (nonatomic, strong) VStockGroup       * stockGroup;
 
-@property (nonatomic, strong) NSMutableArray *drawPoints;
+@property (nonatomic, strong) NSMutableArray    * drawPoints;
+@property (nonatomic, strong) NSMutableArray    * avPricePoints; //均价
 
 @end
 
@@ -29,7 +31,8 @@
     NSAssert(stockGroup, @"数据源不能为空");
     _maxValue = maxValue;
     _minValue = minValue;
-    
+    _stockGroup = stockGroup;
+
     // 转换为实际坐标
     [self convertToPositionsWithXPosition:xPosition drawLineModels:stockGroup.lineModels maxValue:maxValue minValue:minValue];
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -44,7 +47,8 @@
     if (drawLineModels == nil) return nil;
     
     [self.drawPoints removeAllObjects];
-    
+    [self.avPricePoints removeAllObjects];
+
     CGFloat minY = kStockLineMainViewMinY;
     CGFloat maxY = self.frame.size.height - kStockLineMainViewMinY;
     CGFloat unitValue = (maxValue - minValue)/(maxY - minY);
@@ -54,6 +58,8 @@
         CGFloat xPosition = startX + idx * ([VStockChartConfig timeLineVolumeWidth] + kStockTimeVolumeLineGap);
         CGPoint pricePoint = CGPointMake(xPosition, ABS(maxY - (model.price - minValue)/unitValue));
         [self.drawPoints addObject:[NSValue valueWithCGPoint:pricePoint]];
+        
+        [self.avPricePoints addObject: [NSValue valueWithCGPoint:CGPointMake(xPosition, ABS(maxY - (model.avPrice - minValue)/unitValue))]];
     }];
     
     return self.drawPoints;
@@ -66,6 +72,12 @@
     return _drawPoints;
 }
 
+- (NSMutableArray *)avPricePoints {
+    if (_avPricePoints == nil) {
+        _avPricePoints = [NSMutableArray array];
+    }
+    return _avPricePoints;
+}
 
 #pragma mark - DrawRect
 
@@ -123,6 +135,12 @@
     const CGPoint h_line[] = {CGPointMake(0, self.frame.size.height/4), CGPointMake(self.frame.size.width, self.frame.size.height/4), CGPointMake(0, self.frame.size.height/4*3), CGPointMake(self.frame.size.width, self.frame.size.height/4*3)};
     CGContextStrokeLineSegments(context, h_line, 4);
     
+    // 均线
+    if(self.avPricePoints.count > 0) {
+        [self drawMALineOnContent:context positions:self.avPricePoints color:kRGB(220, 185, 47)];
+    }
+
+    
     // 股票昨日收盘价线
     CGContextSetStrokeColorWithColor(context, [UIColor midTimeLineColor].CGColor);
     CGFloat lengths[] = {3, 3};
@@ -162,8 +180,8 @@
     
     CAKeyframeAnimation *opencityAnimation = [CAKeyframeAnimation animationWithKeyPath:@"opacity"];
     opencityAnimation.duration = 2;
-    opencityAnimation.values = @[@0.8,@0.4,@0];
-    opencityAnimation.keyTimes = @[@0,@0.5,@1];
+    opencityAnimation.values = @[@0.8, @0.4, @0];
+    opencityAnimation.keyTimes = @[@0, @0.5, @1];
     opencityAnimation.removedOnCompletion = YES;
     
     NSArray *animations = @[scaleAnimation,opencityAnimation];
@@ -230,7 +248,23 @@
 }
 
 
-
+- (void)drawMALineOnContent:(CGContextRef)context positions:(NSArray *)positions color:(UIColor *)lineColor{
+    
+    CGContextSetStrokeColorWithColor(context, lineColor.CGColor);
+    
+    CGContextSetLineWidth(context, 1);
+    
+    CGPoint firstPoint = [positions.firstObject CGPointValue];
+    //    NSAssert(!isnan(firstPoint.x) && !isnan(firstPoint.y), @"出现NAN值：MA画线");
+    
+    CGContextMoveToPoint(context, firstPoint.x, firstPoint.y);
+    for (NSInteger idx = 1; idx < positions.count ; idx++) {
+        CGPoint point = [positions[idx] CGPointValue];
+        CGContextAddLineToPoint(context, point.x, point.y);
+    }
+    
+    CGContextStrokePath(context);
+}
 
 
 @end

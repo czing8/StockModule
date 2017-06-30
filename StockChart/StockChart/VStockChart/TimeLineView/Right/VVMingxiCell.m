@@ -1,23 +1,23 @@
 //
-//  VTradeDetailCell.m
-//  HBStockView
+//  VVMingxiCell.m
+//  StockChart
 //
 //  Created by Vols on 2017/3/14.
 //  Copyright © 2017年 vols. All rights reserved.
 //
 
-#import "VTradeDetailCell.h"
+#import "VVMingxiCell.h"
 #import "Masonry.h"
 
-@interface VTradeDetailCell ()
+@interface VVMingxiCell ()
 
-@property(nonatomic,strong) UILabel *timeLabel;
-@property(nonatomic,strong) UILabel *priceLabel;
-@property(nonatomic,strong) UILabel *volumeLabel;
+@property(nonatomic,strong) UILabel * timeLabel;
+@property(nonatomic,strong) UILabel * priceLabel;
+@property(nonatomic,strong) UILabel * volumeLabel;
 
 @end
 
-@implementation VTradeDetailCell
+@implementation VVMingxiCell
 
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
     if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {

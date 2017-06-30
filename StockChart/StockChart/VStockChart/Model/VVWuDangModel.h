@@ -1,5 +1,5 @@
 //
-//  VBidPriceModel.h
+//  VVWuDangModel.h
 //  HBStockView
 //
 //  Created by Vols on 2017/2/25.
@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface VBidPriceModel : NSObject
+@interface VVWuDangModel : NSObject
 
 @property (nonatomic, strong) NSArray * buyPrices;    // 买价格数组 ，没有价格时 @"--"
 @property (nonatomic, strong) NSArray * sellPrices;   // 卖价格数组

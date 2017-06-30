@@ -1,6 +1,6 @@
 //
 //  VStockPoint.m
-//  HBStockView
+//  StockChart
 //
 //  Created by Vols on 2017/2/25.
 //  Copyright © 2017年 vols. All rights reserved.
@@ -11,7 +11,7 @@
 @implementation VStockPoint
 
 - (NSString *)description {
-    return [NSString stringWithFormat:@"<%@:%p> price = %@, volume = %f", [self class], self, self.price, self.volume];
+    return [NSString stringWithFormat:@"<%@:%p> price = %f, volume = %f", [self class], self, self.price, self.volume];
 }
 
 @end

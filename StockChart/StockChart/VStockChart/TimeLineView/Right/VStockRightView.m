@@ -1,6 +1,6 @@
 //
 //  VStockRightView.m
-//  HBStockView
+//  StockChart
 //
 //  Created by Vols on 2017/3/13.
 //  Copyright © 2017年 vols. All rights reserved.
@@ -8,9 +8,9 @@
 
 #import "VStockRightView.h"
 #import "VScrollMenuView.h"
-#import "VBidPriceView.h"
-#import "VTradeDetailView.h"
-#import "VDaDanView.h"
+#import "VVWuDangView.h"
+#import "VVMingxiView.h"
+#import "VVDaDanView.h"
 
 #import "StockRequest.h"
 
@@ -20,9 +20,9 @@
 
 @property (nonatomic, strong) VScrollMenuView   * scrollMenu;      // 顶部选择菜单
 
-@property (nonatomic, strong) VBidPriceView     * bidPriceView;     // 五档图
-@property (nonatomic, strong) VTradeDetailView  * tradeDetailView;  // 交易明细
-@property (nonatomic, strong) VDaDanView        * daDanView;     // 大单视图
+@property (nonatomic, strong) VVWuDangView  * wuDangView;     // 五档图
+@property (nonatomic, strong) VVMingxiView  * mingxiView;  // 交易明细
+@property (nonatomic, strong) VVDaDanView   * daDanView;     // 大单视图
 
 
 @end
@@ -54,16 +54,16 @@
     }];
     _scrollMenu.delegate = self;
     
-    [self addSubview:self.bidPriceView];
-    [self addSubview:self.tradeDetailView];
+    [self addSubview:self.wuDangView];
+    [self addSubview:self.mingxiView];
     [self addSubview:self.daDanView];
 
-    [_bidPriceView mas_makeConstraints:^(MASConstraintMaker *make) {
+    [_wuDangView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.left.right.equalTo(self);
         make.bottom.equalTo(_scrollMenu.mas_top);
     }];
     
-    [_tradeDetailView mas_makeConstraints:^(MASConstraintMaker *make) {
+    [_mingxiView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.left.right.equalTo(self);
         make.bottom.equalTo(_scrollMenu.mas_top);
     }];
@@ -73,42 +73,41 @@
         make.bottom.equalTo(_scrollMenu.mas_top);
     }];
 
-    _bidPriceView.backgroundColor = [UIColor clearColor];
-    _tradeDetailView.backgroundColor = [UIColor clearColor];
+    _wuDangView.backgroundColor = [UIColor clearColor];
+    _mingxiView.backgroundColor = [UIColor clearColor];
     _daDanView.backgroundColor = [UIColor orangeColor];
 }
 
 #pragma mark - Properties
 
-- (VBidPriceView *)bidPriceView {
-    if (_bidPriceView == nil) {
-        _bidPriceView = [VBidPriceView new];
+- (VVWuDangView *)wuDangView {
+    if (_wuDangView == nil) {
+        _wuDangView = [VVWuDangView new];
     }
-    return _bidPriceView;
+    return _wuDangView;
 }
 
-- (VTradeDetailView *)tradeDetailView {
-    if (_tradeDetailView == nil) {
-        _tradeDetailView = [VTradeDetailView new];
-        _tradeDetailView.hidden = YES;
+- (VVMingxiView *)mingxiView {
+    if (_mingxiView == nil) {
+        _mingxiView = [VVMingxiView new];
+        _mingxiView.hidden = YES;
     }
-    return _tradeDetailView;
+    return _mingxiView;
 }
 
-- (VDaDanView *)daDanView {
+- (VVDaDanView *)daDanView {
     if (_daDanView == nil) {
-        _daDanView = [VDaDanView new];
+        _daDanView = [VVDaDanView new];
         _daDanView.hidden = YES;
     }
     return _daDanView;
 }
 
 
-
 - (void)setStockGroup:(VStockGroup *)stockGroup{
     _stockGroup = stockGroup;
     
-    [self.bidPriceView reloadWithModel:_stockGroup.bidPriceModel];
+    [self.wuDangView reloadWithModel:_stockGroup.wuDangModel];
 //    [self.tradeDetailView reloadWithData:_stockGroup.tradeModels];
 //    self.tradeDetailView.stockCode = _stockGroup.stockCode;
 }
@@ -116,22 +115,21 @@
 #pragma mark - ScrollMenuDelegate
 
 - (void)scrollMenu:(VScrollMenuView *)scrollMenu didSelectedIndex:(NSInteger)index {
-    _bidPriceView.hidden = YES;
-    _tradeDetailView.hidden = YES;
+    _wuDangView.hidden = YES;
+    _mingxiView.hidden = YES;
     _daDanView.hidden = YES;
 
     if (index == 0) {
-        _bidPriceView.hidden = NO;
+        _wuDangView.hidden = NO;
     }
     else if (index == 1) {
-        _tradeDetailView.hidden = NO;
-        [_tradeDetailView reloadWithStockCode:_stockGroup.stockCode];
+        _mingxiView.hidden = NO;
+        [_mingxiView reloadWithStockCode:_stockGroup.stockCode];
     }
     else if (index == 2) {
         _daDanView.hidden = NO;
         [_daDanView reloadWithStockCode:_stockGroup.stockCode];
     }
 }
-
 
 @end

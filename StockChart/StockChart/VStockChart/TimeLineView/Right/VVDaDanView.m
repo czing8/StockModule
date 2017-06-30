@@ -1,22 +1,22 @@
 //
-//  DaDanView.m
+//  VVDaDanView.m
 //  HBStockView
 //
 //  Created by Vols on 2017/5/23.
 //  Copyright © 2017年 vols. All rights reserved.
 //
 
-#import "VDaDanView.h"
+#import "VVDaDanView.h"
 #import "Masonry.h"
 #import "MJRefresh.h"
 #import "VariousChart.h"
 
-#import "VTradeDetailCell.h"
+#import "VVMingxiCell.h"
 #import "UIColor+StockTheme.h"
 #import "StockRequest.h"
 
 
-@interface VDaDanView ()<UITableViewDelegate, UITableViewDataSource>
+@interface VVDaDanView ()<UITableViewDelegate, UITableViewDataSource>
 
 @property (nonatomic, strong) UITableView       * tableView;
 @property (nonatomic, strong) NSMutableArray    * dataSource;
@@ -36,7 +36,7 @@
 @end
 
 
-@implementation VDaDanView
+@implementation VVDaDanView
 
 - (instancetype)init {
     self = [super init];
@@ -105,7 +105,7 @@
     // MJRefresh 刷新设置
     MJRefreshNormalHeader *mjHeader = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
         [StockRequest getDaDanRequest:_stockCode success:^(NSArray *resultArray) {
-            [self.tableView.header endRefreshing];
+            [self.tableView.mj_header endRefreshing];
 
             if (resultArray != nil) {
                 if (_noDataLabel) {
@@ -127,7 +127,7 @@
     mjHeader.lastUpdatedTimeLabel.hidden = YES;
     mjHeader.stateLabel.hidden = YES;
     
-    self.tableView.header = mjHeader;
+    self.tableView.mj_header = mjHeader;
 }
 
 
@@ -140,12 +140,11 @@
         _tableView.dataSource = self;
         _tableView.backgroundColor = [UIColor purpleColor];
         _tableView.tableFooterView = [UIView new];
-        [_tableView registerClass:[VTradeDetailCell class] forCellReuseIdentifier:kTradeDetailCellIdentifier];
+        [_tableView registerClass:[VVMingxiCell class] forCellReuseIdentifier:kMingXiCellIdentifier];
         _tableView.rowHeight = 24;      //预估行高 可以提高性能
         _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
         _tableView.showsVerticalScrollIndicator = NO;
         _tableView.sectionHeaderHeight = 14;
-        
     }
     return _tableView;
 }
@@ -310,7 +309,7 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    VTradeDetailCell * cell = [tableView dequeueReusableCellWithIdentifier:kTradeDetailCellIdentifier];
+    VVMingxiCell * cell = [tableView dequeueReusableCellWithIdentifier:kMingXiCellIdentifier];
     
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     cell.textLabel.textColor = [UIColor colorWithWhite:0.293 alpha:1.000];

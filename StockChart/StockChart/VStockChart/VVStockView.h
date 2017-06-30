@@ -18,7 +18,7 @@
 
 typedef void (^StockStatusBlock)(VStockStatusModel * stockStatusModel);
 
-@interface VStockView : UIView
+@interface VVStockView : UIView
 
 @property (nonatomic, assign) VStockType        stockType;
 @property (nonatomic, assign) VStockChartType   stockChartType;

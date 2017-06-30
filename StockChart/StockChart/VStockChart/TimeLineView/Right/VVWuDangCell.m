@@ -6,16 +6,16 @@
 //  Copyright © 2017年 vols. All rights reserved.
 //
 
-#import "VBidPriceCell.h"
+#import "VVWuDangCell.h"
 #import "Masonry.h"
 
-@interface VBidPriceCell ()
+@interface VVWuDangCell ()
 
 
 @end
 
 
-@implementation VBidPriceCell
+@implementation VVWuDangCell
 
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
     if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
@@ -54,7 +54,7 @@
 }
 
 
-- (void)setModel:(VBidPriceModel *)model{
+- (void)setModel:(VVWuDangModel *)model{
     if (_model != model) {
         _model = model;
     }
@@ -62,7 +62,7 @@
     [self refreshUI:model];
 }
 
-- (void)refreshUI:(VBidPriceModel *)model
+- (void)refreshUI:(VVWuDangModel *)model
 {
     //    self.dayLabel.text = model.time;
     //    self.monthLabel.text = model.time;

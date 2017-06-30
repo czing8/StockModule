@@ -1,6 +1,6 @@
 //
 //  VStockLineDataModel.h
-//  HBStockView
+//  StockChart
 //
 //  Created by Vols on 2017/2/25.
 //  Copyright © 2017年 vols. All rights reserved.
@@ -19,6 +19,8 @@
 @property (nonatomic, assign) CGFloat   closePrice;    // 收盘价
 @property (nonatomic, assign) CGFloat   highestPrice;  // 最高价
 @property (nonatomic, assign) CGFloat   lowestPrice;   // 最低价
+@property (nonatomic, assign) CGFloat   preClosePrice; // 上个收盘价
+
 @property (nonatomic, assign) CGFloat   volume;        // 成交量
 
 @property (nonatomic, assign) CGFloat   ma5;    // MA5 五日均线

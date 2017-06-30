@@ -1,6 +1,6 @@
 //
 //  VHKStockYearView.m
-//  HBStockView
+//  StockChart
 //
 //  Created by Vols on 2017/3/28.
 //  Copyright © 2017年 vols. All rights reserved.
@@ -8,9 +8,9 @@
 
 #import "VHKStockYearView.h"
 #import "VStockScrollView.h"
-#import "VLineChart.h"
-#import "VLineVolumeView.h"
-#import "VLineMaskView.h"
+#import "VVHKYearLineChart.h"
+#import "VVHKYearVolumeView.h"
+#import "VVHKYearMaskView.h"
 
 #import "UIColor+StockTheme.h"
 #import "VStockGroup.h"
@@ -20,9 +20,9 @@
 @interface VHKStockYearView ()
 
 @property (nonatomic, strong) VStockScrollView  * stockScrollView;  // 背景
-@property (nonatomic, strong) VLineChart        * lineChart;        // 年线图
-@property (nonatomic, strong) VLineVolumeView   * volumeView;       // 成交量部分
-@property (nonatomic, strong) VLineMaskView     * maskView;
+@property (nonatomic, strong) VVHKYearLineChart * lineChart;        // 年线图
+@property (nonatomic, strong) VVHKYearVolumeView* volumeView;       // 成交量部分
+@property (nonatomic, strong) VVHKYearMaskView  * maskView;
 
 @property (nonatomic, strong) VStockGroup    * stockGroup;        // 数据源
 
@@ -83,9 +83,7 @@
     }];
     
     // 分时图View
-    _lineChart = [[VLineChart alloc] init];
-    _lineChart.backgroundColor = [UIColor clearColor];
-    [_stockScrollView.contentView addSubview:_lineChart];
+    [_stockScrollView.contentView addSubview:self.lineChart];
     [_lineChart mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(_stockScrollView.contentView);
         make.left.equalTo(_stockScrollView.contentView);
@@ -94,10 +92,7 @@
     }];
     
     // 成交量View
-    _volumeView = [[VLineVolumeView alloc] init];
-    _volumeView.backgroundColor = [UIColor clearColor];
-    [_stockScrollView.contentView addSubview:_volumeView];
-    
+    [_stockScrollView.contentView addSubview:self.volumeView];
     [_volumeView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(_lineChart.mas_bottom).offset(2);
         make.left.right.equalTo(_stockScrollView.contentView);
@@ -105,10 +100,9 @@
     }];
     
     //长按手势
-    UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc]initWithTarget:self action:@selector(longPressGesture:)];
+    UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc]initWithTarget:self action:@selector(event_longPressGesture:)];
     [_stockScrollView addGestureRecognizer:longPress];
 }
-
 
 
 #pragma mark - Draw Func
@@ -182,6 +176,26 @@
     return _stockScrollView;
 }
 
+- (VVHKYearLineChart *)lineChart {
+    if (_lineChart == nil) {
+        _lineChart = [[VVHKYearLineChart alloc] init];
+        _lineChart.backgroundColor = [UIColor clearColor];
+    }
+    return _lineChart;
+}
+
+
+- (VVHKYearVolumeView *)volumeView {
+    if (_volumeView == nil) {
+        _volumeView = [[VVHKYearVolumeView alloc] init];
+        _volumeView.backgroundColor = [UIColor clearColor];
+    }
+    return _volumeView;
+}
+
+
+
+
 #pragma mark - Helpers
 
 - (void)updateScrollViewContentWidth {
@@ -194,7 +208,7 @@
 }
 
 
-- (void)longPressGesture:(UILongPressGestureRecognizer *)longPress {
+- (void)event_longPressGesture:(UILongPressGestureRecognizer *)longPress {
     NSLog(@"进入长按");
     
     NSLog(@"%f", [longPress locationInView:self.stockScrollView].x - self.stockScrollView.contentOffset.x);
@@ -213,7 +227,7 @@
         if (startIndex >= self.stockGroup.kLineModels.count) startIndex = self.stockGroup.kLineModels.count - 1;
         
         if (!self.maskView) {
-            _maskView = [VLineMaskView new];
+            _maskView = [VVHKYearMaskView new];
             _maskView.backgroundColor = [UIColor clearColor];
             [self addSubview:_maskView];
             [_maskView mas_makeConstraints:^(MASConstraintMaker *make) {

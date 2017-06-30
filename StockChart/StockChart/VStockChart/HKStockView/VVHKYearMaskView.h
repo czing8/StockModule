@@ -1,5 +1,5 @@
 //
-//  VLineMaskView.h
+//  VVHKYearMaskView.h
 //  HBStockView
 //
 //  Created by Vols on 2017/3/29.
@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "VLineModel.h"
 
-@interface VLineMaskView : UIView
+@interface VVHKYearMaskView : UIView
 
 //当前长按选中的model
 @property (nonatomic, strong) VLineModel    * selectedModel;

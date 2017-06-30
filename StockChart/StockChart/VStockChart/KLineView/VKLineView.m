@@ -1,6 +1,6 @@
 //
 //  VKLineView.m
-//  HBStockView
+//  StockChart
 //
 //  Created by Vols on 2017/2/25.
 //  Copyright © 2017年 vols. All rights reserved.
@@ -19,9 +19,9 @@
 
 @interface VKLineView () <UIScrollViewDelegate, UIActionSheetDelegate>
 
-@property (nonatomic, strong) VStockScrollView  * stockScrollView;      // 背景
-@property (nonatomic, strong) VKLineChart       * kLineChart;           // k线图表
-@property (nonatomic, strong) VKLineVolumeView  * volumeChart;          // 成交量
+@property (nonatomic, strong) VStockScrollView  * stockScrollView;  // 背景
+@property (nonatomic, strong) VKLineChart       * kLineChart;       // k线图表
+@property (nonatomic, strong) VKLineVolumeView  * volumeChart;      // 成交量
 @property (nonatomic, strong) VKLineMaskView    * maskView;
 
 @property (nonatomic, assign) VStockType        stockType;          //
@@ -30,9 +30,9 @@
 
 @property (nonatomic, copy) NSArray <VKLinePosition *>*drawLinePositions;   // 位置数组
 
-@property (nonatomic, strong) VStockGroup       * stockGroup;            // 数据源
-@property (nonatomic, strong) NSMutableArray    * screenLineModels;     // 当前一屏幕数据源
-@property (nonatomic, strong) VLineModel        * selectLineModel;      //长按选中的model
+@property (nonatomic, strong) VStockGroup       * stockGroup;       // 数据源
+@property (nonatomic, strong) NSMutableArray    * screenLineModels; // 当前一屏幕数据源
+@property (nonatomic, strong) VLineModel        * selectLineModel;  //长按选中的model
 
 
 @property (nonatomic, strong) UIButton  * zoomInBtn;        // 放大按钮

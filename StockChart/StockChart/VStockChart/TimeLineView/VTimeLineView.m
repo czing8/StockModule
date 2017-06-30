@@ -11,8 +11,8 @@
 #import "VStockScrollView.h"
 #import "VTimeLineChart.h"
 #import "UIColor+StockTheme.h"
-#import "VolumeView.h"
-#import "VBidPriceView.h"
+#import "VVTimeVolumeView.h"
+#import "VVWuDangView.h"
 #import "VStockRightView.h"
 #import "VTimeLineMaskView.h"
 
@@ -29,16 +29,15 @@
 
 @property (nonatomic, strong) VStockScrollView  * stockScrollView;  // 背景
 @property (nonatomic, strong) VTimeLineChart    * timeLineChart;    // 分时线图表
-@property (nonatomic, strong) VolumeView        * volumeView;       // 成交量部分
+@property (nonatomic, strong) VVTimeVolumeView  * volumeView;       // 成交量部分
 @property (nonatomic, strong) VStockRightView   * theRightView;     // 右侧视图容器（五档，明细，大单）
 
 @property (nonatomic, strong) VTimeLineMaskView * maskView;
 
-@property (nonatomic, strong) VStockGroup    * stockGroup;    // 数据源
+@property (nonatomic, strong) VStockGroup   * stockGroup;       // 数据源
+@property (nonatomic, strong) VStockPoint   * selectLineModel;  //长按选中的model
 
 @property (nonatomic, copy  ) NSArray <NSValue *> * drawLinePoints; // 位置数组
-
-@property (nonatomic, strong) VStockPoint    * selectLineModel;      //长按选中的model
 
 @end
 
@@ -126,10 +125,7 @@
     }];
 
     // 成交量View
-    _volumeView = [[VolumeView alloc] init];
-    _volumeView.backgroundColor = [UIColor clearColor];
-    [_stockScrollView.contentView addSubview:_volumeView];
-    
+    [_stockScrollView.contentView addSubview:self.volumeView];
     [_volumeView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(_timeLineChart.mas_bottom).offset(2);
         make.left.equalTo(_stockScrollView.contentView);
@@ -224,6 +220,15 @@
     }
     return _theRightView;
 }
+
+- (VVTimeVolumeView *)volumeView {
+    if (_volumeView == nil) {
+        _volumeView = [VVTimeVolumeView new];
+        _volumeView.backgroundColor = [UIColor whiteColor];
+    }
+    return _volumeView;
+}
+
 
 #pragma mark - Helpers
 

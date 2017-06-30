@@ -1,14 +1,14 @@
 //
-//  VBidPriceModel.m
+//  VVWuDangModel.m
 //  HBStockView
 //
 //  Created by Vols on 2017/2/25.
 //  Copyright © 2017年 vols. All rights reserved.
 //
 
-#import "VBidPriceModel.h"
+#import "VVWuDangModel.h"
 
-@implementation VBidPriceModel
+@implementation VVWuDangModel
 
 - (instancetype)init {
     if (self = [super init]) {

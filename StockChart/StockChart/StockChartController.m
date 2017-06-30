@@ -1,6 +1,6 @@
 //
 //  ViewController.m
-//  HBStockView
+//  StockChart
 //
 //  Created by Vols on 2017/2/25.
 //  Copyright © 2017年 vols. All rights reserved.
@@ -9,12 +9,13 @@
 #import "StockChartController.h"
 #import "StockRequest.h"
 #import "VStockGroup.h"
-#import "VStockView.h"
+#import "VVStockView.h"
 #import "Masonry.h"
 
 #import "VStockStatusView.h"
 #import "VStockStatusView_HK.h"
 #import "VFullScreenStockView.h"
+#import "VRefreshBtn.h"
 
 #define kStatusViewHeight   168
 
@@ -29,7 +30,7 @@
 @property (nonatomic, strong) VStockStatusView      * stockStatusView;
 @property (nonatomic, strong) VStockStatusView_HK   * stockStatusView_HK;
 
-@property (nonatomic, strong) VStockView            * stockView;
+@property (nonatomic, strong) VVStockView           * stockView;
 
 @property (nonatomic, strong) VFullScreenStockView  * fullScreenStockView;
 
@@ -41,9 +42,12 @@
     NSLog(@"StockViewController release");
 }
 
-- (instancetype)initStockVC:(NSString *)stockCode type:(VStockType)stockType {
+- (instancetype)initStockVC:(NSString *)stockCode {
     if (self = [super init]) {
         
+        VStockType stockType = VStockTypeCN;
+        if ([stockCode hasPrefix:@"hk"])    stockType = VStockTypeHK;
+
         self.stockCode = stockCode;
         self.stockType = stockType;
     }
@@ -92,7 +96,7 @@
     __weak typeof(self) weakSelf = self;
 //    _stockStatusView.backgroundColor = [UIColor blackColor];
 
-    _stockView = [[VStockView alloc] initWithStockCode:_stockCode stockType:_stockType];
+    _stockView = [[VVStockView alloc] initWithStockCode:_stockCode stockType:_stockType];
     [_stockView setRefreshTime:_refreshTime];
 
     _stockView.stockStatusBlock = ^(VStockStatusModel * stockStatusModel){

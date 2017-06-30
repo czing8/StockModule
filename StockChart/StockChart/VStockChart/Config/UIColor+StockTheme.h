@@ -1,6 +1,6 @@
 //
 //  UIColor+StockTheme.h
-//  HBStockView
+//  StockChart
 //
 //  Created by Vols on 2017/2/25.
 //  Copyright © 2017年 vols. All rights reserved.
@@ -10,7 +10,7 @@
 
 @interface UIColor (StockTheme)
 
-/************************************K线颜色配置***************************************/
+/***************    K线颜色配置  ***************/
 
 
 // 整体背景颜色
@@ -98,7 +98,7 @@
 + (UIColor *)stock_decreaseColor;
 
 
-/************************************TopBar颜色配置***************************************/
+/***************    TopBar颜色配置  ****************/
 
 /**
  *  顶部TopBar文字默认颜色

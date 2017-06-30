@@ -1,6 +1,6 @@
 //
 //  StockRequest.m
-//  HBStockView
+//  StockChart
 //
 //  Created by Vols on 2017/2/27.
 //  Copyright © 2017年 vols. All rights reserved.
@@ -37,11 +37,11 @@
         NSArray *buyVolumes = @[stockStatusArray[10], stockStatusArray[12], stockStatusArray[14], stockStatusArray[16], stockStatusArray[18]];
         NSArray *sellVolumes = @[stockStatusArray[28], stockStatusArray[26], stockStatusArray[24], stockStatusArray[22], stockStatusArray[20]];
         
-        VBidPriceModel * bidPriceModel = [[VBidPriceModel alloc]init];
-        bidPriceModel.buyPrices = buyPrices;
-        bidPriceModel.buyVolumes = buyVolumes;
-        bidPriceModel.sellPrices = sellPrices;
-        bidPriceModel.sellVolumes = sellVolumes;
+        VVWuDangModel * wuDangModel = [[VVWuDangModel alloc]init];
+        wuDangModel.buyPrices = buyPrices;
+        wuDangModel.buyVolumes = buyVolumes;
+        wuDangModel.sellPrices = sellPrices;
+        wuDangModel.sellVolumes = sellVolumes;
 
         // ---- 股票K线数组
         NSMutableArray * timeLineModels = [[NSMutableArray alloc] init];
@@ -50,7 +50,8 @@
         
         float maxPrice = 0.0, minPrice = 0.0, maxVolume = 0.0, minVolume = 0.0;
         float tmpVolume = 0.0;
-        
+        float tmpTotalPrice = 0.0;
+
         for (int i = 0; i < data.count; i ++) {
             NSString *timeStockData = data[i];
             NSArray * item = [timeStockData componentsSeparatedByString:@" "];
@@ -62,6 +63,12 @@
             model.price = price;
             model.volume = volume - tmpVolume;
             model.preClosePrice = closePrice;
+            model.totalPrice = model.price * model.volume + tmpTotalPrice;
+            if (volume > 0)
+                model.avPrice = model.totalPrice/volume;
+            else if (volume <= 0)
+                model.avPrice = model.price;
+
             [timeLineModels addObject:model];
             
             if (i == 0) {
@@ -72,31 +79,22 @@
                 minVolume = maxVolume;
             }
             
-            if (price > maxPrice) {
-                maxPrice = price;
-            }
+            if (price > maxPrice) {     maxPrice = price;   }
+            if (price < minPrice) {     minPrice = price;   }
             
-            if (price < minPrice) {
-                minPrice = price;
-            }
-            
-            if (model.volume > maxVolume) {
-                maxVolume = model.volume;
-            }
-            
-            if (model.volume < minVolume) {
-                minVolume = model.volume;
-            }
+            if (model.volume > maxVolume) {     maxVolume = model.volume;   }
+            if (model.volume < minVolume) {     minVolume = model.volume;   }
             
             tmpVolume = volume;
+            tmpTotalPrice   = model.totalPrice;
         }
         
         VStockGroup * timeGroup = [[VStockGroup alloc] init];
-        timeGroup.stockCode         = stockCode;
-        
-        timeGroup.tradeModels       = [NSMutableArray arrayWithArray:[[tradeModels reverseObjectEnumerator] allObjects]];
+        timeGroup.stockCode     = stockCode;
+        timeGroup.stockType     = VStockTypeCN;
+        timeGroup.tradeModels   = [NSMutableArray arrayWithArray:[[tradeModels reverseObjectEnumerator] allObjects]];
         timeGroup.stockStatusModel  = statusModel;
-        timeGroup.bidPriceModel     = bidPriceModel;
+        timeGroup.wuDangModel       = wuDangModel;
         timeGroup.lineModels        = timeLineModels;
         
         timeGroup.maxPrice = maxPrice;
@@ -132,54 +130,29 @@
     NSArray * resultTypes = @[@"day", @"qfqday", @"hfqday"];
 
     NSString * urlString = [NSString stringWithFormat:@"http://proxy.finance.qq.com/ifzqgtimg/appstock/app/fqkline/get?p=1&param=%@,day,,,320,%@", stockCode, fuQuanTypes[fuQuanType]];
-    
 
     [[HttpHelper shared] get:nil path:urlString success:^(NSDictionary * flag) {
         NSDictionary * resultDic = flag[@"data"][stockCode];
-        
+        float preClosePrice = [resultDic[@"prec"] floatValue];
+
         NSArray * stockStatusArray = resultDic[@"qt"][stockCode];
         VStockStatusModel * statusModel = [self stockStatusModelFromArray:stockStatusArray  isHK:NO];
 
         NSArray * stockData = resultDic[resultTypes[fuQuanType]];
-        NSMutableArray* lineModels = [[NSMutableArray alloc] init];
-        int MA5 = 5, MA10 = 10, MA20 = 20;  // 均线统计
         
-        for (int i = 0; i < stockData.count; i ++) {
-            NSArray *item = stockData[i];
-            VLineModel * model = [[VLineModel alloc] init];
-            model.day = item[0];
-            model.openPrice = [item[1] floatValue];
-            model.closePrice = [item[2] floatValue];
-            model.highestPrice = [item[3] floatValue];
-            model.lowestPrice = [item[4] floatValue];
-            model.volume = [item[5] floatValue];
-            
-            if (i >= 5) {
-                model.ma5 = [self averageWithData:stockData range:NSMakeRange(i-MA5+1, MA5)];
-            }
-            if (i >= 10) {
-                model.ma10 = [self averageWithData:stockData range:NSMakeRange(i-MA10+1, MA10)];
-            }
-            if (i >= 20) {
-                model.ma20 = [self averageWithData:stockData range:NSMakeRange(i-MA20+1, MA20)];
-            }
-            
-            [lineModels addObject:model];
-        }
+        NSArray * lineModels = [self lineModelsFrom:stockData preClosePrice:preClosePrice];
         
         VStockGroup * stockGroup = [[VStockGroup alloc] init];
-        stockGroup.stockCode         = stockCode;
-
-        stockGroup.kLineModels = lineModels;
+        stockGroup.stockCode    = stockCode;
+        stockGroup.stockType    = VStockTypeCN;
+        stockGroup.kLineModels  = lineModels;
         stockGroup.stockStatusModel = statusModel;
         success(stockGroup);
         
     } failue:^(NSError *error) {
         
     }];
-
 }
-
 
 + (void)getWeekStockData:(NSString *)stockCode fuQuanType:(VStockFuQuanType)fuQuanType success:(void (^)(VStockGroup *response))success {
     
@@ -190,43 +163,18 @@
     
     [[HttpHelper shared] get:nil path:urlString success:^(NSDictionary * flag) {
         NSDictionary * resultDic = flag[@"data"][stockCode];
+        float preClosePrice = [resultDic[@"prec"] floatValue];
 
         NSArray * stockData = resultDic[resultTypes[fuQuanType]];
         NSArray * stockStatusArray = resultDic[@"qt"][stockCode];
         VStockStatusModel * statusModel = [self stockStatusModelFromArray:stockStatusArray  isHK:NO];
 
-        NSLog(@"WeekStockData:%@", stockData);
-
-        NSMutableArray* lineModels = [[NSMutableArray alloc] init];
-        int MA5 = 5, MA10 = 10, MA20 = 20;  // 均线统计
-        
-        for (int i = 0; i < stockData.count; i ++) {
-            NSArray *item = stockData[i];
-            VLineModel * model = [[VLineModel alloc] init];
-            model.day = item[0];
-            model.openPrice = [item[1] floatValue];
-            model.closePrice = [item[2] floatValue];
-            model.highestPrice = [item[3] floatValue];
-            model.lowestPrice = [item[4] floatValue];
-            model.volume = [item[5] floatValue];
-            
-            if (i >= 5) {
-                model.ma5 = [self averageWithData:stockData range:NSMakeRange(i-MA5+1, MA5)];
-            }
-            if (i >= 10) {
-                model.ma10 = [self averageWithData:stockData range:NSMakeRange(i-MA10+1, MA10)];
-            }
-            if (i >= 20) {
-                model.ma20 = [self averageWithData:stockData range:NSMakeRange(i-MA20+1, MA20)];
-            }
-            
-            [lineModels addObject:model];
-        }
+        NSArray * lineModels = [self lineModelsFrom:stockData preClosePrice:preClosePrice];
         
         VStockGroup * stockGroup = [[VStockGroup alloc] init];
-        stockGroup.stockCode         = stockCode;
-
-        stockGroup.kLineModels = lineModels;
+        stockGroup.stockCode    = stockCode;
+        stockGroup.stockType    = VStockTypeCN;
+        stockGroup.kLineModels  = lineModels;
         stockGroup.stockStatusModel = statusModel;
         success(stockGroup);
     } failue:^(NSError *error) {
@@ -243,43 +191,19 @@
     
     [[HttpHelper shared] get:nil path:urlString success:^(NSDictionary * flag) {
         NSDictionary * resultDic = flag[@"data"][stockCode];
+        float preClosePrice = [resultDic[@"prec"] floatValue];
+
         NSArray * stockData = resultDic[resultTypes[fuQuanType]];
         
         NSArray * stockStatusArray = resultDic[@"qt"][stockCode];
         VStockStatusModel * statusModel = [self stockStatusModelFromArray:stockStatusArray  isHK:NO];
 
-        NSLog(@"MonthStockData:%@", stockData);
-        
-        NSMutableArray* lineModels = [[NSMutableArray alloc] init];
-        int MA5 = 5, MA10 = 10, MA20 = 20;  // 均线统计
-        
-        for (int i = 0; i < stockData.count; i ++) {
-            NSArray *item = stockData[i];
-            VLineModel * model = [[VLineModel alloc] init];
-            model.day = item[0];
-            model.openPrice = [item[1] floatValue];
-            model.closePrice = [item[2] floatValue];
-            model.highestPrice = [item[3] floatValue];
-            model.lowestPrice = [item[4] floatValue];
-            model.volume = [item[5] floatValue];
-            
-            if (i >= 5) {
-                model.ma5 = [self averageWithData:stockData range:NSMakeRange(i-MA5+1, MA5)];
-            }
-            if (i >= 10) {
-                model.ma10 = [self averageWithData:stockData range:NSMakeRange(i-MA10+1, MA10)];
-            }
-            if (i >= 20) {
-                model.ma20 = [self averageWithData:stockData range:NSMakeRange(i-MA20+1, MA20)];
-            }
-            
-            [lineModels addObject:model];
-        }
+        NSArray * lineModels = [self lineModelsFrom:stockData preClosePrice:preClosePrice];
         
         VStockGroup * stockGroup = [[VStockGroup alloc] init];
-        stockGroup.stockCode         = stockCode;
-
-        stockGroup.kLineModels = lineModels;
+        stockGroup.stockCode    = stockCode;
+        stockGroup.stockType    = VStockTypeCN;
+        stockGroup.kLineModels  = lineModels;
         stockGroup.stockStatusModel = statusModel;
         success(stockGroup);
     } failue:^(NSError *error) {
@@ -309,8 +233,6 @@
 
 + (void)getDaDanRequest:(NSString *)stockCode success:(void (^)(NSArray *resultArray))success {
     NSString * urlString = [NSString stringWithFormat:@"http://proxy.finance.qq.com/ifzqgtimg/appstock/app/HsDealinfo/getDadan?code=%@", stockCode];
-
-//    NSString * urlString = @"http://proxy.finance.qq.com/ifzqgtimg/appstock/app/HsDealinfo/getDadan?code=sz002185";
     
     [[HttpHelper shared] get:nil path:urlString success:^(NSDictionary * flag) {
         NSArray * daDanData = flag[@"data"][@"detail"];
@@ -359,7 +281,6 @@
     [[HttpHelper shared] get:nil path:urlString success:^(NSDictionary * flag) {
    
         NSDictionary * resultDic = flag[@"data"][stockCode];
-
         
         // ---- 股票各种参数
         NSArray * stockStatusArray  = resultDic[@"qt"][stockCode];
@@ -371,7 +292,8 @@
         NSMutableArray * timeLineModels = [[NSMutableArray alloc] init];
         float maxPrice = 0.0, minPrice = 0.0, maxVolume = 0.0, minVolume = 0.0;
         float tmpVolume = 0.0;
-        
+        float tmpTotalPrice = 0.0;
+
         for (int i = 0; i < data.count; i ++) {
             NSString *timeStockData = data[i];
             NSArray * item = [timeStockData componentsSeparatedByString:@" "];
@@ -383,6 +305,10 @@
             model.price = price;
             model.volume = volume - tmpVolume;
             model.preClosePrice = [stockStatusArray[4] floatValue];
+            model.totalPrice = model.price * model.volume + tmpTotalPrice;
+            if (volume > 0)     model.avPrice = model.totalPrice/volume;
+            else if (volume <= 0)   model.avPrice = model.price;
+
             [timeLineModels addObject:model];
             
             if (i == 0) {
@@ -393,37 +319,28 @@
                 minVolume = maxVolume;
             }
             
-            if (price > maxPrice) {
-                maxPrice = price;
-            }
+            if (price > maxPrice) {     maxPrice = price;   }
+            if (price < minPrice) {     minPrice = price;   }
             
-            if (price < minPrice) {
-                minPrice = price;
-            }
-            
-            if (model.volume > maxVolume) {
-                maxVolume = model.volume;
-            }
-            
-            if (model.volume < minVolume) {
-                minVolume = model.volume;
-            }
+            if (model.volume > maxVolume) {     maxVolume = model.volume;   }
+            if (model.volume < minVolume) {     minVolume = model.volume;   }
             
             tmpVolume = volume;
+            tmpTotalPrice   = model.totalPrice;
         }
         
         VStockGroup * timeGroup = [[VStockGroup alloc] init];
-        timeGroup.stockCode         = stockCode;
-
-        timeGroup.stockStatusModel  = statusModel;
-        timeGroup.lineModels        = timeLineModels;
-        
+        timeGroup.stockCode = stockCode;
+        timeGroup.stockType = VStockTypeHK;
         timeGroup.maxPrice = maxPrice;
         timeGroup.minPrice = minPrice;
         timeGroup.maxVolume= maxVolume;
         timeGroup.minVolume= minVolume;
         timeGroup.preClosePrice = [stockStatusArray[4] floatValue];
         
+        timeGroup.stockStatusModel  = statusModel;
+        timeGroup.lineModels        = timeLineModels;
+
         success(timeGroup);
         
     } failue:^(NSError *error) {
@@ -453,45 +370,21 @@
         }
         
         NSDictionary * resultDic = flag[@"data"][stockCode];
-        NSLog(@"resultDic-->%@", resultDic);
+        float preClosePrice = [resultDic[@"prec"] floatValue];
+
         NSArray * stockStatusArray = resultDic[@"qt"][stockCode];
         VStockStatusModel * statusModel = [self stockStatusModelFromArray:stockStatusArray  isHK:YES];
         NSArray * stockData = resultDic[resultTypes[fuQuanType]];
-        NSMutableArray* lineModels = [[NSMutableArray alloc] init];
-        int MA5 = 5, MA10 = 10, MA20 = 20;  // 均线统计
         
-        for (int i = 0; i < stockData.count; i ++) {
-            NSArray *item = stockData[i];
-            VLineModel * model = [[VLineModel alloc] init];
-            model.day = item[0];
-            model.openPrice = [item[1] floatValue];
-            model.closePrice = [item[2] floatValue];
-            model.highestPrice = [item[3] floatValue];
-            model.lowestPrice = [item[4] floatValue];
-            model.volume = [item[5] floatValue];
-            
-            if (i >= 5) {
-                model.ma5 = [self averageWithData:stockData range:NSMakeRange(i-MA5+1, MA5)];
-            }
-            if (i >= 10) {
-                model.ma10 = [self averageWithData:stockData range:NSMakeRange(i-MA10+1, MA10)];
-            }
-            if (i >= 20) {
-                model.ma20 = [self averageWithData:stockData range:NSMakeRange(i-MA20+1, MA20)];
-            }
-            
-            [lineModels addObject:model];
-        }
+        NSArray * lineModels = [self lineModelsFrom:stockData preClosePrice:preClosePrice];
         
         VStockGroup * stockGroup = [[VStockGroup alloc] init];
         stockGroup.stockCode    = stockCode;
-
+        stockGroup.stockType    = VStockTypeHK;
         stockGroup.kLineModels  = lineModels;
         stockGroup.stockStatusModel = statusModel;
         success(stockGroup);
         
-        NSLog(@"resultDic-->%@,stockData-->%@", resultDic, stockData);
-
     } failue:^(NSError *error) {
         
     }];
@@ -503,44 +396,21 @@
     NSArray * fuQuanTypes = @[@"", @"qfq", @"hfq"];
     
     NSString * urlString = [NSString stringWithFormat:@"http://proxy.finance.qq.com/ifzqgtimg/appstock/app/fqkline/get?p=1&param=%@,week,,,320,%@", stockCode, fuQuanTypes[fuQuanType]];
-
-//    NSString * urlString = [NSString stringWithFormat:@"http://123.126.122.40/ifzqgtimg/appstock/app/newkline/newkline?p=1&param=%@,week,,,320", stockCode];
     
     [[HttpHelper shared] get:nil path:urlString success:^(NSDictionary * flag) {
         NSDictionary * resultDic = flag[@"data"][stockCode];
-        
+        float preClosePrice = [resultDic[@"prec"] floatValue];
+
         NSArray * stockData = resultDic[@"week"];
         NSArray * stockStatusArray = resultDic[@"qt"][stockCode];
+
         VStockStatusModel * statusModel = [self stockStatusModelFromArray:stockStatusArray  isHK:YES];
         
-        NSMutableArray* lineModels = [[NSMutableArray alloc] init];
-        int MA5 = 5, MA10 = 10, MA20 = 20;  // 均线统计
-        
-        for (int i = 0; i < stockData.count; i ++) {
-            NSArray *item = stockData[i];
-            VLineModel * model = [[VLineModel alloc] init];
-            model.day = item[0];
-            model.openPrice = [item[1] floatValue];
-            model.closePrice = [item[2] floatValue];
-            model.highestPrice = [item[3] floatValue];
-            model.lowestPrice = [item[4] floatValue];
-            model.volume = [item[5] floatValue];
-            
-            if (i >= 5) {
-                model.ma5 = [self averageWithData:stockData range:NSMakeRange(i-MA5+1, MA5)];
-            }
-            if (i >= 10) {
-                model.ma10 = [self averageWithData:stockData range:NSMakeRange(i-MA10+1, MA10)];
-            }
-            if (i >= 20) {
-                model.ma20 = [self averageWithData:stockData range:NSMakeRange(i-MA20+1, MA20)];
-            }
-            
-            [lineModels addObject:model];
-        }
+        NSArray * lineModels = [self lineModelsFrom:stockData preClosePrice:preClosePrice];
         
         VStockGroup * stockGroup = [[VStockGroup alloc] init];
         stockGroup.stockCode    = stockCode;
+        stockGroup.stockType    = VStockTypeHK;
         stockGroup.kLineModels  = lineModels;
         stockGroup.stockStatusModel = statusModel;
         success(stockGroup);
@@ -555,66 +425,23 @@
     
     [[HttpHelper shared] get:nil path:urlString success:^(NSDictionary * flag) {
         NSDictionary * resultDic = flag[@"data"][stockCode];
-        
+        float preClosePrice = [resultDic[@"prec"] floatValue];
+
         NSArray * stockStatusArray = resultDic[@"qt"][stockCode];
-        VStockStatusModel * statusModel = [self stockStatusModelFromArray:stockStatusArray  isHK:YES];
+        VStockStatusModel * statusModel = [self stockStatusModelFromArray:stockStatusArray isHK:YES];
         
         NSArray * stockData = resultDic[@"day"];
-        NSMutableArray* lineModels = [[NSMutableArray alloc] init];
-        int MA5 = 5, MA10 = 10, MA20 = 20;  // 均线统计
+        NSArray * lineModels = [self lineModelsFrom:stockData preClosePrice:preClosePrice];
         
-        float maxPrice = 0.0, minPrice = 0.0, maxVolume = 0.0, minVolume = 0.0;
-        
-        for (int i = 0; i < stockData.count; i ++) {
-            NSArray *item = stockData[i];
-            VLineModel * model = [[VLineModel alloc] init];
-            model.day = item[0];
-            model.openPrice = [item[1] floatValue];
-            model.closePrice = [item[2] floatValue];
-            model.highestPrice = [item[3] floatValue];
-            model.lowestPrice = [item[4] floatValue];
-            model.volume = [item[5] floatValue];
-            
-            if (i >= 5) {
-                model.ma5 = [self averageWithData:stockData range:NSMakeRange(i-MA5+1, MA5)];
-            }
-            if (i >= 10) {
-                model.ma10 = [self averageWithData:stockData range:NSMakeRange(i-MA10+1, MA10)];
-            }
-            if (i >= 20) {
-                model.ma20 = [self averageWithData:stockData range:NSMakeRange(i-MA20+1, MA20)];
-            }
-            
-            [lineModels addObject:model];
-            
-            if (i == 0) {
-                maxPrice = model.highestPrice;
-                minPrice = model.lowestPrice;
-                
-                maxVolume = model.volume;
-                minVolume = maxVolume;
-            }
-            
-            if (model.highestPrice > maxPrice) {
-                maxPrice = model.highestPrice;
-            }
-            
-            if (model.lowestPrice < minPrice) {
-                minPrice = model.lowestPrice;
-            }
-            
-            if (model.volume > maxVolume) {
-                maxVolume = model.volume;
-            }
-            
-            if (model.volume < minVolume) {
-                minVolume = model.volume;
-            }
-            
-        }
+        //更新最大值最小值-价格
+        float maxPrice =  [[[lineModels valueForKeyPath:@"highestPrice"] valueForKeyPath:@"@max.floatValue"] floatValue];
+        float minPrice =  [[[lineModels valueForKeyPath:@"lowestPrice"] valueForKeyPath:@"@min.floatValue"] floatValue];
+        float maxVolume =  [[[lineModels valueForKeyPath:@"volume"] valueForKeyPath:@"@max.floatValue"] floatValue];
+        float minVolume =  [[[lineModels valueForKeyPath:@"volume"] valueForKeyPath:@"@min.floatValue"] floatValue];
         
         VStockGroup * stockGroup  = [[VStockGroup alloc] init];
-        stockGroup.stockCode        = stockCode;
+        stockGroup.stockCode    = stockCode;
+        stockGroup.stockType    = VStockTypeHK;
 
         stockGroup.stockStatusModel = statusModel;
         stockGroup.kLineModels      = lineModels;
@@ -719,5 +546,39 @@
 }
 
 
++ (NSArray *)lineModelsFrom:(NSArray *)stockData preClosePrice:(float)preClosePrice{
+    
+    if (stockData == nil)   return nil;
+    
+    NSMutableArray * lineModels = [[NSMutableArray alloc] init];
+    int MA5 = 5, MA10 = 10, MA20 = 20;  // 均线统计
+    
+    for (int i = 0; i < stockData.count; i ++) {
+        NSArray *item = stockData[i];
+        VLineModel * model = [[VLineModel alloc] init];
+        model.day = item[0];
+        model.openPrice = [item[1] floatValue];
+        model.closePrice = [item[2] floatValue];
+        model.highestPrice = [item[3] floatValue];
+        model.lowestPrice = [item[4] floatValue];
+        model.preClosePrice = preClosePrice;
+        model.volume = [item[5] floatValue];
+        preClosePrice = model.closePrice;
+        
+        if (i >= 5) {
+            model.ma5 = [self averageWithData:stockData range:NSMakeRange(i-MA5+1, MA5)];
+        }
+        if (i >= 10) {
+            model.ma10 = [self averageWithData:stockData range:NSMakeRange(i-MA10+1, MA10)];
+        }
+        if (i >= 20) {
+            model.ma20 = [self averageWithData:stockData range:NSMakeRange(i-MA20+1, MA20)];
+        }
+        
+        [lineModels addObject:model];
+    }
+
+    return lineModels;
+}
 
 @end

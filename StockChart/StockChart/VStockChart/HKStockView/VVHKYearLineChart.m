@@ -1,12 +1,12 @@
 //
-//  VLineChart.m
+//  VVHKYearLineChart.m
 //  HBStockView
 //
 //  Created by Vols on 2017/3/29.
 //  Copyright © 2017年 vols. All rights reserved.
 //
 
-#import "VLineChart.h"
+#import "VVHKYearLineChart.h"
 
 #import "VStockConstant.h"
 #import "UIColor+StockTheme.h"
@@ -14,13 +14,13 @@
 
 #import "UIColor+VAdd.h"
 
-@interface VLineChart() <CAAnimationDelegate>
+@interface VVHKYearLineChart() <CAAnimationDelegate>
 
 @property (nonatomic, strong) NSMutableArray *drawPoints;
 
 @end
 
-@implementation VLineChart {
+@implementation VVHKYearLineChart {
     CGFloat _maxValue;  // 不是股价的最大值，是表格区域表示的最大值
     CGFloat _minValue;  // 不是股价的最小值，是表格区域表示的最小值
 }

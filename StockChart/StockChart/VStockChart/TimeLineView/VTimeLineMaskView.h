@@ -12,10 +12,10 @@
 @interface VTimeLineMaskView : UIView
 
 //当前长按选中的model
-@property (nonatomic, strong) VStockPoint    * selectedModel;
-@property (nonatomic, assign) CGPoint           selectedPoint;
+@property (nonatomic, strong) VStockPoint   * selectedModel;
+@property (nonatomic, assign) CGPoint       selectedPoint;
 
 // 当前的滑动scrollview
-@property (nonatomic, strong) UIScrollView *stockScrollView;
+@property (nonatomic, strong) UIScrollView * stockScrollView;
 
 @end

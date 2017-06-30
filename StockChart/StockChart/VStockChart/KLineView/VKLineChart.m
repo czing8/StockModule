@@ -1,6 +1,6 @@
 //
 //  VKLineChart.m
-//  HBStockView
+//  StockChart
 //
 //  Created by Vols on 2017/3/6.
 //  Copyright © 2017年 vols. All rights reserved.
@@ -16,13 +16,10 @@
 
 @property (nonatomic, strong) NSMutableArray *drawPositionModels;
 
-
 @property (nonatomic, strong) NSArray <VLineModel *> * lineModels;
 
 @property (nonatomic, strong) NSMutableArray * MA5Positions;
-
 @property (nonatomic, strong) NSMutableArray * MA10Positions;
-
 @property (nonatomic, strong) NSMutableArray * MA20Positions;
 
 @end
@@ -68,8 +65,6 @@
         
         //格式化openPoint和closePointY
         if(ABS(closePointY - openPoint.y) < kStockLineMinThick) {
-            NSLog(@"%f",closePointY);
-            NSLog(@"%f",openPoint.y);
             //            if (openPoint.y == closePointY) {
             //
             //            }

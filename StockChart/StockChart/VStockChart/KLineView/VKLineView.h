@@ -1,6 +1,6 @@
 //
 //  VKLineView.h
-//  HBStockView
+//  StockChart
 //
 //  Created by Vols on 2017/2/25.
 //  Copyright © 2017年 vols. All rights reserved.
@@ -17,7 +17,7 @@ typedef void (^StockFuQuanStatusBlock)(VStockFuQuanType fuQuanType);
 
 @interface VKLineView : UIView
 
-@property (nonatomic, copy  ) StockFuQuanStatusBlock  fuQuanStatusBlock;
+@property (nonatomic, copy) StockFuQuanStatusBlock  fuQuanStatusBlock;
 
 - (instancetype)initWithChartType:(VStockChartType)chartType;
 

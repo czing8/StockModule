@@ -13,8 +13,6 @@
 		F103EE8D1F05F6B000516F44 /* AFURLRequestSerialization.m in Sources */ = {isa = PBXBuildFile; fileRef = F103EDB91F05F6B000516F44 /* AFURLRequestSerialization.m */; };
 		F103EE8E1F05F6B000516F44 /* AFURLResponseSerialization.m in Sources */ = {isa = PBXBuildFile; fileRef = F103EDBB1F05F6B000516F44 /* AFURLResponseSerialization.m */; };
 		F103EE8F1F05F6B000516F44 /* AFURLSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F103EDBD1F05F6B000516F44 /* AFURLSessionManager.m */; };
-		F103EE901F05F6B000516F44 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = F103EDBE1F05F6B000516F44 /* LICENSE */; };
-		F103EE911F05F6B000516F44 /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = F103EDBF1F05F6B000516F44 /* README.md */; };
 		F103EE921F05F6B000516F44 /* AFAutoPurgingImageCache.m in Sources */ = {isa = PBXBuildFile; fileRef = F103EDC21F05F6B000516F44 /* AFAutoPurgingImageCache.m */; };
 		F103EE931F05F6B000516F44 /* AFImageDownloader.m in Sources */ = {isa = PBXBuildFile; fileRef = F103EDC41F05F6B000516F44 /* AFImageDownloader.m */; };
 		F103EE941F05F6B000516F44 /* AFNetworkActivityIndicatorManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F103EDC61F05F6B000516F44 /* AFNetworkActivityIndicatorManager.m */; };
@@ -68,14 +66,13 @@
 		F103EEC41F05F6B000516F44 /* UIColor+StockTheme.m in Sources */ = {isa = PBXBuildFile; fileRef = F103EE371F05F6B000516F44 /* UIColor+StockTheme.m */; };
 		F103EEC51F05F6B000516F44 /* VStockChartConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = F103EE391F05F6B000516F44 /* VStockChartConfig.m */; };
 		F103EEC61F05F6B000516F44 /* VHKStockYearView.m in Sources */ = {isa = PBXBuildFile; fileRef = F103EE3D1F05F6B000516F44 /* VHKStockYearView.m */; };
-		F103EEC71F05F6B000516F44 /* VLineChart.m in Sources */ = {isa = PBXBuildFile; fileRef = F103EE3F1F05F6B000516F44 /* VLineChart.m */; };
-		F103EEC81F05F6B000516F44 /* VLineMaskView.m in Sources */ = {isa = PBXBuildFile; fileRef = F103EE411F05F6B000516F44 /* VLineMaskView.m */; };
-		F103EEC91F05F6B000516F44 /* VLineVolumeView.m in Sources */ = {isa = PBXBuildFile; fileRef = F103EE431F05F6B000516F44 /* VLineVolumeView.m */; };
+		F103EEC71F05F6B000516F44 /* VVHKYearLineChart.m in Sources */ = {isa = PBXBuildFile; fileRef = F103EE3F1F05F6B000516F44 /* VVHKYearLineChart.m */; };
+		F103EEC81F05F6B000516F44 /* VVHKYearMaskView.m in Sources */ = {isa = PBXBuildFile; fileRef = F103EE411F05F6B000516F44 /* VVHKYearMaskView.m */; };
+		F103EEC91F05F6B000516F44 /* VVHKYearVolumeView.m in Sources */ = {isa = PBXBuildFile; fileRef = F103EE431F05F6B000516F44 /* VVHKYearVolumeView.m */; };
 		F103EECA1F05F6B000516F44 /* VKLineChart.m in Sources */ = {isa = PBXBuildFile; fileRef = F103EE461F05F6B000516F44 /* VKLineChart.m */; };
 		F103EECB1F05F6B000516F44 /* VKLineMaskView.m in Sources */ = {isa = PBXBuildFile; fileRef = F103EE481F05F6B000516F44 /* VKLineMaskView.m */; };
 		F103EECC1F05F6B000516F44 /* VKLineView.m in Sources */ = {isa = PBXBuildFile; fileRef = F103EE4A1F05F6B000516F44 /* VKLineView.m */; };
 		F103EECD1F05F6B000516F44 /* VKLineVolumeView.m in Sources */ = {isa = PBXBuildFile; fileRef = F103EE4C1F05F6B000516F44 /* VKLineVolumeView.m */; };
-		F103EECE1F05F6B000516F44 /* VBidPriceModel.m in Sources */ = {isa = PBXBuildFile; fileRef = F103EE4F1F05F6B000516F44 /* VBidPriceModel.m */; };
 		F103EECF1F05F6B000516F44 /* VKLinePosition.m in Sources */ = {isa = PBXBuildFile; fileRef = F103EE511F05F6B000516F44 /* VKLinePosition.m */; };
 		F103EED01F05F6B000516F44 /* VLineModel.m in Sources */ = {isa = PBXBuildFile; fileRef = F103EE531F05F6B000516F44 /* VLineModel.m */; };
 		F103EED11F05F6B000516F44 /* VolumePositionModel.m in Sources */ = {isa = PBXBuildFile; fileRef = F103EE551F05F6B000516F44 /* VolumePositionModel.m */; };
@@ -83,14 +80,13 @@
 		F103EED31F05F6B000516F44 /* VStockPoint.m in Sources */ = {isa = PBXBuildFile; fileRef = F103EE591F05F6B000516F44 /* VStockPoint.m */; };
 		F103EED41F05F6B000516F44 /* VStockStatusModel.m in Sources */ = {isa = PBXBuildFile; fileRef = F103EE5B1F05F6B000516F44 /* VStockStatusModel.m */; };
 		F103EED51F05F6B000516F44 /* VTimeTradeModel.m in Sources */ = {isa = PBXBuildFile; fileRef = F103EE5D1F05F6B000516F44 /* VTimeTradeModel.m */; };
-		F103EED61F05F6B000516F44 /* VolumeView.m in Sources */ = {isa = PBXBuildFile; fileRef = F103EE611F05F6B000516F44 /* VolumeView.m */; };
 		F103EED71F05F6B000516F44 /* VariousChart.m in Sources */ = {isa = PBXBuildFile; fileRef = F103EE641F05F6B000516F44 /* VariousChart.m */; };
-		F103EED81F05F6B000516F44 /* VBidPriceCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F103EE661F05F6B000516F44 /* VBidPriceCell.m */; };
-		F103EED91F05F6B000516F44 /* VBidPriceView.m in Sources */ = {isa = PBXBuildFile; fileRef = F103EE681F05F6B000516F44 /* VBidPriceView.m */; };
-		F103EEDA1F05F6B000516F44 /* VDaDanView.m in Sources */ = {isa = PBXBuildFile; fileRef = F103EE6A1F05F6B000516F44 /* VDaDanView.m */; };
+		F103EED81F05F6B000516F44 /* VVWuDangCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F103EE661F05F6B000516F44 /* VVWuDangCell.m */; };
+		F103EED91F05F6B000516F44 /* VVWuDangView.m in Sources */ = {isa = PBXBuildFile; fileRef = F103EE681F05F6B000516F44 /* VVWuDangView.m */; };
+		F103EEDA1F05F6B000516F44 /* VVDaDanView.m in Sources */ = {isa = PBXBuildFile; fileRef = F103EE6A1F05F6B000516F44 /* VVDaDanView.m */; };
 		F103EEDB1F05F6B000516F44 /* VStockRightView.m in Sources */ = {isa = PBXBuildFile; fileRef = F103EE6C1F05F6B000516F44 /* VStockRightView.m */; };
-		F103EEDC1F05F6B000516F44 /* VTradeDetailCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F103EE6E1F05F6B000516F44 /* VTradeDetailCell.m */; };
-		F103EEDD1F05F6B000516F44 /* VTradeDetailView.m in Sources */ = {isa = PBXBuildFile; fileRef = F103EE701F05F6B000516F44 /* VTradeDetailView.m */; };
+		F103EEDC1F05F6B000516F44 /* VVMingxiCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F103EE6E1F05F6B000516F44 /* VVMingxiCell.m */; };
+		F103EEDD1F05F6B000516F44 /* VVMingxiView.m in Sources */ = {isa = PBXBuildFile; fileRef = F103EE701F05F6B000516F44 /* VVMingxiView.m */; };
 		F103EEDE1F05F6B000516F44 /* VTimeLineChart.m in Sources */ = {isa = PBXBuildFile; fileRef = F103EE721F05F6B000516F44 /* VTimeLineChart.m */; };
 		F103EEDF1F05F6B000516F44 /* VTimeLineMaskView.m in Sources */ = {isa = PBXBuildFile; fileRef = F103EE741F05F6B000516F44 /* VTimeLineMaskView.m */; };
 		F103EEE01F05F6B000516F44 /* VTimeLineView.m in Sources */ = {isa = PBXBuildFile; fileRef = F103EE761F05F6B000516F44 /* VTimeLineView.m */; };
@@ -101,9 +97,12 @@
 		F103EEE51F05F6B000516F44 /* VStockStatusView.xib in Resources */ = {isa = PBXBuildFile; fileRef = F103EE7F1F05F6B000516F44 /* VStockStatusView.xib */; };
 		F103EEE61F05F6B000516F44 /* VStockStatusView_HK.m in Sources */ = {isa = PBXBuildFile; fileRef = F103EE811F05F6B000516F44 /* VStockStatusView_HK.m */; };
 		F103EEE71F05F6B000516F44 /* VStockStatusView_HK.xib in Resources */ = {isa = PBXBuildFile; fileRef = F103EE821F05F6B000516F44 /* VStockStatusView_HK.xib */; };
-		F103EEE81F05F6B000516F44 /* VStockView.m in Sources */ = {isa = PBXBuildFile; fileRef = F103EE841F05F6B000516F44 /* VStockView.m */; };
+		F103EEE81F05F6B000516F44 /* VVStockView.m in Sources */ = {isa = PBXBuildFile; fileRef = F103EE841F05F6B000516F44 /* VVStockView.m */; };
 		F103EEE91F05F6B000516F44 /* HttpHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = F103EE871F05F6B000516F44 /* HttpHelper.m */; };
 		F103EEEA1F05F6B000516F44 /* StockRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = F103EE891F05F6B000516F44 /* StockRequest.m */; };
+		F103EEED1F06028600516F44 /* VVTimeVolumeView.m in Sources */ = {isa = PBXBuildFile; fileRef = F103EEEC1F06028600516F44 /* VVTimeVolumeView.m */; };
+		F103EEF11F06205E00516F44 /* VRefreshBtn.m in Sources */ = {isa = PBXBuildFile; fileRef = F103EEF01F06205E00516F44 /* VRefreshBtn.m */; };
+		F103EEF41F06235800516F44 /* VVWuDangModel.m in Sources */ = {isa = PBXBuildFile; fileRef = F103EEF31F06235800516F44 /* VVWuDangModel.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -120,8 +119,6 @@
 		F103EDBB1F05F6B000516F44 /* AFURLResponseSerialization.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFURLResponseSerialization.m; sourceTree = "<group>"; };
 		F103EDBC1F05F6B000516F44 /* AFURLSessionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFURLSessionManager.h; sourceTree = "<group>"; };
 		F103EDBD1F05F6B000516F44 /* AFURLSessionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFURLSessionManager.m; sourceTree = "<group>"; };
-		F103EDBE1F05F6B000516F44 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
-		F103EDBF1F05F6B000516F44 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		F103EDC11F05F6B000516F44 /* AFAutoPurgingImageCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFAutoPurgingImageCache.h; sourceTree = "<group>"; };
 		F103EDC21F05F6B000516F44 /* AFAutoPurgingImageCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFAutoPurgingImageCache.m; sourceTree = "<group>"; };
 		F103EDC31F05F6B000516F44 /* AFImageDownloader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFImageDownloader.h; sourceTree = "<group>"; };
@@ -209,12 +206,12 @@
 		F103EE1D1F05F6B000516F44 /* UIView+MJExtension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+MJExtension.m"; sourceTree = "<group>"; };
 		F103EE1E1F05F6B000516F44 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		F103EE1F1F05F6B000516F44 /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		F103EE201F05F6B000516F44 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		F103EE201F05F6B000516F44 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = StockChart/Assets.xcassets; sourceTree = "<group>"; };
 		F103EE221F05F6B000516F44 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		F103EE241F05F6B000516F44 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		F103EE251F05F6B000516F44 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		F103EE261F05F6B000516F44 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		F103EE271F05F6B000516F44 /* PrefixHeader.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PrefixHeader.pch; sourceTree = "<group>"; };
+		F103EE251F05F6B000516F44 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = StockChart/Info.plist; sourceTree = "<group>"; };
+		F103EE261F05F6B000516F44 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = StockChart/main.m; sourceTree = "<group>"; };
+		F103EE271F05F6B000516F44 /* PrefixHeader.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PrefixHeader.pch; path = StockChart/PrefixHeader.pch; sourceTree = "<group>"; };
 		F103EE281F05F6B000516F44 /* StockChartController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StockChartController.h; sourceTree = "<group>"; };
 		F103EE291F05F6B000516F44 /* StockChartController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StockChartController.m; sourceTree = "<group>"; };
 		F103EE2C1F05F6B000516F44 /* VGCDTimer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VGCDTimer.h; sourceTree = "<group>"; };
@@ -232,12 +229,12 @@
 		F103EE3A1F05F6B000516F44 /* VStockConstant.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VStockConstant.h; sourceTree = "<group>"; };
 		F103EE3C1F05F6B000516F44 /* VHKStockYearView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VHKStockYearView.h; sourceTree = "<group>"; };
 		F103EE3D1F05F6B000516F44 /* VHKStockYearView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VHKStockYearView.m; sourceTree = "<group>"; };
-		F103EE3E1F05F6B000516F44 /* VLineChart.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VLineChart.h; sourceTree = "<group>"; };
-		F103EE3F1F05F6B000516F44 /* VLineChart.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VLineChart.m; sourceTree = "<group>"; };
-		F103EE401F05F6B000516F44 /* VLineMaskView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VLineMaskView.h; sourceTree = "<group>"; };
-		F103EE411F05F6B000516F44 /* VLineMaskView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VLineMaskView.m; sourceTree = "<group>"; };
-		F103EE421F05F6B000516F44 /* VLineVolumeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VLineVolumeView.h; sourceTree = "<group>"; };
-		F103EE431F05F6B000516F44 /* VLineVolumeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VLineVolumeView.m; sourceTree = "<group>"; };
+		F103EE3E1F05F6B000516F44 /* VVHKYearLineChart.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VVHKYearLineChart.h; sourceTree = "<group>"; };
+		F103EE3F1F05F6B000516F44 /* VVHKYearLineChart.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VVHKYearLineChart.m; sourceTree = "<group>"; };
+		F103EE401F05F6B000516F44 /* VVHKYearMaskView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VVHKYearMaskView.h; sourceTree = "<group>"; };
+		F103EE411F05F6B000516F44 /* VVHKYearMaskView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VVHKYearMaskView.m; sourceTree = "<group>"; };
+		F103EE421F05F6B000516F44 /* VVHKYearVolumeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VVHKYearVolumeView.h; sourceTree = "<group>"; };
+		F103EE431F05F6B000516F44 /* VVHKYearVolumeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VVHKYearVolumeView.m; sourceTree = "<group>"; };
 		F103EE451F05F6B000516F44 /* VKLineChart.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VKLineChart.h; sourceTree = "<group>"; };
 		F103EE461F05F6B000516F44 /* VKLineChart.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VKLineChart.m; sourceTree = "<group>"; };
 		F103EE471F05F6B000516F44 /* VKLineMaskView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VKLineMaskView.h; sourceTree = "<group>"; };
@@ -246,8 +243,6 @@
 		F103EE4A1F05F6B000516F44 /* VKLineView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VKLineView.m; sourceTree = "<group>"; };
 		F103EE4B1F05F6B000516F44 /* VKLineVolumeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VKLineVolumeView.h; sourceTree = "<group>"; };
 		F103EE4C1F05F6B000516F44 /* VKLineVolumeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VKLineVolumeView.m; sourceTree = "<group>"; };
-		F103EE4E1F05F6B000516F44 /* VBidPriceModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VBidPriceModel.h; sourceTree = "<group>"; };
-		F103EE4F1F05F6B000516F44 /* VBidPriceModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VBidPriceModel.m; sourceTree = "<group>"; };
 		F103EE501F05F6B000516F44 /* VKLinePosition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VKLinePosition.h; sourceTree = "<group>"; };
 		F103EE511F05F6B000516F44 /* VKLinePosition.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VKLinePosition.m; sourceTree = "<group>"; };
 		F103EE521F05F6B000516F44 /* VLineModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VLineModel.h; sourceTree = "<group>"; };
@@ -262,22 +257,20 @@
 		F103EE5B1F05F6B000516F44 /* VStockStatusModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VStockStatusModel.m; sourceTree = "<group>"; };
 		F103EE5C1F05F6B000516F44 /* VTimeTradeModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VTimeTradeModel.h; sourceTree = "<group>"; };
 		F103EE5D1F05F6B000516F44 /* VTimeTradeModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VTimeTradeModel.m; sourceTree = "<group>"; };
-		F103EE601F05F6B000516F44 /* VolumeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VolumeView.h; sourceTree = "<group>"; };
-		F103EE611F05F6B000516F44 /* VolumeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VolumeView.m; sourceTree = "<group>"; };
 		F103EE631F05F6B000516F44 /* VariousChart.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VariousChart.h; sourceTree = "<group>"; };
 		F103EE641F05F6B000516F44 /* VariousChart.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VariousChart.m; sourceTree = "<group>"; };
-		F103EE651F05F6B000516F44 /* VBidPriceCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VBidPriceCell.h; sourceTree = "<group>"; };
-		F103EE661F05F6B000516F44 /* VBidPriceCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VBidPriceCell.m; sourceTree = "<group>"; };
-		F103EE671F05F6B000516F44 /* VBidPriceView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VBidPriceView.h; sourceTree = "<group>"; };
-		F103EE681F05F6B000516F44 /* VBidPriceView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VBidPriceView.m; sourceTree = "<group>"; };
-		F103EE691F05F6B000516F44 /* VDaDanView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VDaDanView.h; sourceTree = "<group>"; };
-		F103EE6A1F05F6B000516F44 /* VDaDanView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VDaDanView.m; sourceTree = "<group>"; };
+		F103EE651F05F6B000516F44 /* VVWuDangCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VVWuDangCell.h; sourceTree = "<group>"; };
+		F103EE661F05F6B000516F44 /* VVWuDangCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VVWuDangCell.m; sourceTree = "<group>"; };
+		F103EE671F05F6B000516F44 /* VVWuDangView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VVWuDangView.h; sourceTree = "<group>"; };
+		F103EE681F05F6B000516F44 /* VVWuDangView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VVWuDangView.m; sourceTree = "<group>"; };
+		F103EE691F05F6B000516F44 /* VVDaDanView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VVDaDanView.h; sourceTree = "<group>"; };
+		F103EE6A1F05F6B000516F44 /* VVDaDanView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VVDaDanView.m; sourceTree = "<group>"; };
 		F103EE6B1F05F6B000516F44 /* VStockRightView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VStockRightView.h; sourceTree = "<group>"; };
 		F103EE6C1F05F6B000516F44 /* VStockRightView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VStockRightView.m; sourceTree = "<group>"; };
-		F103EE6D1F05F6B000516F44 /* VTradeDetailCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VTradeDetailCell.h; sourceTree = "<group>"; };
-		F103EE6E1F05F6B000516F44 /* VTradeDetailCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VTradeDetailCell.m; sourceTree = "<group>"; };
-		F103EE6F1F05F6B000516F44 /* VTradeDetailView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VTradeDetailView.h; sourceTree = "<group>"; };
-		F103EE701F05F6B000516F44 /* VTradeDetailView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VTradeDetailView.m; sourceTree = "<group>"; };
+		F103EE6D1F05F6B000516F44 /* VVMingxiCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VVMingxiCell.h; sourceTree = "<group>"; };
+		F103EE6E1F05F6B000516F44 /* VVMingxiCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VVMingxiCell.m; sourceTree = "<group>"; };
+		F103EE6F1F05F6B000516F44 /* VVMingxiView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VVMingxiView.h; sourceTree = "<group>"; };
+		F103EE701F05F6B000516F44 /* VVMingxiView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VVMingxiView.m; sourceTree = "<group>"; };
 		F103EE711F05F6B000516F44 /* VTimeLineChart.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VTimeLineChart.h; sourceTree = "<group>"; };
 		F103EE721F05F6B000516F44 /* VTimeLineChart.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VTimeLineChart.m; sourceTree = "<group>"; };
 		F103EE731F05F6B000516F44 /* VTimeLineMaskView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VTimeLineMaskView.h; sourceTree = "<group>"; };
@@ -296,12 +289,18 @@
 		F103EE801F05F6B000516F44 /* VStockStatusView_HK.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VStockStatusView_HK.h; sourceTree = "<group>"; };
 		F103EE811F05F6B000516F44 /* VStockStatusView_HK.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VStockStatusView_HK.m; sourceTree = "<group>"; };
 		F103EE821F05F6B000516F44 /* VStockStatusView_HK.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = VStockStatusView_HK.xib; sourceTree = "<group>"; };
-		F103EE831F05F6B000516F44 /* VStockView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VStockView.h; sourceTree = "<group>"; };
-		F103EE841F05F6B000516F44 /* VStockView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VStockView.m; sourceTree = "<group>"; };
+		F103EE831F05F6B000516F44 /* VVStockView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VVStockView.h; sourceTree = "<group>"; };
+		F103EE841F05F6B000516F44 /* VVStockView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VVStockView.m; sourceTree = "<group>"; };
 		F103EE861F05F6B000516F44 /* HttpHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HttpHelper.h; sourceTree = "<group>"; };
 		F103EE871F05F6B000516F44 /* HttpHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HttpHelper.m; sourceTree = "<group>"; };
 		F103EE881F05F6B000516F44 /* StockRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StockRequest.h; sourceTree = "<group>"; };
 		F103EE891F05F6B000516F44 /* StockRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StockRequest.m; sourceTree = "<group>"; };
+		F103EEEB1F06028600516F44 /* VVTimeVolumeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VVTimeVolumeView.h; sourceTree = "<group>"; };
+		F103EEEC1F06028600516F44 /* VVTimeVolumeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VVTimeVolumeView.m; sourceTree = "<group>"; };
+		F103EEEF1F06205E00516F44 /* VRefreshBtn.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VRefreshBtn.h; sourceTree = "<group>"; };
+		F103EEF01F06205E00516F44 /* VRefreshBtn.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VRefreshBtn.m; sourceTree = "<group>"; };
+		F103EEF21F06235800516F44 /* VVWuDangModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VVWuDangModel.h; sourceTree = "<group>"; };
+		F103EEF31F06235800516F44 /* VVWuDangModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VVWuDangModel.m; sourceTree = "<group>"; };
 		F14B2AE31E6126620001663F /* StockChart.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = StockChart.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -322,17 +321,11 @@
 				F103EDAE1F05F6B000516F44 /* 3rds */,
 				F103EE1E1F05F6B000516F44 /* AppDelegate.h */,
 				F103EE1F1F05F6B000516F44 /* AppDelegate.m */,
-				F103EE201F05F6B000516F44 /* Assets.xcassets */,
-				F103EE211F05F6B000516F44 /* LaunchScreen.storyboard */,
-				F103EE231F05F6B000516F44 /* Main.storyboard */,
-				F103EE251F05F6B000516F44 /* Info.plist */,
-				F103EE261F05F6B000516F44 /* main.m */,
-				F103EE271F05F6B000516F44 /* PrefixHeader.pch */,
+				F103EE321F05F6B000516F44 /* ViewController.h */,
+				F103EE331F05F6B000516F44 /* ViewController.m */,
 				F103EE281F05F6B000516F44 /* StockChartController.h */,
 				F103EE291F05F6B000516F44 /* StockChartController.m */,
 				F103EE2A1F05F6B000516F44 /* Utils */,
-				F103EE321F05F6B000516F44 /* ViewController.h */,
-				F103EE331F05F6B000516F44 /* ViewController.m */,
 				F103EE341F05F6B000516F44 /* VStockChart */,
 				F103EE851F05F6B000516F44 /* WebService */,
 			);
@@ -353,8 +346,6 @@
 			isa = PBXGroup;
 			children = (
 				F103EDB01F05F6B000516F44 /* AFNetworking */,
-				F103EDBE1F05F6B000516F44 /* LICENSE */,
-				F103EDBF1F05F6B000516F44 /* README.md */,
 				F103EDC01F05F6B000516F44 /* UIKit+AFNetworking */,
 			);
 			path = AFNetworking;
@@ -537,6 +528,7 @@
 		F103EE2A1F05F6B000516F44 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				F103EEEE1F06205E00516F44 /* RefreshBtn */,
 				F103EE2B1F05F6B000516F44 /* GCDTimer */,
 				F103EE2E1F05F6B000516F44 /* UIColor+VAdd.h */,
 				F103EE2F1F05F6B000516F44 /* UIColor+VAdd.m */,
@@ -575,8 +567,8 @@
 				F103EE801F05F6B000516F44 /* VStockStatusView_HK.h */,
 				F103EE811F05F6B000516F44 /* VStockStatusView_HK.m */,
 				F103EE821F05F6B000516F44 /* VStockStatusView_HK.xib */,
-				F103EE831F05F6B000516F44 /* VStockView.h */,
-				F103EE841F05F6B000516F44 /* VStockView.m */,
+				F103EE831F05F6B000516F44 /* VVStockView.h */,
+				F103EE841F05F6B000516F44 /* VVStockView.m */,
 			);
 			path = VStockChart;
 			sourceTree = "<group>";
@@ -598,12 +590,12 @@
 			children = (
 				F103EE3C1F05F6B000516F44 /* VHKStockYearView.h */,
 				F103EE3D1F05F6B000516F44 /* VHKStockYearView.m */,
-				F103EE3E1F05F6B000516F44 /* VLineChart.h */,
-				F103EE3F1F05F6B000516F44 /* VLineChart.m */,
-				F103EE401F05F6B000516F44 /* VLineMaskView.h */,
-				F103EE411F05F6B000516F44 /* VLineMaskView.m */,
-				F103EE421F05F6B000516F44 /* VLineVolumeView.h */,
-				F103EE431F05F6B000516F44 /* VLineVolumeView.m */,
+				F103EE3E1F05F6B000516F44 /* VVHKYearLineChart.h */,
+				F103EE3F1F05F6B000516F44 /* VVHKYearLineChart.m */,
+				F103EE401F05F6B000516F44 /* VVHKYearMaskView.h */,
+				F103EE411F05F6B000516F44 /* VVHKYearMaskView.m */,
+				F103EE421F05F6B000516F44 /* VVHKYearVolumeView.h */,
+				F103EE431F05F6B000516F44 /* VVHKYearVolumeView.m */,
 			);
 			path = HKStockView;
 			sourceTree = "<group>";
@@ -626,8 +618,8 @@
 		F103EE4D1F05F6B000516F44 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				F103EE4E1F05F6B000516F44 /* VBidPriceModel.h */,
-				F103EE4F1F05F6B000516F44 /* VBidPriceModel.m */,
+				F103EEF21F06235800516F44 /* VVWuDangModel.h */,
+				F103EEF31F06235800516F44 /* VVWuDangModel.m */,
 				F103EE501F05F6B000516F44 /* VKLinePosition.h */,
 				F103EE511F05F6B000516F44 /* VKLinePosition.m */,
 				F103EE521F05F6B000516F44 /* VLineModel.h */,
@@ -649,7 +641,8 @@
 		F103EE5E1F05F6B000516F44 /* TimeLineView */ = {
 			isa = PBXGroup;
 			children = (
-				F103EE5F1F05F6B000516F44 /* Bottom */,
+				F103EEEB1F06028600516F44 /* VVTimeVolumeView.h */,
+				F103EEEC1F06028600516F44 /* VVTimeVolumeView.m */,
 				F103EE621F05F6B000516F44 /* Right */,
 				F103EE711F05F6B000516F44 /* VTimeLineChart.h */,
 				F103EE721F05F6B000516F44 /* VTimeLineChart.m */,
@@ -661,32 +654,23 @@
 			path = TimeLineView;
 			sourceTree = "<group>";
 		};
-		F103EE5F1F05F6B000516F44 /* Bottom */ = {
-			isa = PBXGroup;
-			children = (
-				F103EE601F05F6B000516F44 /* VolumeView.h */,
-				F103EE611F05F6B000516F44 /* VolumeView.m */,
-			);
-			path = Bottom;
-			sourceTree = "<group>";
-		};
 		F103EE621F05F6B000516F44 /* Right */ = {
 			isa = PBXGroup;
 			children = (
 				F103EE631F05F6B000516F44 /* VariousChart.h */,
 				F103EE641F05F6B000516F44 /* VariousChart.m */,
-				F103EE651F05F6B000516F44 /* VBidPriceCell.h */,
-				F103EE661F05F6B000516F44 /* VBidPriceCell.m */,
-				F103EE671F05F6B000516F44 /* VBidPriceView.h */,
-				F103EE681F05F6B000516F44 /* VBidPriceView.m */,
-				F103EE691F05F6B000516F44 /* VDaDanView.h */,
-				F103EE6A1F05F6B000516F44 /* VDaDanView.m */,
+				F103EE651F05F6B000516F44 /* VVWuDangCell.h */,
+				F103EE661F05F6B000516F44 /* VVWuDangCell.m */,
+				F103EE671F05F6B000516F44 /* VVWuDangView.h */,
+				F103EE681F05F6B000516F44 /* VVWuDangView.m */,
+				F103EE691F05F6B000516F44 /* VVDaDanView.h */,
+				F103EE6A1F05F6B000516F44 /* VVDaDanView.m */,
 				F103EE6B1F05F6B000516F44 /* VStockRightView.h */,
 				F103EE6C1F05F6B000516F44 /* VStockRightView.m */,
-				F103EE6D1F05F6B000516F44 /* VTradeDetailCell.h */,
-				F103EE6E1F05F6B000516F44 /* VTradeDetailCell.m */,
-				F103EE6F1F05F6B000516F44 /* VTradeDetailView.h */,
-				F103EE701F05F6B000516F44 /* VTradeDetailView.m */,
+				F103EE6D1F05F6B000516F44 /* VVMingxiCell.h */,
+				F103EE6E1F05F6B000516F44 /* VVMingxiCell.m */,
+				F103EE6F1F05F6B000516F44 /* VVMingxiView.h */,
+				F103EE701F05F6B000516F44 /* VVMingxiView.m */,
 			);
 			path = Right;
 			sourceTree = "<group>";
@@ -702,10 +686,25 @@
 			path = WebService;
 			sourceTree = "<group>";
 		};
+		F103EEEE1F06205E00516F44 /* RefreshBtn */ = {
+			isa = PBXGroup;
+			children = (
+				F103EEEF1F06205E00516F44 /* VRefreshBtn.h */,
+				F103EEF01F06205E00516F44 /* VRefreshBtn.m */,
+			);
+			path = RefreshBtn;
+			sourceTree = "<group>";
+		};
 		F14B2ADA1E6126620001663F = {
 			isa = PBXGroup;
 			children = (
 				F103EDAD1F05F6B000516F44 /* StockChart */,
+				F103EE201F05F6B000516F44 /* Assets.xcassets */,
+				F103EE211F05F6B000516F44 /* LaunchScreen.storyboard */,
+				F103EE231F05F6B000516F44 /* Main.storyboard */,
+				F103EE251F05F6B000516F44 /* Info.plist */,
+				F103EE261F05F6B000516F44 /* main.m */,
+				F103EE271F05F6B000516F44 /* PrefixHeader.pch */,
 				F14B2AE41E6126620001663F /* Products */,
 			);
 			sourceTree = "<group>";
@@ -778,7 +777,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				F103EEE51F05F6B000516F44 /* VStockStatusView.xib in Resources */,
-				F103EE901F05F6B000516F44 /* LICENSE in Resources */,
 				F103EEBC1F05F6B000516F44 /* Main.storyboard in Resources */,
 				F103EEBA1F05F6B000516F44 /* Assets.xcassets in Resources */,
 				F103EEE71F05F6B000516F44 /* VStockStatusView_HK.xib in Resources */,
@@ -799,19 +797,19 @@
 				F103EEE21F05F6B000516F44 /* VScrollMenuView.m in Sources */,
 				F103EED41F05F6B000516F44 /* VStockStatusModel.m in Sources */,
 				F103EE971F05F6B000516F44 /* UIImageView+AFNetworking.m in Sources */,
+				F103EEED1F06028600516F44 /* VVTimeVolumeView.m in Sources */,
 				F103EECB1F05F6B000516F44 /* VKLineMaskView.m in Sources */,
 				F103EECD1F05F6B000516F44 /* VKLineVolumeView.m in Sources */,
 				F103EEE01F05F6B000516F44 /* VTimeLineView.m in Sources */,
 				F103EED21F05F6B000516F44 /* VStockGroup.m in Sources */,
 				F103EE961F05F6B000516F44 /* UIButton+AFNetworking.m in Sources */,
 				F103EE8F1F05F6B000516F44 /* AFURLSessionManager.m in Sources */,
+				F103EEF41F06235800516F44 /* VVWuDangModel.m in Sources */,
 				F103EEDE1F05F6B000516F44 /* VTimeLineChart.m in Sources */,
 				F103EE9A1F05F6B000516F44 /* UIWebView+AFNetworking.m in Sources */,
 				F103EE9B1F05F6B000516F44 /* MASCompositeConstraint.m in Sources */,
-				F103EED61F05F6B000516F44 /* VolumeView.m in Sources */,
 				F103EED31F05F6B000516F44 /* VStockPoint.m in Sources */,
 				F103EEC01F05F6B000516F44 /* VGCDTimer.m in Sources */,
-				F103EECE1F05F6B000516F44 /* VBidPriceModel.m in Sources */,
 				F103EEDB1F05F6B000516F44 /* VStockRightView.m in Sources */,
 				F103EEB21F05F6B000516F44 /* MJRefreshStateHeader.m in Sources */,
 				F103EEB91F05F6B000516F44 /* AppDelegate.m in Sources */,
@@ -825,7 +823,7 @@
 				F103EEA71F05F6B000516F44 /* MJRefreshComponent.m in Sources */,
 				F103EEA41F05F6B000516F44 /* ViewController+MASAdditions.m in Sources */,
 				F103EEC51F05F6B000516F44 /* VStockChartConfig.m in Sources */,
-				F103EEC91F05F6B000516F44 /* VLineVolumeView.m in Sources */,
+				F103EEC91F05F6B000516F44 /* VVHKYearVolumeView.m in Sources */,
 				F103EED71F05F6B000516F44 /* VariousChart.m in Sources */,
 				F103EEA31F05F6B000516F44 /* View+MASAdditions.m in Sources */,
 				F103EEA81F05F6B000516F44 /* MJRefreshFooter.m in Sources */,
@@ -835,15 +833,14 @@
 				F103EEA01F05F6B000516F44 /* MASViewConstraint.m in Sources */,
 				F103EE9F1F05F6B000516F44 /* MASViewAttribute.m in Sources */,
 				F103EEC41F05F6B000516F44 /* UIColor+StockTheme.m in Sources */,
-				F103EEDC1F05F6B000516F44 /* VTradeDetailCell.m in Sources */,
+				F103EEDC1F05F6B000516F44 /* VVMingxiCell.m in Sources */,
 				F103EEAF1F05F6B000516F44 /* MJRefreshBackStateFooter.m in Sources */,
 				F103EE9E1F05F6B000516F44 /* MASLayoutConstraint.m in Sources */,
-				F103EED81F05F6B000516F44 /* VBidPriceCell.m in Sources */,
+				F103EED81F05F6B000516F44 /* VVWuDangCell.m in Sources */,
 				F103EEB71F05F6B000516F44 /* UIScrollView+MJRefresh.m in Sources */,
 				F103EE8C1F05F6B000516F44 /* AFSecurityPolicy.m in Sources */,
 				F103EEEA1F05F6B000516F44 /* StockRequest.m in Sources */,
 				F103EED01F05F6B000516F44 /* VLineModel.m in Sources */,
-				F103EE911F05F6B000516F44 /* README.md in Sources */,
 				F103EEC11F05F6B000516F44 /* UIColor+VAdd.m in Sources */,
 				F103EEAD1F05F6B000516F44 /* MJRefreshBackGifFooter.m in Sources */,
 				F103EEB81F05F6B000516F44 /* UIView+MJExtension.m in Sources */,
@@ -854,7 +851,7 @@
 				F103EEA21F05F6B000516F44 /* NSLayoutConstraint+MASDebugAdditions.m in Sources */,
 				F103EEE11F05F6B000516F44 /* VFullScreenStockView.m in Sources */,
 				F103EEAA1F05F6B000516F44 /* MJRefreshAutoGifFooter.m in Sources */,
-				F103EEDA1F05F6B000516F44 /* VDaDanView.m in Sources */,
+				F103EEDA1F05F6B000516F44 /* VVDaDanView.m in Sources */,
 				F103EE8A1F05F6B000516F44 /* AFHTTPSessionManager.m in Sources */,
 				F103EECF1F05F6B000516F44 /* VKLinePosition.m in Sources */,
 				F103EE981F05F6B000516F44 /* UIProgressView+AFNetworking.m in Sources */,
@@ -866,13 +863,14 @@
 				F103EE8B1F05F6B000516F44 /* AFNetworkReachabilityManager.m in Sources */,
 				F103EEA51F05F6B000516F44 /* MJRefreshAutoFooter.m in Sources */,
 				F103EEB41F05F6B000516F44 /* MJRefreshConst.m in Sources */,
-				F103EEC71F05F6B000516F44 /* VLineChart.m in Sources */,
+				F103EEF11F06205E00516F44 /* VRefreshBtn.m in Sources */,
+				F103EEC71F05F6B000516F44 /* VVHKYearLineChart.m in Sources */,
 				F103EEBF1F05F6B000516F44 /* StockChartController.m in Sources */,
 				F103EEDF1F05F6B000516F44 /* VTimeLineMaskView.m in Sources */,
 				F103EECC1F05F6B000516F44 /* VKLineView.m in Sources */,
 				F103EEA61F05F6B000516F44 /* MJRefreshBackFooter.m in Sources */,
-				F103EEE81F05F6B000516F44 /* VStockView.m in Sources */,
-				F103EEC81F05F6B000516F44 /* VLineMaskView.m in Sources */,
+				F103EEE81F05F6B000516F44 /* VVStockView.m in Sources */,
+				F103EEC81F05F6B000516F44 /* VVHKYearMaskView.m in Sources */,
 				F103EEC31F05F6B000516F44 /* ViewController.m in Sources */,
 				F103EEE41F05F6B000516F44 /* VStockStatusView.m in Sources */,
 				F103EE991F05F6B000516F44 /* UIRefreshControl+AFNetworking.m in Sources */,
@@ -880,10 +878,10 @@
 				F103EEA91F05F6B000516F44 /* MJRefreshHeader.m in Sources */,
 				F103EEAE1F05F6B000516F44 /* MJRefreshBackNormalFooter.m in Sources */,
 				F103EEAC1F05F6B000516F44 /* MJRefreshAutoStateFooter.m in Sources */,
-				F103EEDD1F05F6B000516F44 /* VTradeDetailView.m in Sources */,
+				F103EEDD1F05F6B000516F44 /* VVMingxiView.m in Sources */,
 				F103EE931F05F6B000516F44 /* AFImageDownloader.m in Sources */,
 				F103EE8E1F05F6B000516F44 /* AFURLResponseSerialization.m in Sources */,
-				F103EED91F05F6B000516F44 /* VBidPriceView.m in Sources */,
+				F103EED91F05F6B000516F44 /* VVWuDangView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -896,6 +894,7 @@
 				F103EE221F05F6B000516F44 /* Base */,
 			);
 			name = LaunchScreen.storyboard;
+			path = StockChart;
 			sourceTree = "<group>";
 		};
 		F103EE231F05F6B000516F44 /* Main.storyboard */ = {
@@ -904,6 +903,7 @@
 				F103EE241F05F6B000516F44 /* Base */,
 			);
 			name = Main.storyboard;
+			path = StockChart;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */

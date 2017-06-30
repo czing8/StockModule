@@ -1,6 +1,6 @@
 //
 //  ViewController.m
-//  HBStockView
+//  StockChart
 //
 //  Created by Vols on 2017/3/27.
 //  Copyright © 2017年 vols. All rights reserved.
@@ -28,10 +28,7 @@
     NSString * stockCode = _stockCodeTF.text;
     if (_stockCodeTF.text.length == 0)  stockCode = @"sz002185";
     
-    VStockType stockType = VStockTypeCN;
-    if ([stockCode hasPrefix:@"hk"])    stockType = VStockTypeHK;
-    
-    StockChartController * stockVC = [[StockChartController alloc] initStockVC:stockCode type:stockType];
+    StockChartController * stockVC = [[StockChartController alloc] initStockVC:stockCode];
     stockVC.refreshTime = [_refreshTimeTF.text floatValue];
     [self.navigationController pushViewController:stockVC animated:YES];
 }

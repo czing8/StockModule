@@ -6,7 +6,7 @@
 //  Copyright © 2017年 vols. All rights reserved.
 //
 
-#import "VStockView.h"
+#import "VVStockView.h"
 #import "VScrollMenuView.h"
 #import "VTimeLineView.h"
 #import "VKLineView.h"
@@ -18,9 +18,9 @@
 #import "VDateTool.h"
 #import "Masonry.h"
 
-@interface VStockView () <VScrollMenuViewDelegate>
+@interface VVStockView () <VScrollMenuViewDelegate>
 
-@property (nonatomic, strong) NSString    * stockCode;
+@property (nonatomic, strong) NSString  * stockCode;
 
 @property (nonatomic, strong) VScrollMenuView * scrollMenu;      // 顶部选择菜单
 
@@ -28,7 +28,7 @@
 @property (nonatomic, strong) VKLineView    * dayKLineView;     //日K图
 @property (nonatomic, strong) VKLineView    * weekKLineView;    //日K图
 @property (nonatomic, strong) VKLineView    * monthKLineView;   //日K图
-@property (nonatomic, strong) VHKStockYearView  * hkStockYearView;    //港股的年线图
+@property (nonatomic, strong) VHKStockYearView  * hkStockYearView;  //港股年线图
 
 @property (nonatomic, strong) VStockGroup   * timeLineGroup;    //分时图数据源
 @property (nonatomic, strong) VStockGroup   * dayLineGroup;     //日k线图数据源
@@ -42,7 +42,7 @@
 
 @end
 
-@implementation VStockView
+@implementation VVStockView
 
 #pragma mark - View Lifecycle
 
@@ -271,7 +271,7 @@
 #pragma mark - Helpers
 
 - (BOOL)checkDate {
-    return YES;
+//    return YES;
 
     if ([VDateTool getNowWeekday] == 1 || [VDateTool getNowWeekday] == 7) {
         return NO;

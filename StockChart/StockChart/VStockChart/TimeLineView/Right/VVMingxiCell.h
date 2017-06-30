@@ -1,5 +1,5 @@
 //
-//  VTradeDetailCell.h
+//  VVMingxiCell.h
 //  HBStockView
 //
 //  Created by Vols on 2017/3/14.
@@ -9,9 +9,9 @@
 #import <UIKit/UIKit.h>
 #import "VTimeTradeModel.h"
 
-#define kTradeDetailCellIdentifier     @"kTradeDetailCellIdentifier"
+#define kMingXiCellIdentifier     @"kMingXiCellIdentifier"
 
-@interface VTradeDetailCell : UITableViewCell
+@interface VVMingxiCell : UITableViewCell
 
 @property (nonatomic, strong) VTimeTradeModel * model;
 
