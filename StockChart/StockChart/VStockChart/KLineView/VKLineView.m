@@ -204,7 +204,7 @@
         CGFloat newLeftDistance = oldLeftArrCount * [VStockChartConfig lineWidth] + (oldLeftArrCount - 1) * [VStockChartConfig lineGap];
         
         // 设置scrollview的contentoffset = (5) - (2);
-        if (self.screenLineModels.count * newLineWidth + (self.screenLineModels.count + 1) * [VStockChartConfig lineGap] > self.stockScrollView.bounds.size.width) {
+        if (self.stockGroup.kLineModels.count * newLineWidth + (self.stockGroup.kLineModels.count + 1) * [VStockChartConfig lineGap] > self.stockScrollView.bounds.size.width) {
             CGFloat newOffsetX = newLeftDistance - (centerX - self.stockScrollView.contentOffset.x);
             self.stockScrollView.contentOffset = CGPointMake(newOffsetX > 0 ? newOffsetX : 0 , self.stockScrollView.contentOffset.y);
         } else {
@@ -237,9 +237,12 @@
         // 设置scrollview的contentoffset = (5) - (2);
         if (self.stockGroup.kLineModels.count * newLineWidth + (self.stockGroup.kLineModels.count + 1) * [VStockChartConfig lineGap] > self.stockScrollView.bounds.size.width) {
             CGFloat newOffsetX = newCenterDistance - (centerX - self.stockScrollView.contentOffset.x);
-            NSLog(@"newOffsetX:%f,%f", newOffsetX, self.stockScrollView.contentOffset.x);
-
-//            self.stockScrollView.contentOffset = CGPointMake(newOffsetX > 0 ? newOffsetX : 0 , self.stockScrollView.contentOffset.y);
+            
+            if (_stockScrollView.contentSize.width - newCenterDistance < _stockScrollView.bounds.size.width) {
+                newOffsetX = _stockScrollView.contentSize.width - _stockScrollView.bounds.size.width;
+            }
+            
+            self.stockScrollView.contentOffset = CGPointMake(newOffsetX > 0 ? newOffsetX : 0 , self.stockScrollView.contentOffset.y);
         } else {
             self.stockScrollView.contentOffset = CGPointMake(0 , self.stockScrollView.contentOffset.y);
         }
@@ -312,7 +315,7 @@
             CGFloat centerX = (p1.x+p2.x)/2;
             
             //3.拿到中心点数据源的index
-            CGFloat oldLeftArrCount = ABS(centerX + [VStockChartConfig lineGap]) / ([VStockChartConfig lineGap] + [VStockChartConfig lineWidth]);
+            CGFloat oldCenterArrCount = ABS(centerX + [VStockChartConfig lineGap]) / ([VStockChartConfig lineGap] + [VStockChartConfig lineWidth]);
             
             //4.缩放重绘
             CGFloat newLineWidth = [VStockChartConfig lineWidth] * (_scaleRadio > 0 ? (1 + kStockLineScaleFactor) : (1 - kStockLineScaleFactor));
@@ -320,11 +323,15 @@
             [self updateScrollViewContentWidth];
             
             //5.计算更新宽度后捏合中心点距离klineView左侧的距离
-            CGFloat newLeftDistance = oldLeftArrCount * [VStockChartConfig lineWidth] + (oldLeftArrCount - 1) * [VStockChartConfig lineGap];
+            CGFloat newCenterDistance = oldCenterArrCount * [VStockChartConfig lineWidth] + (oldCenterArrCount - 1) * [VStockChartConfig lineGap];
             
             //6.设置scrollview的contentoffset = (5) - (2);
-            if (self.screenLineModels.count * newLineWidth + (self.screenLineModels.count + 1) * [VStockChartConfig lineGap] > self.stockScrollView.bounds.size.width) {
-                CGFloat newOffsetX = newLeftDistance - (centerX - self.stockScrollView.contentOffset.x);
+            if (self.stockGroup.kLineModels.count * newLineWidth + (self.stockGroup.kLineModels.count + 1) * [VStockChartConfig lineGap] > self.stockScrollView.bounds.size.width) {
+                CGFloat newOffsetX = newCenterDistance - (centerX - self.stockScrollView.contentOffset.x);
+                if (_stockScrollView.contentSize.width - newCenterDistance < _stockScrollView.bounds.size.width) {
+                    newOffsetX = _stockScrollView.contentSize.width - _stockScrollView.bounds.size.width;
+                }
+
                 self.stockScrollView.contentOffset = CGPointMake(newOffsetX > 0 ? newOffsetX : 0 , self.stockScrollView.contentOffset.y);
             } else {
                 self.stockScrollView.contentOffset = CGPointMake(0 , self.stockScrollView.contentOffset.y);

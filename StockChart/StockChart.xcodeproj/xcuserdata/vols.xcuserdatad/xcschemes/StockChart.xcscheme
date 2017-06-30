@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "F14B2AE21E6126620001663F"
-               BuildableName = "HBStockView.app"
-               BlueprintName = "HBStockView"
-               ReferencedContainer = "container:HBStockView.xcodeproj">
+               BuildableName = "StockChart.app"
+               BlueprintName = "StockChart"
+               ReferencedContainer = "container:StockChart.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -33,9 +33,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "F14B2AE21E6126620001663F"
-            BuildableName = "HBStockView.app"
-            BlueprintName = "HBStockView"
-            ReferencedContainer = "container:HBStockView.xcodeproj">
+            BuildableName = "StockChart.app"
+            BlueprintName = "StockChart"
+            ReferencedContainer = "container:StockChart.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <AdditionalOptions>
@@ -56,9 +56,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "F14B2AE21E6126620001663F"
-            BuildableName = "HBStockView.app"
-            BlueprintName = "HBStockView"
-            ReferencedContainer = "container:HBStockView.xcodeproj">
+            BuildableName = "StockChart.app"
+            BlueprintName = "StockChart"
+            ReferencedContainer = "container:StockChart.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
@@ -75,9 +75,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "F14B2AE21E6126620001663F"
-            BuildableName = "HBStockView.app"
-            BlueprintName = "HBStockView"
-            ReferencedContainer = "container:HBStockView.xcodeproj">
+            BuildableName = "StockChart.app"
+            BlueprintName = "StockChart"
+            ReferencedContainer = "container:StockChart.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>
